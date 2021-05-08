@@ -1,5 +1,15 @@
 let sketch = function(p) {
-  
+
+  let capturer = new CCapture( {
+    name: 'ASofterSpace-preview',
+    format: 'gif',
+    workersPath: './',
+    framerate: 30,
+    verbose: true,
+    // timeLimit: 5,
+  } );
+  let canvas
+    
   let WIDTH = 800
   let HEIGHT = 600
   
@@ -17,18 +27,50 @@ let sketch = function(p) {
   let color3 = 'hsl(300, 100%, 50%)'
   
   p.setup = () => {
-    p.createCanvas(WIDTH, HEIGHT);
-    p.frameRate(60)
+    let p5canvas = p.createCanvas(WIDTH, HEIGHT);
+    canvas = p5canvas.canvas
+
+    p.frameRate(120)
     p.angleMode(p.DEGREES)
     p.blendMode(p.SCREEN)
-    // loop()
+    p.loop()
     
     circle1 = new circleSpinner(0,5,DIAMETER,color1,1.2)
-    circle2 = new circleSpinner(5,0,DIAMETER + 0,color2,2)
-    circle3 = new circleSpinner(-5,5,DIAMETER,color3,3)
+    circle2 = new circleSpinner(5,0,DIAMETER + 10,color2,4)
+    circle3 = new circleSpinner(-5,0,DIAMETER,color3,3)
   }
   
+  // MASSIVE THANKS to @pbesh (https://github.com/pbeshai/p5js-ccapture)
+
+  let startMillis
   p.draw = () => {
+    if (p.frameCount === 1) {
+      // start the recording on the first frame
+      // this avoids the code freeze which occurs if capturer.start is called
+      // in the setup, since v0.9 of p5.js
+      capturer.start();
+    }
+  
+    if (startMillis == null) {
+      startMillis = p.millis();
+    }
+  
+    // duration in milliseconds
+    var duration = 8000;
+  
+    // compute how far we are through the animation as a value between 0 and 1.
+    var elapsed = p.millis() - startMillis;
+    var t = p.map(elapsed, 0, duration, 0, 1);
+  
+    // if we have passed t=1 then end the animation.
+    if (t > 1) {
+      p.noLoop();
+      console.log('finished recording.');
+      capturer.stop();
+      capturer.save();
+      return;
+    }
+
     p.clear()
     p.background(0);
     p.noStroke();
@@ -36,6 +78,7 @@ let sketch = function(p) {
     circle1.display()
     circle2.display()
     circle3.display()
+    capturer.capture(canvas)
   }
   
   class circleSpinner {
