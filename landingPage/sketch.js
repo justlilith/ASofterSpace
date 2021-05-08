@@ -12,7 +12,7 @@ let sketch = function(p) {
   let circle1, circle2, circle3
   let DIAMETER = HEIGHT/2
   
-  let color1 = 'hsl(70, 100%, 50%)'
+  let color1 = 'hsl(60, 100%, 50%)'
   let color2 = 'hsl(180, 100%, 50%)' //blue
   let color3 = 'hsl(300, 100%, 50%)'
   
@@ -24,7 +24,7 @@ let sketch = function(p) {
     // loop()
     
     circle1 = new circleSpinner(0,5,DIAMETER,color1,1.2)
-    circle2 = new circleSpinner(5,10,DIAMETER + 10,color2,2)
+    circle2 = new circleSpinner(5,0,DIAMETER + 0,color2,2)
     circle3 = new circleSpinner(-5,5,DIAMETER,color3,3)
   }
   
