@@ -20,8 +20,9 @@ let sketch = function(p) {
     p.createCanvas(WIDTH, HEIGHT);
     p.frameRate(60)
     p.angleMode(p.DEGREES)
+    p.blendMode(p.MULTIPLY)
     p.blendMode(p.SCREEN)
-    // loop()
+    // p.loop()
     
     circle1 = new circleSpinner(0,5,DIAMETER,color1,1.2)
     circle2 = new circleSpinner(5,0,DIAMETER + 0,color2,2)
@@ -30,12 +31,15 @@ let sketch = function(p) {
   
   p.draw = () => {
     p.clear()
+    // p.background(220,160,200);
     p.background(0);
+    // p.background(255);
     p.noStroke();
-    spin = (spin + .2)
+    spin = (spin + .8)
     circle1.display()
     circle2.display()
     circle3.display()
+    p.filter(p.BLUR, 1)
   }
   
   class circleSpinner {
