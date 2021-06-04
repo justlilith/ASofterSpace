@@ -3,8 +3,9 @@
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	<h1>here's a softer space</h1>
+	<br>
+	<p>Let's talk.</p>
 </main>
 
 <style>
@@ -14,14 +15,14 @@
 		max-width: 240px;
 		margin: 0 auto;
 	}
-
+	
 	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
+		color: #fff;
+		text-transform: lowercase;
+		font-size: 3em;
+		font-weight: 600;
 	}
-
+	
 	@media (min-width: 640px) {
 		main {
 			max-width: none;

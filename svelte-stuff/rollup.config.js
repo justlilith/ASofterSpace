@@ -3,6 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
+import copy from 'rollup-plugin-copy';
 import sveltePreprocess from 'svelte-preprocess';
 import scss from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
@@ -12,11 +13,11 @@ const production = !process.env.ROLLUP_WATCH;
 
 function serve() {
 	let server;
-
+	
 	function toExit() {
 		if (server) server.kill(0);
 	}
-
+	
 	return {
 		writeBundle() {
 			if (server) return;
@@ -24,7 +25,7 @@ function serve() {
 				stdio: ['ignore', 'inherit', 'inherit'],
 				shell: true
 			});
-
+			
 			process.on('SIGTERM', toExit);
 			process.on('exit', toExit);
 		}
@@ -33,13 +34,30 @@ function serve() {
 
 export default {
 	input: 'src/main.ts',
-	output: {
-		sourcemap: true,
-		format: 'iife',
-		name: 'app',
-		file: 'public/build/bundle.js'
-	},
+	output: [
+		// {
+		// 	sourcemap: true,
+		// 	format: 'iife',
+		// 	name: 'app',
+		// 	file: 'public/build/bundle.js'
+		// },
+		{
+			sourcemap: true,
+			format: 'iife',
+			name: 'app',
+			file: '../docs/build/bundle.js'
+		}
+	],
 	plugins: [
+		copy({
+			targets: [
+				{
+					src:'src/p5/*',
+					dest:'../docs'
+				}
+			],
+			flatten:false
+		}),
 		svelte({
 			preprocess: sveltePreprocess({
 				sourceMap: !production,
@@ -53,7 +71,7 @@ export default {
 		// we'll extract any component CSS out into
 		// a separate file - better for performance
 		css({ output: 'bundle.css' }),
-
+		
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
 		// some cases you'll need additional configuration -
@@ -68,15 +86,16 @@ export default {
 			sourceMap: !production,
 			inlineSources: !production
 		}),
-
+		
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated
 		!production && serve(),
-
+		
 		// Watch the `public` directory and refresh the
 		// browser on changes when not in production
-		!production && livereload('public'),
-
+		// --!production && livereload('public'),
+		!production && livereload('../docs'),
+		
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
 		production && terser()
