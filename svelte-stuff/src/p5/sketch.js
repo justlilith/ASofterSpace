@@ -1,23 +1,20 @@
 let sketch = function(p) {
+  let DIAMETER = Math.min(p.windowWidth/3, p.windowHeight/3)
   
-  let WIDTH = 800
-  let HEIGHT = 600
-  
-  let origin = [WIDTH/2, HEIGHT/2]
+  let origin = [p.windowWidth/2, p.windowHeight/2]
   
   console.log(origin)
   
   let spin = 0
   
   let circle1, circle2, circle3
-  let DIAMETER = HEIGHT/2
   
   let color1 = 'hsl(60, 100%, 50%)'
   let color2 = 'hsl(180, 100%, 50%)' //blue
   let color3 = 'hsl(300, 100%, 50%)'
   
   p.setup = () => {
-    p.createCanvas(WIDTH, HEIGHT);
+    p.createCanvas(p.windowWidth, p.windowHeight);
     p.frameRate(60)
     p.angleMode(p.DEGREES)
     p.blendMode(p.MULTIPLY)
@@ -40,6 +37,16 @@ let sketch = function(p) {
     circle2.display()
     circle3.display()
     // p.filter(p.BLUR, 1)
+  }
+
+  p.windowResized = () => {
+    DIAMETER = Math.min(p.windowWidth/3, p.windowHeight/3)
+    p.resizeCanvas(p.windowWidth, p.windowHeight)
+
+    
+    circle1.size = DIAMETER
+    circle2.size = DIAMETER
+    circle3.size = DIAMETER
   }
   
   class circleSpinner {

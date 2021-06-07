@@ -52,7 +52,7 @@ export default {
 		copy({
 			targets: [
 				{
-					src:'src/p5/*',
+					src:'src/p5',
 					dest:'../docs'
 				}
 			],
@@ -83,7 +83,7 @@ export default {
 		}),
 		commonjs(),
 		typescript({
-			sourceMap: !production,
+			sourceMap: true,
 			inlineSources: !production
 		}),
 		
@@ -93,8 +93,10 @@ export default {
 		
 		// Watch the `public` directory and refresh the
 		// browser on changes when not in production
-		// --!production && livereload('public'),
-		!production && livereload('../docs'),
+		// /**/ !production && livereload('public'),
+		// /**/ !production && livereload('../docs'),
+		/**/ !production && livereload('./src/'),
+		// /**/ !production && livereload(['../docs','./p5/**/*']),
 		
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
