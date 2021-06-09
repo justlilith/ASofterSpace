@@ -33,7 +33,7 @@ function serve() {
 }
 
 export default {
-	input: 'src/main.ts',
+	input: './src/main.ts',
 	output: [
 		// {
 		// 	sourcemap: true,
@@ -52,16 +52,16 @@ export default {
 		copy({
 			targets: [
 				{
-					src:'src/p5',
+					src:'./src/p5',
 					dest:'./docs'
 				}
 			],
-			flatten:false
+			flatten:true
 		}),
 		svelte({
 			preprocess: sveltePreprocess({
 				sourceMap: !production,
-				scss:({implementation:'sass'})
+				scss:('sass')
 			}),
 			compilerOptions: {
 				// enable run-time checks when not in production
@@ -95,8 +95,8 @@ export default {
 		// browser on changes when not in production
 		// /**/ !production && livereload('public'),
 		// /**/ !production && livereload('../docs'),
-		/**/ !production && livereload('./src'),
-		// /**/ !production && livereload(['../docs','./p5/**/*']),
+		// /**/ !production && livereload('./docs'),
+		/**/ !production && livereload(['./docs','./src/p5']),
 		
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify

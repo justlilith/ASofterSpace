@@ -1,7 +1,7 @@
 let sketch = function(p) {
   let DIAMETER = Math.min(p.windowWidth/3, p.windowHeight/3)
   
-  let origin = [p.windowWidth/2, p.windowHeight/2]
+  let origin = [p.windowWidth/4, p.windowHeight/4]
   
   console.log(origin)
   
@@ -14,7 +14,7 @@ let sketch = function(p) {
   let color3 = 'hsl(300, 100%, 50%)'
   
   p.setup = () => {
-    p.createCanvas(p.windowWidth, p.windowHeight);
+    p.createCanvas(p.windowWidth/2, p.windowHeight/2);
     p.frameRate(60)
     p.angleMode(p.DEGREES)
     p.blendMode(p.MULTIPLY)
@@ -41,7 +41,8 @@ let sketch = function(p) {
 
   p.windowResized = () => {
     DIAMETER = Math.min(p.windowWidth/3, p.windowHeight/3)
-    p.resizeCanvas(p.windowWidth, p.windowHeight)
+    origin = [p.windowWidth/4, p.windowHeight/4]
+    p.resizeCanvas(p.windowWidth/2, p.windowHeight/2)
 
     
     circle1.size = DIAMETER

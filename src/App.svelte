@@ -1,31 +1,55 @@
 <script lang="ts">
-	// export let name: string;
-</script>
-
-<main>
-	<h1>here's a softer space</h1>
-	<br>
-	<p>Let's talk.</p>
-</main>
-
-<style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
-	}
+	import InputComponent from './components/InputComponent.svelte'
+	import MessageComponent from './components/MessageComponent.svelte'
 	
-	h1 {
-		color: #fff;
-		text-transform: lowercase;
-		font-size: 3em;
-		font-weight: 600;
-	}
+	export let messageList:Array<Message> = []
+		
+		// export let name: string;
+	</script>
 	
-	@media (min-width: 640px) {
+	<main>
+		<div id='messages'>
+			{#if messageList.length !== 0}
+			{#each messageList as message}
+			<MessageComponent message={message}></MessageComponent>
+			{/each}
+			{:else}
+			<p>Talk to me.</p>
+			{/if}
+		</div>
+		<InputComponent bind:messageList></InputComponent>
+		
+	</main>
+	
+	<style>
 		main {
-			max-width: none;
+			position:relative;
+			text-align: center;
+			padding: 1em;
+			/* min-width: 400px; */
+			max-width: 25%;
+			/* width:100px; */
+			height:100%;
+			margin: 0 auto;
 		}
-	}
-</style>
+		
+		#messages {
+			display:flex;
+			flex-direction: column-reverse;
+			height: 75vh;
+			overflow:overlay;
+		}
+		
+		/* h1 {
+			color: #fff;
+			text-transform: lowercase;
+			font-size: 3em;
+			font-weight: 600;
+		} */
+		/* 	
+		@media (min-width: 640px) {
+			main {
+				max-width: none;
+			}
+		} */
+	</style>
