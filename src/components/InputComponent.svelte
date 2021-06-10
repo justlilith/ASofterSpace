@@ -19,6 +19,7 @@
 			, sender: 'user'
 			}
 			]
+			messageContent = ''
 		// animateList('messages')
 	}
 
