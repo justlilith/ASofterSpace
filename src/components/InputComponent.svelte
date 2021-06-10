@@ -1,27 +1,36 @@
 <script lang='ts'>
+	import { createEventDispatcher } from 'svelte'
 	import Button from '@smui/button'
 	import { Icon } from '@smui/common'
 	import Fab from '@smui/fab'
 
 	export let messageList:Array<Message>
+	export let timer:number = 0
+	// export const animateList = function(){}
 	
 	let messageContent:string
 
+	let dispatch = createEventDispatcher()
+
 	const sendMessage = (messageContent:string) => {
 		messageList = [
-			{ content: messageContent
+			...messageList
+			, { content: messageContent
 			, sender: 'user'
 			}
-			,...messageList
 			]
+		// animateList('messages')
 	}
 
 	const keypressCheck = (event) => {
-		console.log(event)
-		if (event.key.toLowerCase() === 'enter') {
+		// console.log(event)
+		if (event.key.toLowerCase() == 'enter') {
 			sendMessage(messageContent)
 			messageContent = ''
+			dispatch('voidInvoked')
 		}
+		timer = 7
+		
 	}
 </script>
 
