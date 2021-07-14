@@ -1,6 +1,6 @@
 <script lang='ts'>
 	import { createEventDispatcher } from 'svelte'
-	import Button from '@smui/button'
+	import Button, { Label } from '@smui/button'
 	import { Icon } from '@smui/common'
 	import Fab from '@smui/fab'
 import { bind } from 'svelte/internal';
@@ -9,7 +9,7 @@ import { bind } from 'svelte/internal';
 	export let timer:number = 0
 	// export const animateList = function(){}
 	
-	let messageContent:string
+	let messageContent:string = ''
 
 	let dispatch = createEventDispatcher()
 
@@ -42,11 +42,13 @@ import { bind } from 'svelte/internal';
 	bind:value={messageContent}
 	on:keypress='{keypressCheck.bind(messageContent)}'>
 	<div id='submit'>
-		<!-- <Button> -->
-			<Fab on:click={
-				sendMessage(messageContent)}>
-				<Icon class="material-icons">send</Icon></Fab>
-		<!-- </Button> -->
+		<!-- <Fab  -->
+		<Button variant='raised'
+		on:click={sendMessage(messageContent)}>
+			<Icon class="material-icons">send</Icon>
+			<Label>Send</Label>
+		</Button>
+		<!-- </Fab> -->
 	</div>
 </section>
 

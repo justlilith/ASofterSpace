@@ -1,7 +1,7 @@
 <script lang='ts'>
 	import { fade, fly } from 'svelte/transition'
 	export let message:Message
-// transition:fly='{{y:50}}'
+	// transition:fly='{{y:50}}'
 </script>
 
 <p 

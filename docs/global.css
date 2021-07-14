@@ -76,6 +76,10 @@ button:focus {
 	border-color: #666;
 }
 
+span.mdc-button__label {
+	text-transform: none;
+}
+
 
 
 #p5Sketch {

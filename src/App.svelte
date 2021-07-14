@@ -3,11 +3,22 @@
 	import MessageComponent from './components/MessageComponent.svelte'
 	import Fab from '@smui/fab'
 	import { fade } from 'svelte/transition'
-import { bind } from 'svelte/internal'
-import StashComponent from './components/StashComponent.svelte'
+	import { bind } from 'svelte/internal'
+	import StashComponent from './components/StashComponent.svelte'
 	
 	export let messageList:Array<Message> = []
 	export let timer:number = 8
+
+	const appStorage = window.localStorage
+
+	try {
+		let stash = JSON.parse(appStorage.getItem('chats'))
+		messageList = stash || messageList
+		console.log(stash)
+	} catch (error) {
+		console.warn(error)
+	}
+
 		
 	// export let name: string;
 
@@ -22,11 +33,16 @@ import StashComponent from './components/StashComponent.svelte'
 		}
 	}
 
-	const animateList = (node) => {
-		document.getElementById(node).scroll({
-			top:9001,
-			behavior:'smooth'
-		})
+	const animateList = (node:string) => {
+		let target = document.getElementById(node)
+		console.log(target)
+		setTimeout(()=> {
+			target.scroll({
+				top:9001,
+				behavior:'smooth'
+			})
+		},50)
+
 		console.log('scrolled')
 	}
 
@@ -79,11 +95,16 @@ import StashComponent from './components/StashComponent.svelte'
 	// 	messageList = removeMessage(messageList)
 	// }.bind(messageList),
 	// 	3000)
+
 	</script>
 	
 	<main>
 		<div id='messages'>
-			{#if messageList.length !== 0}
+			{#if messageList.length === 0}
+			<p transition:fade
+			on:introend='{() => {animateList('messages')}}'
+			>Talk to me.</p>
+			{:else}
 			{#each messageList as message}
 			<!-- <span transition:fly> -->
 			<span transition:fade on:introstart='{() => {
@@ -92,18 +113,28 @@ import StashComponent from './components/StashComponent.svelte'
 				<MessageComponent message={message}></MessageComponent>
 			</span>
 			{/each}
-			{:else}
-			<p transition:fade on:introend='{() => {animateList('messages')}}'>Talk to me.</p>
 			{/if}
 		</div>
 		<InputComponent
 		on:voidInvoked='{invokeVoid.bind(timer,responses,messageList)}'
 		bind:messageList
 		bind:timer></InputComponent>
-		<StashComponent></StashComponent>
+		<StashComponent bind:messageList></StashComponent>
+		
 	</main>
-	
-	<style>
+	<style lang='scss'>
+		@use '@material/theme/color-palette';
+		
+		$background: #000;
+		
+		@use '@material/theme/index' as theme with (
+			$primary: color-palette.$blue-500,
+			$secondary: color-palette.$teal-600,
+			$surface: #fff,
+			$background: $background,
+			$error: #b00020,
+		);
+
 		main {
 			position:relative;
 			text-align: center;
@@ -121,6 +152,7 @@ import StashComponent from './components/StashComponent.svelte'
 			flex-direction: column;
 			/* justify-content: flex-end; */
 			height: 75vh;
+			min-height:1px;
 			overflow:scroll;
 			-webkit-mask-image: linear-gradient(to top, black 0%, transparent 80%);
 			mask-image: linear-gradient(to top, black 0%, transparent 80%);
