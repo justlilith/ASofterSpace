@@ -3,6 +3,7 @@
 	import Button from '@smui/button'
 	import { Icon } from '@smui/common'
 	import Fab from '@smui/fab'
+import { bind } from 'svelte/internal';
 
 	export let messageList:Array<Message>
 	export let timer:number = 0
@@ -12,14 +13,15 @@
 
 	let dispatch = createEventDispatcher()
 
-	const sendMessage = (messageContent:string) => {
+	const sendMessage = (message:string) => {
 		messageList = [
 			...messageList
-			, { content: messageContent
+			, { content: message
 			, sender: 'user'
 			}
 			]
 			messageContent = ''
+			// dispatch('voidInvoked')
 		// animateList('messages')
 	}
 
@@ -28,7 +30,7 @@
 		if (event.key.toLowerCase() == 'enter') {
 			sendMessage(messageContent)
 			messageContent = ''
-			dispatch('voidInvoked')
+			// dispatch('voidInvoked')
 		}
 		timer = 7
 		
@@ -41,7 +43,8 @@
 	on:keypress='{keypressCheck.bind(messageContent)}'>
 	<div id='submit'>
 		<!-- <Button> -->
-			<Fab on:click={sendMessage(messageContent)}>
+			<Fab on:click={
+				sendMessage(messageContent)}>
 				<Icon class="material-icons">send</Icon></Fab>
 		<!-- </Button> -->
 	</div>

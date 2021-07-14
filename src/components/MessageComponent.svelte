@@ -16,17 +16,20 @@ class={message.sender}
 		padding: 1em;
 		height:min-content;
 		margin: 0 0 .5em;
+		width: fit-content;
 	}
 	.user {
 		// grid-column: 3 / span 5;
 		// float:right;
 		text-align: end;
+		float:right;
 		background-color: white;
 		color: black;
 	}
 	
 	.theVoid {
 		text-align: start;
+		float:left;
 		background-color: black;
 		color: white;
 	}
