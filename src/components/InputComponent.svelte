@@ -37,14 +37,18 @@ import { bind } from 'svelte/internal';
 	}
 </script>
 
-<section id='inputArea'>
+<section id='inputArea' on:click|preventDefault>
 	<input id='textInput'
 	bind:value={messageContent}
 	on:keypress='{keypressCheck.bind(messageContent)}'>
-	<div id='submit' on:click|preventDefault>
+	<div id='submit'>
 		<!-- <Fab  -->
 		<Button variant='raised'
-		on:click={sendMessage(messageContent)}>
+		on:mousedown={(event)=> {
+			sendMessage(messageContent)
+			event.preventDefault()
+			}}
+		b>
 			<Icon class="material-icons">send</Icon>
 			<Label>Send</Label>
 		</Button>
