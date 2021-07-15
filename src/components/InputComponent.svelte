@@ -41,7 +41,7 @@ import { bind } from 'svelte/internal';
 	<input id='textInput'
 	bind:value={messageContent}
 	on:keypress='{keypressCheck.bind(messageContent)}'>
-	<div id='submit'>
+	<div id='submit' on:click|preventDefault>
 		<!-- <Fab  -->
 		<Button variant='raised'
 		on:click={sendMessage(messageContent)}>
