@@ -13,17 +13,25 @@
 	
 	const appStorage = window.localStorage
 	
-	themeStore.subscribe((newTheme) => {
-		theme = newTheme
-	})
-	
 	try {
-		theme = JSON.parse(appStorage.getItem('theme')) || ''
+		theme = JSON.parse(appStorage.getItem('theme'))
+		if (!theme) {
+			throw new Error('theme not found :<')
+		}
+		themeStore.update(() => {
+				let currentThemeIndex = 0
+				currentThemeIndex = themes.indexOf(theme)
+				return themes[currentThemeIndex]
+			})
 		console.log(`theme found: ${theme}`)
 	} catch (error) {
 		theme = ''
 		console.log(error)
 	}
+
+	themeStore.subscribe((newTheme) => {
+		theme = newTheme
+	})
 	
 	const saveTheme = (theme:string):void => {
 		appStorage.setItem('theme',JSON.stringify(theme))
