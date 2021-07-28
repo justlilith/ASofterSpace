@@ -3,7 +3,7 @@ declare module '@smui/common';
 declare module '@smui/fab';
 declare module '@smui/button';
 
-interface Message {
+interface MessageT {
 	content:string,
 	sender:string
 }

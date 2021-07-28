@@ -82,6 +82,38 @@ span.mdc-button__label {
 
 
 
+
+
+#interstitial {
+	background-color:#000;
+	animation: transition;
+	animation-duration: 300ms;
+	z-index:-90;
+	height:100%;
+	width:100%;
+	position:absolute;
+}
+
+@keyframes transition {
+	from {
+	background-color:hsla(0,0%,0%,0);
+	z-index:-10
+}
+50% {
+	background-color:hsla(0,0%,0%,1);
+	z-index: 100;
+}
+to {
+		background-color:hsla(0,0%,0%,0);
+		z-index:-10
+		
+	}
+}
+
+
+
+
+
 #p5Sketch {
 	z-index:-66;
 	width:100%;

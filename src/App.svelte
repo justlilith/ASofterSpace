@@ -1,12 +1,16 @@
 <script lang="ts">
-	import InputComponent from './components/InputComponent.svelte'
-	import MessageComponent from './components/MessageComponent.svelte'
+	import Input from './components/Input.svelte'
+	import Message from './components/Message.svelte'
 	import Fab from '@smui/fab'
 	import { fade, slide } from 'svelte/transition'
 	import { bind } from 'svelte/internal'
-	import StashComponent from './components/StashComponent.svelte'
+	import Stash from './components/Stash.svelte'
+	import ThemeSwitcher from './components/ThemeSwitcher.svelte'
 	
-	export let messageList:Array<Message> = [], timer:number = 8
+	let theme:string = 'soft-blue'
+	
+
+	export let messageList:Array<MessageT> = [], timer:number = 8
 	
 	const appStorage = window.localStorage
 	
@@ -41,7 +45,7 @@
 	
 	let voidFlag = 0
 	
-	const voidResponse = (timer:number, listofResponses:string[], messages:Array<Message>,voidFlag,innerVoidFlag,) => {
+	const voidResponse = (timer:number, listofResponses:string[], messages:Array<MessageT>,voidFlag,innerVoidFlag,) => {
 		if (voidFlag !== innerVoidFlag) {
 			return messageList
 		}
@@ -83,14 +87,14 @@
 		// 	3000)
 </script>
 		
-		<main>
+		<main class={theme}>
 			<div id='messages'>
 				<section id='animatedList'>
 					{#if messageList.length !== 0}
 					{#each messageList as message}
 					<span
 					transition:slide='{{ duration: 200 }}'>
-						<MessageComponent message={message}></MessageComponent>
+						<Message message={message}></Message>
 					</span>
 					{/each}
 					{:else}
@@ -98,11 +102,13 @@
 					{/if}
 				</section>
 			</div>
-			<InputComponent
+			<Input
 			on:voidInvoked='{invokeVoid.bind(timer,responses,messageList)}'
 			bind:messageList
-			bind:timer></InputComponent>
-			<StashComponent bind:messageList></StashComponent>
+			bind:timer></Input>
+			<Stash bind:messageList></Stash>
+			<ThemeSwitcher bind:theme></ThemeSwitcher>
+
 			
 		</main>
 		<style lang='scss'>
@@ -111,13 +117,15 @@
 			$background: #000;
 			
 			@use '@material/theme/index' as theme with (
-			$primary: color-palette.$blue-500,
-			$secondary: color-palette.$teal-600,
-			$surface: #fff,
-			$background: $background,
-			$error: #b00020,
-			);
+				$primary: color-palette.$blue-500,
+				$secondary: color-palette.$teal-600,
+				$surface: #fff,
+				$background: $background,
+				$error: #b00020,
+				);
 			
+			@import './themes/allThemes';
+				
 			main {
 				position:relative;
 				text-align: center;
