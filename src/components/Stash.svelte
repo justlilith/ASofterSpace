@@ -36,7 +36,8 @@
 		download.setAttribute('href',link)
 		document.body.append(download)
 		download.click()
-		// document.body.removeChild(download)
+		download.onload = () => {URL.revokeObjectURL(link)}
+		document.body.removeChild(download)
 	};
 
 	const clearStash = (): void => {
