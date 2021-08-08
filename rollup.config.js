@@ -51,7 +51,8 @@ export default {
 	plugins: [
 		copy({
 			targets: [
-				{
+				{ src:'/src/root/index.html', dest: './docs/' }
+				, {
 					src:'./src/p5',
 					dest:'./docs'
 				}
@@ -96,7 +97,7 @@ export default {
 		// /**/ !production && livereload('public'),
 		// /**/ !production && livereload('../docs'),
 		// /**/ !production && livereload('./docs'),
-		/**/ !production && livereload(['./docs','./src/p5']),
+		/**/ !production && livereload(['./docs','./src/p5','./src/root']),
 		
 		// If we're building for production (npm run build
 		// instead of npm run dev), minify
