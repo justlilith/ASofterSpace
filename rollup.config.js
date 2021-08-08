@@ -51,10 +51,11 @@ export default {
 	plugins: [
 		copy({
 			targets: [
-				{ src:'/src/root/index.html', dest: './docs/' }
-				, {
-					src:'./src/p5',
-					dest:'./docs'
+				{ src:'./src/p5'
+				, dest:'./docs'
+				}
+				, { src:'./src/root/**/*'
+				  , dest: './docs'
 				}
 			],
 			flatten:true
