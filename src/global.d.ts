@@ -5,5 +5,6 @@ declare module '@smui/button';
 
 interface MessageT {
 	content:string,
-	sender:string
+	sender:string,
+	timestamp:string,
 }

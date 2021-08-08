@@ -3,23 +3,70 @@
 	import Button, { Label } from '@smui/button'
 	import { Icon } from '@smui/common'
 	import Fab from '@smui/fab'
-import { bind } from 'svelte/internal';
+	import { bind } from 'svelte/internal';
+	// import { stashChat, saveChat, clearChat, clearStash } from './Stash.svelte'
+	import * as Helpers from './ts/helpers'
 
-	export let messageList:Array<Message>
+	export let messageList:Array<MessageT>
 	export let timer:number = 0
 	// export const animateList = function(){}
-	
+	export let chatName
+	export let fileName
+
 	let messageContent:string = ''
 
 	let dispatch = createEventDispatcher()
 
+	const parseMessage = (messageContent:string) => {
+		// console.log(messageContent[0])
+		switch (messageContent[0]) {
+			case '/':
+				let command = messageContent
+					.slice(1)
+					.split(' ')
+				switch (command[0]) {
+					case 'save':
+						Helpers.saveChat(fileName, messageList)
+						break
+					case 'stash':
+						Helpers.stashChat(chatName, messageList)
+						break
+					case 'clear':
+						console.log(command)
+						switch (command[1]) {
+							case 'stash':
+								Helpers.clearStash()
+								break
+							case 'chat':
+								messageList = []
+								break
+							default:
+								messageContent = 'invalid input'
+						}
+						break
+					default:
+						messageContent = 'invalid input'
+				}
+				break
+			default:
+				sendMessage(messageContent)
+		}
+	}
+
 	const sendMessage = (message:string) => {
+		let date = new Date()
+		let localTime = date.toLocaleTimeString()
+		let localDate = date.toLocaleDateString()
+		.split('/')
+		.reverse()
+		.join('.')
 		messageList = [
 			...messageList
 			, { content: message
 			, sender: 'user'
+			,	timestamp: `${localDate} - ${localTime}`
 			}
-			]
+		]
 			messageContent = ''
 			// dispatch('voidInvoked')
 		// animateList('messages')
@@ -28,7 +75,7 @@ import { bind } from 'svelte/internal';
 	const keypressCheck = (event) => {
 		// console.log(event)
 		if (event.key.toLowerCase() == 'enter') {
-			sendMessage(messageContent)
+			parseMessage(messageContent)
 			messageContent = ''
 			// dispatch('voidInvoked')
 		}
@@ -45,7 +92,7 @@ import { bind } from 'svelte/internal';
 		<!-- <Fab  -->
 		<Button variant='raised'
 		on:mousedown={(event)=> {
-			sendMessage(messageContent)
+			parseMessage(messageContent)
 			event.preventDefault()
 			}}
 		b>

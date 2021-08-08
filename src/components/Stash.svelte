@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Button, { Label } from "@smui/button";
+	import * as Helpers from './ts/helpers'
 
 	const appStorage = window.localStorage;
 
@@ -9,45 +10,7 @@
 
 	const currentDate = new Date();
 	let dateString = currentDate.toDateString().replace(/\s/g, "-");
-	let chatName: string = "";
-
-	const stashChat = (chatName: string): void => {
-		let stashName: string = `${dateString}-${chatName.replace(/\s/g, "-")}`;
-		let messages = new Set(messageList);
-		appStorage.setItem("chats", JSON.stringify(messageList));
-		console.log(appStorage.getItem("chats"));
-	};
-
-	const saveChat = (filename): void => {
-		filename = filename ? filename : "Saved Chat"
-		let chat = messageList
-			.map((message) => `${message.sender}: ${message.content}`)
-			.join("\n");
-		console.log(chat);
-		let date = new Date()
-		let filenameFinal = `${filename} (from ${date.toDateString()})`
-		let file = new File([chat], filenameFinal, {
-			type: 'text/plain'
-		})
-		let download = document.createElement('a')
-		download.setAttribute('id',file.name)
-		download.setAttribute('download',filenameFinal)
-		let link = URL.createObjectURL(file)
-		download.setAttribute('href',link)
-		document.body.append(download)
-		download.click()
-		download.onload = () => {URL.revokeObjectURL(link)}
-		document.body.removeChild(download)
-	};
-
-	const clearStash = (): void => {
-		appStorage.clear();
-	};
-
-	const clearChat = (): void => {
-		messageList = [];
-		console.log("chat cleared");
-	};
+	export let chatName: string = "";
 
 	const toggle = (stashToggle: boolean): boolean => {
 		stashToggle = !stashToggle;
@@ -77,7 +40,7 @@
 			<Button
 				variant="unelevated"
 				on:click={() => {
-					stashChat(chatName);
+					Helpers.stashChat(chatName, messageList);
 				}}
 			>
 				<Label>Stash Chat</Label>
@@ -87,7 +50,7 @@
 			<Button
 				variant="unelevated"
 				on:click={() => {
-					saveChat(chatName);
+					Helpers.saveChat(chatName, messageList);
 				}}
 			>
 				<Label>Save Chat</Label>
@@ -97,7 +60,7 @@
 			<Button
 				variant="unelevated"
 				on:click={() => {
-					clearStash();
+					Helpers.clearStash();
 				}}
 			>
 				<Label>Clear Stash</Label>
@@ -107,7 +70,7 @@
 			<Button
 				variant="unelevated"
 				on:click={() => {
-					clearChat();
+					messageList = []
 				}}
 			>
 				<Label>Clear Chat</Label>

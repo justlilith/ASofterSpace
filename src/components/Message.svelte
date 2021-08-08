@@ -7,9 +7,13 @@
 <p 
 class={message.sender}
 >
+<span class="timestamp">{message.timestamp}</span>
 {message.content}</p>
 
 <style lang='scss'>
+	.timestamp {
+		font-size:.85em;
+	}
 	p {
 		border: thin solid grey;
 		border-radius: 2px;
@@ -17,6 +21,8 @@ class={message.sender}
 		height:min-content;
 		margin: 0 0 .5em;
 		width: fit-content;
+		display:flex;
+		flex-direction: column;
 	}
 	.user {
 		// grid-column: 3 / span 5;

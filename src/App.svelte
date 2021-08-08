@@ -9,6 +9,7 @@
 	
 	let theme:string = 'soft-blue'
 	
+	let date = new Date()
 
 	export let messageList:Array<MessageT> = [], timer:number = 8
 	
@@ -24,6 +25,9 @@
 	
 	
 	// export let name: string;
+
+	let chatName = ''
+	let fileName = ''
 	
 	const removeMessage = (list:Array<Message>):Array<Message> => {
 		console.log(list)
@@ -57,10 +61,16 @@
 			let index:number = (100 * multiplier) % 4
 			index = Math.floor(index)
 			console.log(listofResponses[index])
+			let date = new Date()
+		let localTime = date.toLocaleTimeString()
+		let localDate = date.toLocaleDateString()
+		.split('/')
+		.reverse()
+		.join('.')
 			messageList = [...messages,
-			{
-				content:listofResponses[index],
-				sender:'theVoid'
+			{ content:listofResponses[index]
+			, sender:'theVoid'
+			, timestamp: `${localDate} - ${localTime}`
 			}
 			]
 			voidFlag = 0
@@ -105,8 +115,12 @@
 			<Input
 			on:voidInvoked='{invokeVoid.bind(timer,responses,messageList)}'
 			bind:messageList
-			bind:timer></Input>
-			<Stash bind:messageList></Stash>
+			bind:timer
+			bind:chatName
+			bind:fileName></Input>
+			<Stash
+			bind:messageList
+			bind:chatName></Stash>
 			<ThemeSwitcher bind:theme></ThemeSwitcher>
 
 			
