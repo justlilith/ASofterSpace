@@ -6,7 +6,7 @@
 
 	export let messageList: Array<MessageT>;
 
-	let showStashSave: boolean = true;
+	let showStashSave: boolean = false;
 
 	const currentDate = new Date();
 	let dateString = currentDate.toDateString().replace(/\s/g, "-");

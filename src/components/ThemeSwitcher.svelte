@@ -40,8 +40,8 @@
 	
 	const updateTheme = () => {
 		let interstitial = document.createElement('div')
-		document.body.prepend(interstitial)
 		interstitial.id = 'interstitial'
+		document.body.prepend(interstitial)
 		
 		setTimeout(() => {
 			themeStore.update(() => {
