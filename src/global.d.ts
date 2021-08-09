@@ -8,3 +8,8 @@ interface MessageT {
 	sender:string,
 	timestamp:string,
 }
+
+enum ListenerE {
+	'sun' = string,
+ cube = 'cube'
+}

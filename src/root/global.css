@@ -121,10 +121,14 @@ to {
 
 
 
-#p5Sketch {
+#p5Sketch, #p5Sketch2 {
 	z-index:-66;
 	width:100%;
 	position:absolute;
 	display:grid;
 	justify-items: center;;
+}
+
+.hidden {
+	visibility: hidden;
 }
