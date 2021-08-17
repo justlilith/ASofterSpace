@@ -1,0 +1,8 @@
+:global(html.soft-pink) {
+	background:
+	linear-gradient(130deg, hsl(273, 90%, 100%) 0%, hsla(330, 100%, 75%, 0.1) 70%, hsla(302, 100%, 50%, 0) 100%),
+	radial-gradient(circle at top, hsl(300, 50%, 75%) 30%, hsla(0, 90%, 75%, 0.8) 60%, hsla(0, 50%, 50%, 1.0) 100%),
+	radial-gradient(circle at bottom, hsl(330, 100%, 75%) 10%, hsl(300, 77%, 36%) 20%, hsl(0, 0%, 100%) 40%)
+	;
+	background-attachment: fixed;
+}
