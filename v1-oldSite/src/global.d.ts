@@ -1,5 +1,4 @@
-/// <reference types="@sveltejs/kit" />
-
+/// <reference types="svelte" />
 declare module '@smui/common';
 declare module '@smui/fab';
 declare module '@smui/button';
@@ -10,8 +9,7 @@ interface MessageT {
 	timestamp:string,
 }
 
-interface ToastT {
-	message:string,
-	duration:number,
-	id:number
+enum ListenerE {
+	'sun' = string,
+ cube = 'cube'
 }

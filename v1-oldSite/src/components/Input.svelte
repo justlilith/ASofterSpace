@@ -1,63 +1,59 @@
 <script lang='ts'>
 	import { createEventDispatcher } from 'svelte'
-	// import Button, { Label } from '@smui/button'
-	// import { Label } from '@smui/button'
-	// import { Icon } from '@smui/common'
-	// import Fab from '@smui/fab'
+	import Button, { Label } from '@smui/button'
+	import { Icon } from '@smui/common'
+	import Fab from '@smui/fab'
 	import { bind } from 'svelte/internal';
 	// import { stashChat, saveChat, clearChat, clearStash } from './Stash.svelte'
 	import * as Helpers from './ts/helpers'
-	
+
 	export let messageList:MessageT[]
 	export let timer:number = 0
 	// export const animateList = function(){}
 	export let chatName
 	export let fileName
-	
+
 	let messageContent:string = ''
-	
+
 	let dispatch = createEventDispatcher()
-	
+
 	const parseMessage = (messageContent:string) => {
 		// console.log(messageContent[0])
 		switch (messageContent[0]) {
 			case '/':
-			let command = messageContent
-			.slice(1)
-			.split(' ')
-			switch (command[0]) {
-				case 'save':
-				Helpers.saveChat(fileName, messageList)
-				break
-				case 'stash':
-				Helpers.stashChat(window.localStorage, chatName, messageList)
-				break
-				case 'clear':
-				console.log(command)
-				switch (command[1]) {
+				let command = messageContent
+					.slice(1)
+					.split(' ')
+				switch (command[0]) {
+					case 'save':
+						Helpers.saveChat(fileName, messageList)
+						break
 					case 'stash':
-					Helpers.clearStash(window.localStorage)
-					break
-					case 'chat':
-					messageList = []
-					break
+						Helpers.stashChat(chatName, messageList)
+						break
+					case 'clear':
+						console.log(command)
+						switch (command[1]) {
+							case 'stash':
+								Helpers.clearStash()
+								break
+							case 'chat':
+								messageList = []
+								break
+							default:
+								messageContent = 'invalid input'
+						}
+						break
 					default:
-					messageContent = 'invalid input'
+						messageContent = 'invalid input'
 				}
 				break
-				default:
-				messageContent = 'invalid input'
-			}
-			break
 			default:
-			sendMessage(messageContent)
+				sendMessage(messageContent)
 		}
 	}
-	
+
 	const sendMessage = (message:string) => {
-		if (!message) {
-			return
-		}
 		let date = new Date()
 		let localTime = date.toLocaleTimeString()
 		let localDate = date.toLocaleDateString()
@@ -65,17 +61,17 @@
 		.reverse()
 		.join('.')
 		messageList = [
-		...messageList
-		, { content: message
+			...messageList
+			, { content: message
 			, sender: 'user'
 			,	timestamp: `${localDate} - ${localTime}`
-		}
+			}
 		]
-		messageContent = ''
-		// dispatch('voidInvoked')
+			messageContent = ''
+			// dispatch('voidInvoked')
 		// animateList('messages')
 	}
-	
+
 	const keypressCheck = (event) => {
 		// console.log(event)
 		if (event.key.toLowerCase() == 'enter') {
@@ -94,15 +90,15 @@
 	on:keypress='{keypressCheck.bind(messageContent)}'>
 	<div id='submit'>
 		<!-- <Fab  -->
-			<button
-			on:mousedown={(event)=> {
-				parseMessage(messageContent)
-				event.preventDefault()
+		<Button variant='raised'
+		on:mousedown={(event)=> {
+			parseMessage(messageContent)
+			event.preventDefault()
 			}}
-			>
-			<span class="material-icons">send</span>
-			Send
-		</button>
+		b>
+			<Icon class="material-icons">send</Icon>
+			<Label>Send</Label>
+		</Button>
 		<!-- </Fab> -->
 	</div>
 </section>

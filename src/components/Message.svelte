@@ -4,16 +4,15 @@
 	// transition:fly='{{y:50}}'
 </script>
 
+<div class="timestamp">
+	<span class="timestamp">{message.timestamp}</span>
+</div>
 <p 
 class={message.sender}
 >
-<span class="timestamp">{message.timestamp}</span>
 {message.content}</p>
 
 <style lang='scss'>
-	.timestamp {
-		font-size:.85em;
-	}
 	p {
 		border: thin solid grey;
 		border-radius: 2px;
@@ -38,5 +37,13 @@ class={message.sender}
 		float:left;
 		background-color: black;
 		color: white;
+	}
+	
+	.timestamp {
+		font-size:.85em;
+		// float:right;
+		text-align: right;
+		// display: block;
+		border: none;
 	}
 </style>
