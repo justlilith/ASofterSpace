@@ -44,28 +44,28 @@
 	}
 </script>
 
+{#if currentToastQueue?.length > 0}
 <div class={theme} id='toastContainer'>
-	{#if currentToastQueue?.length > 0}
 	<!-- {serveToast()} -->
 	{#each currentToastQueue as toast}
 	{#if !toasterOccupied}
-	<div class='toastMessage' in:fly='{{duration: 500, y: -100}}' out:fade='{{duration:400}}'>
+	<div class='toastMessage' in:fly='{{duration: 300, y: -100}}' out:fade='{{duration:400}}'>
 		{serveToast(toast)}
 	</div>
 	{/if}
 	{/each}
-	{/if}
 </div>
+	{/if}
 
 <style lang='scss'>
 	#toastContainer {
 		position:absolute;
 		transform: translateX(50%);
 		// z-index:10;
-		top:5vh;
+		top:1vh;
 		left:0px;
-		overflow: hidden;
-		height:20vh;
+		overflow: visible;
+		height:2vh;
 		margin:auto;
 		width:50%;
 		

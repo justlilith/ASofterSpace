@@ -5,6 +5,7 @@
 	import { browser } from '$app/env'
 	import { onMount } from 'svelte'
 	import * as Helpers from './ts/helpers'
+	import Toast from './Toast.svelte'
 	
 	let themes = 
 	[ 'deep-blue'
@@ -23,12 +24,12 @@
 		const appStorage = window.localStorage
 		theme = Helpers.fetchTheme(appStorage, themeStore, 'theme')
 		listener = Helpers.fetchTheme(appStorage, themeStore, 'listener')
+		
+		themeStore.subscribe((newTheme) => {
+			theme = newTheme
+		})
+		
 	})
-	
-	themeStore.subscribe((newTheme) => {
-		theme = newTheme
-	})
-	
 
 	
 	
@@ -45,6 +46,7 @@
 		<span>Switch Listener</span>
 	</button>
 	{/if}
+	<Toast {theme}></Toast>
 </div>
 
 <style lang='scss'>

@@ -101,8 +101,8 @@ function notify(toastMessage:string, duration?:number):void {
 	// console.log(toastQueue)
 	
 	toastStore.update((toastQueue:ToastT[]) => {
-		console.log(toastQueue)
-		console.log('message added: ' + JSON.stringify(toast))
+		// console.log(toastQueue)
+		// console.log('message added: ' + JSON.stringify(toast))
 		return [...toastQueue, toast]
 	})
 }
@@ -122,7 +122,7 @@ function setListener (currentListener:string):string {
 		cube.setAttribute('class', '')
 		break
 	}
-	notify(`${currentListener} is now listening to you! c:`, 3000)
+	// notify(`${currentListener} is now listening to you! c:`, 1000)
 	return currentListener
 }
 
@@ -163,7 +163,6 @@ const stashChat = (appStorage:Storage, chatName:string, messageList:MessageT[]):
 
 
 function updateListener (appStorage, currentListener:string):string {
-	notify(`${currentListener.toUpperCase()} is now listening to you! c:`, 3000)
 	// console.log(listener)
 	const sun = document.getElementById('p5Sketch')
 	const cube = document.getElementById('p5Sketch2')
@@ -182,6 +181,8 @@ function updateListener (appStorage, currentListener:string):string {
 		break
 	}
 	saveToLocal(appStorage, 'listener',currentListener)
+	notify(`${currentListener} is now listening to you~ c:`, 1000)
+
 	return currentListener
 }
 
@@ -197,17 +198,21 @@ function updateTheme (appStorage:Storage, theme:string):void {
 	, 'deep-pink'
 	, 'soft-blue'
 	, 'soft-pink' ]
+
+	const themeIndex = (themes.indexOf(theme) + 1) % themes.length
+
+	theme = themes[themeIndex]
 	
 	const interstitial = document.createElement('div')
 	interstitial.id = 'interstitial'
 	document.body.prepend(interstitial)
 	
 	setTimeout(() => {
+
 		themeStore.update(() => {
-			let currentThemeIndex = 0
-			currentThemeIndex = (themes.indexOf(theme) + 1) % themes.length
-			return themes[currentThemeIndex]
+			return theme
 		})
+
 		
 		console.log(`theme updated to ${theme} :>`)
 		const html = document.getElementsByTagName('html')[0] 
@@ -218,7 +223,7 @@ function updateTheme (appStorage:Storage, theme:string):void {
 	
 	setTimeout(() => {
 		document.getElementById('interstitial') ? document.body.removeChild(document.getElementById('interstitial')) : null
-		notify(`your new theme is ${theme}! c:`, 3000)
+		notify(`your new theme is ${theme}! c:`, 1000)
 	},300)
 	
 }
