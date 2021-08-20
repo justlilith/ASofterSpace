@@ -1,21 +1,23 @@
 <script lang='ts'>
 	import { fade, fly } from 'svelte/transition'
 	export let message:MessageT
+	export let theme = ''
 	// transition:fly='{{y:50}}'
 </script>
 
+<div class='timestamp {theme}'>
+	<span class='timestamp {theme}'>{message.timestamp}</span>
+</div>
 <p 
 class={message.sender}
 >
-<span class="timestamp">{message.timestamp}</span>
 {message.content}</p>
 
 <style lang='scss'>
-	.timestamp {
-		font-size:.85em;
-	}
+	@import '../themes/allThemes';
+
 	p {
-		border: thin solid grey;
+		// border: thin solid grey;
 		border-radius: 2px;
 		padding: 1em;
 		height:min-content;
@@ -38,5 +40,13 @@ class={message.sender}
 		float:left;
 		background-color: black;
 		color: white;
+	}
+	
+	.timestamp {
+		font-size:.85em;
+		// float:right;
+		text-align: right;
+		// display: block;
+		border: none;
 	}
 </style>

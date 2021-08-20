@@ -6,3 +6,32 @@
 	;
 	background-attachment: fixed;
 }
+
+soft-pink {
+	@at-root {
+		button#menuButton.#{&} {
+			color:black;
+		}
+		
+		nav.#{&} {
+			background-color: white;
+		}
+		
+		nav.#{&} a {
+			color: hsl(0, 100%, 30%)
+		}
+		
+		div.#{&} p, p.#{&}, span.#{&}.timestamp {
+			color:black;
+		}
+		
+		div.#{&}.toastMessage {
+			background-color: hsl(330, 50%, 90%);
+		}
+		
+		button.#{&} {
+			background-color: hsl(330, 100%, 45%);
+			color: white;
+		}
+	}
+}

@@ -1,0 +1,143 @@
+html, body {
+	position: relative;
+	width: 100%;
+}
+
+/* html, #app {
+	position: relative;
+	width: 100%;
+	height:100%;
+} */
+
+html {
+	background-color: #000;
+	background: rgb(0,0,0);
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background:
+	linear-gradient(130deg, rgb(32, 3, 56) 0%, rgba(175, 0, 87, 0.1) 70%, rgba(255, 0, 247, 0) 100%),
+	radial-gradient(circle at top, rgba(0,0,0,1) 30%, rgba(12,5,94,.8) 60%, rgba(0,0,0,0) 100%),
+	radial-gradient(circle at bottom, rgb(55, 0, 255) 10%, rgb(33, 21, 165) 20%, rgba(0,0,0,1) 40%)
+	;
+	background-attachment: fixed;
+}
+
+body {
+	height: 100%;
+	color: #333;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+a {
+	color: rgb(0,100,200);
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:visited {
+	color: rgb(0,80,160);
+}
+
+label {
+	display: block;
+}
+
+input, button, select, textarea {
+	font-family: inherit;
+	font-size: inherit;
+	-webkit-padding: 0.4em 0;
+	padding: 0.4em;
+	margin: 0 0 0.5em 0;
+	box-sizing: border-box;
+	border: 1px solid #ccc;
+	border-radius: 2px;
+}
+
+input:disabled {
+	color: #ccc;
+}
+
+button {
+	font-family: inherit;
+	font-size: inherit;
+	color: #333;
+	/* background-color: #f4f4f4; */
+	outline: none;
+	border:none;
+}
+
+button:disabled {
+	color: #999;
+}
+
+button:not(:disabled):active {
+	background-color: #ddd;
+}
+
+button:focus {
+	border-color: #fff;
+}
+
+span.mdc-button__label {
+	text-transform: none;
+}
+
+
+
+
+
+#interstitial {
+	background-color:#000;
+	animation: transition;
+	animation-duration: 300ms;
+	z-index:-90;
+	height:100vh;
+	width:100%;
+	position:absolute;
+}
+
+@keyframes transition {
+	from {
+	background-color:hsla(0,0%,0%,0);
+	z-index:-10
+}
+50% {
+	background-color:hsla(0,0%,0%,1);
+	z-index: 100;
+}
+to {
+		background-color:hsla(0,0%,0%,0);
+		z-index:-10
+		
+	}
+}
+
+
+
+
+
+#p5Sketch, #p5Sketch2 {
+	z-index:-66;
+	width:100%;
+	position:absolute;
+	display:grid;
+	justify-items: center;;
+}
+
+.hidden {
+	visibility: hidden;
+}
+
+.opacity-25 {
+	opacity: 0.25
+}
+
+.opacity-100 {
+	opacity: 1
+}
