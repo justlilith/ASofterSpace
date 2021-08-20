@@ -6,3 +6,32 @@
 	;
 	background-attachment: fixed;
 }
+
+deep-blue {
+	@at-root {
+		button#menuButton.#{&} {
+			color:white;
+		}
+		
+		nav.#{&} {
+			background-color: black;
+		}
+		
+		nav.#{&} a {
+			color: hsl(230, 100%, 80%)
+		}
+		
+		p.#{&}, span.#{&}.timestamp {
+			color:white;
+		}
+		
+		div.#{&}.toastMessage {
+			background-color: hsl(230, 50%, 90%);
+		}
+		
+		button.#{&} {
+			background-color: hsl(230, 100%, 45%);
+			color: white;
+		}
+	}
+}

@@ -35,7 +35,9 @@
 		} catch (error) {
 			console.warn(error)
 		}
+		Helpers.setListenerOpacity(100)
 	})
+
 	
 	
 	// export let name: string;
@@ -111,7 +113,7 @@
 		// 	3000)
 	</script>
 	
-	<Menu></Menu>
+	<Menu {theme}></Menu>
 	
 	<main class={theme}>
 		<div id='messages'>
@@ -120,7 +122,7 @@
 				{#each messageList as message}
 				<span
 				transition:slide='{{ duration: 200 }}'>
-				<Message message={message}></Message>
+				<Message {theme} {message}></Message>
 			</span>
 			{/each}
 			{:else}
@@ -129,6 +131,7 @@
 		</section>
 	</div>
 	<Input
+	{theme}
 	on:click='{()=> {
 		console.log('click')
 }}'
@@ -138,6 +141,7 @@
 	bind:chatName
 	bind:fileName></Input>
 	<Stash
+	{theme}
 	bind:messageList
 	bind:chatName></Stash>
 	

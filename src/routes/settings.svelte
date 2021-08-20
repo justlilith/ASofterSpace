@@ -13,6 +13,7 @@
 	import Stash from '../components/Stash.svelte'
 	import Menu from '../components/Menu.svelte'
 	import ThemeSwitcher from '../components/ThemeSwitcher.svelte'
+	import * as Helpers from '../components/ts/helpers'
 	
 	let date = new Date()
 	
@@ -20,6 +21,7 @@
 	
 	onMount(async () => {
 		const appStorage = window.localStorage
+		Helpers.setListenerOpacity(25)
 	})
 	
 	
@@ -27,7 +29,8 @@
 	
 </script>
 
-<Menu></Menu>
+<Menu {theme}></Menu>
+
 
 <main class={theme}>
 	<ThemeSwitcher bind:theme></ThemeSwitcher>

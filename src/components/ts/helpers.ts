@@ -108,25 +108,6 @@ function notify(toastMessage:string, duration?:number):void {
 }
 
 
-function setListener (currentListener:string):string {
-	const sun = document.getElementById('p5Sketch')
-	const cube = document.getElementById('p5Sketch2')
-	switch (currentListener){
-		case 'the sun':
-		sun.setAttribute('class', '')
-		cube.setAttribute('class', 'hidden')
-		break
-		default:
-		case 'the cube':
-		sun.setAttribute('class', 'hidden')
-		cube.setAttribute('class', '')
-		break
-	}
-	// notify(`${currentListener} is now listening to you! c:`, 1000)
-	return currentListener
-}
-
-
 const saveChat = (filename:string, messageList:MessageT[]): void => {
 	notify('downloading chat! c:', 1000)
 	filename = filename ? filename : "Saved Chat"
@@ -153,6 +134,39 @@ const saveChat = (filename:string, messageList:MessageT[]): void => {
 };
 
 
+function setListener (currentListener:string):string {
+	const sun = document.getElementById('p5Sketch')
+	const cube = document.getElementById('p5Sketch2')
+	switch (currentListener){
+		case 'the sun':
+		sun.classList.remove('hidden')
+		cube.classList.add('hidden')
+		break
+		default:
+		case 'the cube':
+		sun.classList.add('hidden')
+		cube.classList.remove('hidden')
+		break
+	}
+	// notify(`${currentListener} is now listening to you! c:`, 1000)
+	return currentListener
+}
+
+
+function setListenerOpacity (opacity):void {
+	const regex = /opacity*/
+	const listeners = Array.from(document.getElementsByClassName('p5Sketch'))
+	listeners.forEach(element => {
+		const array = Array.from(element.classList)
+		const oldClass = array.filter(className => {
+			return className.search(regex) == 0
+		})?.[0]?.toString()
+		oldClass ? element.classList.remove(oldClass) : null
+		element.classList.add(`opacity-${opacity}`)
+	})
+}
+
+
 const stashChat = (appStorage:Storage, chatName:string, messageList:MessageT[]): void => {
 	// const stashName: string = `${dateString}-${chatName.replace(/\s/g, "-")}`;
 	// const messages = new Set(messageList);
@@ -168,21 +182,21 @@ function updateListener (appStorage, currentListener:string):string {
 	const cube = document.getElementById('p5Sketch2')
 	switch (currentListener){
 		case 'the sun':
-		sun.setAttribute('class', 'hidden')
-		cube.setAttribute('class', '')
+		sun.classList.add('hidden')
+		cube.classList.remove('hidden')
 		// console.log(listener)
 		currentListener = 'the cube'
 		break
 		default:
 		case 'the cube':
-		sun.setAttribute('class', '')
-		cube.setAttribute('class', 'hidden')
+		sun.classList.remove('hidden')
+		cube.classList.add('hidden')
 		currentListener = 'the sun'
 		break
 	}
 	saveToLocal(appStorage, 'listener',currentListener)
-	notify(`${currentListener} is now listening to you~ c:`, 1000)
-
+	notify(`${currentListener} is now listening to you~ c:`, 500)
+	
 	return currentListener
 }
 
@@ -198,9 +212,9 @@ function updateTheme (appStorage:Storage, theme:string):void {
 	, 'deep-pink'
 	, 'soft-blue'
 	, 'soft-pink' ]
-
+	
 	const themeIndex = (themes.indexOf(theme) + 1) % themes.length
-
+	
 	theme = themes[themeIndex]
 	
 	const interstitial = document.createElement('div')
@@ -208,11 +222,11 @@ function updateTheme (appStorage:Storage, theme:string):void {
 	document.body.prepend(interstitial)
 	
 	setTimeout(() => {
-
+		
 		themeStore.update(() => {
 			return theme
 		})
-
+		
 		
 		console.log(`theme updated to ${theme} :>`)
 		const html = document.getElementsByTagName('html')[0] 
@@ -223,7 +237,7 @@ function updateTheme (appStorage:Storage, theme:string):void {
 	
 	setTimeout(() => {
 		document.getElementById('interstitial') ? document.body.removeChild(document.getElementById('interstitial')) : null
-		notify(`your new theme is ${theme}! c:`, 1000)
+		notify(`your new theme is ${theme}! c:`, 500)
 	},300)
 	
 }
@@ -234,6 +248,8 @@ export {
 	, fetchTheme
 	, notify
 	, saveChat
+	, setListener
+	, setListenerOpacity
 	, stashChat
 	, updateListener
 	, updateTheme

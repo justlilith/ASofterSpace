@@ -12,6 +12,8 @@
 	export let chatName: string = "";
 	export let messageList: MessageT[];
 	
+	export let theme = ''
+	
 	const toggle = (stashToggle: boolean): boolean => {
 		stashToggle = !stashToggle;
 		console.log(stashToggle);
@@ -22,6 +24,7 @@
 <aside id="stash-component">
 	<div id="toggle-button">
 		<button
+		class={theme}
 		on:click={() => {
 			showStashSave = toggle(showStashSave);
 		}}
@@ -31,6 +34,7 @@
 </div>
 {#if showStashSave == true}
 <input
+class={theme}
 id="name"
 placeholder="Name this chat, please c:"
 bind:value={chatName}
@@ -38,6 +42,7 @@ bind:value={chatName}
 {#if browser}
 <div id="stash-chat">
 	<button
+	class={theme}
 	on:click={() => {
 		Helpers.stashChat(window.localStorage, chatName, messageList);
 	}}
@@ -47,6 +52,7 @@ bind:value={chatName}
 </div>
 <div id="save-chat">
 	<button
+	class={theme}
 	on:click={() => {
 		Helpers.saveChat(chatName, messageList);
 	}}
@@ -56,6 +62,7 @@ bind:value={chatName}
 </div>
 <div id="clear-stash">
 	<button
+	class={theme}
 	on:click={() => {
 		Helpers.clearStash(window.localStorage);
 	}}
@@ -66,6 +73,7 @@ bind:value={chatName}
 {/if}
 <div id="clear-chat">
 	<button
+	class={theme}
 	on:click={() => {
 		messageList = []
 	}}
@@ -77,6 +85,8 @@ bind:value={chatName}
 </aside>
 
 <style lang="scss">
+	@import '../themes/allThemes';
+	
 	#stash-component {
 		display: grid;
 		grid-template-areas:

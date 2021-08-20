@@ -1,12 +1,11 @@
 <script lang='ts'>
 	import { createEventDispatcher } from 'svelte'
-	// import Button, { Label } from '@smui/button'
-	// import { Label } from '@smui/button'
-	// import { Icon } from '@smui/common'
-	// import Fab from '@smui/fab'
 	import { bind } from 'svelte/internal';
 	// import { stashChat, saveChat, clearChat, clearStash } from './Stash.svelte'
 	import * as Helpers from './ts/helpers'
+	import themeStore from './ts/themeStore'
+	import { onMount } from 'svelte'
+	
 	
 	export let messageList:MessageT[]
 	export let timer:number = 0
@@ -14,9 +13,17 @@
 	export let chatName
 	export let fileName
 	
+	export let theme = ''
+	
 	let messageContent:string = ''
 	
 	let dispatch = createEventDispatcher()
+	
+	let appStorage:Storage
+	
+	onMount( async () => {
+		appStorage = window.localStorage
+	})
 	
 	const parseMessage = (messageContent:string) => {
 		// console.log(messageContent[0])
@@ -26,6 +33,23 @@
 			.slice(1)
 			.split(' ')
 			switch (command[0]) {
+				case 'switch':
+				switch(command[1]) {
+					case 'theme':
+					console.log('%cswitching themes from chatbox', 'color:cyan')
+					theme = Helpers.fetchTheme(appStorage, themeStore, 'theme')
+					Helpers.updateTheme(window.localStorage, theme)
+					break
+					case 'listener':
+					console.log('%cswitching listeners from chatbox', 'color:teal')
+					let listener = Helpers.fetchTheme(appStorage, themeStore, 'listener')
+					Helpers.updateListener(window.localStorage, listener)
+					break
+					default:
+					Helpers.notify('Invalid slash command :x',500)
+					break
+				}
+				break
 				case 'save':
 				Helpers.saveChat(fileName, messageList)
 				break
@@ -42,11 +66,11 @@
 					messageList = []
 					break
 					default:
-					messageContent = 'invalid input'
+					Helpers.notify('Invalid slash command :x',500)
 				}
 				break
 				default:
-				messageContent = 'invalid input'
+				Helpers.notify('Invalid slash command :x',500)
 			}
 			break
 			default:
@@ -90,17 +114,20 @@
 
 <section id='inputArea' on:click|preventDefault>
 	<input id='textInput'
+	class={theme}
 	bind:value={messageContent}
 	on:keypress='{keypressCheck.bind(messageContent)}'>
 	<div id='submit'>
 		<!-- <Fab  -->
 			<button
+			class={theme}
+			id='submitButton'
 			on:mousedown={(event)=> {
 				parseMessage(messageContent)
 				event.preventDefault()
 			}}
 			>
-			<span class="material-icons">send</span>
+			<span id='sendButton' class="material-icons">send</span>
 			Send
 		</button>
 		<!-- </Fab> -->
@@ -108,6 +135,8 @@
 </section>
 
 <style lang='scss'>
+	@import '../themes/allThemes';
+	
 	#inputArea {
 		width: 100%;
 		// height: 2em;
@@ -118,9 +147,11 @@
 		grid-template-columns: repeat(6, 1fr);
 		// grid-auto-columns: min-content;
 	}
+	
 	#textInput {
 		grid-column: 1 / span 6;
 	}
+	
 	#submit {
 		// background-color: #fff;
 		color:purple;
@@ -128,5 +159,9 @@
 		border:none;
 		text-decoration: none;
 		width:100%;
+	}
+	
+	#sendButton {
+		vertical-align: top;
 	}
 </style>

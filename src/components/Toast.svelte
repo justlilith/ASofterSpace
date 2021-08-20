@@ -17,7 +17,7 @@
 
 	toastStore.subscribe((toastQueue:ToastT[]) => {
 		if (toastQueue) {
-			console.log(toastQueue)
+			// console.log(toastQueue)
 			currentToastQueue = toastQueue
 			// let popup = toastQueue[toastQueue.length - 1]
 			// duration = popup?.duration
@@ -44,12 +44,16 @@
 	}
 </script>
 
+
 {#if currentToastQueue?.length > 0}
-<div class={theme} id='toastContainer'>
+<div out:fade='{{duration:200}}' class={theme} id='toastContainer'>
 	<!-- {serveToast()} -->
 	{#each currentToastQueue as toast}
 	{#if !toasterOccupied}
-	<div class='toastMessage' in:fly='{{duration: 300, y: -100}}' out:fade='{{duration:400}}'>
+	<div class='toastMessage {theme}'
+	in:fly='{{duration: 300, y: -100}}'
+	out:fade='{{duration:200}}'
+	>
 		{serveToast(toast)}
 	</div>
 	{/if}
@@ -57,7 +61,10 @@
 </div>
 	{/if}
 
+
 <style lang='scss'>
+	@import '../themes/allThemes';
+
 	#toastContainer {
 		position:absolute;
 		transform: translateX(50%);
@@ -72,6 +79,7 @@
 	}
 
 	.toastMessage {
+		background-color: white;
 		height:3em;
 		width:10em;
 		border: thin solid grey;
@@ -83,8 +91,6 @@
 		// display:flex;
 		// flex-direction: column;
 		text-align: center;
-		background-color: white;
 		color: black;
-		opacity: 75%;
 	}
 </style>

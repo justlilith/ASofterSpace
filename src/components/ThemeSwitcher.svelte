@@ -50,5 +50,5 @@
 </div>
 
 <style lang='scss'>
-	
+	@import '../themes/allThemes';
 </style>

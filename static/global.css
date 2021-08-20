@@ -67,8 +67,9 @@ button {
 	font-family: inherit;
 	font-size: inherit;
 	color: #333;
-	background-color: #f4f4f4;
+	/* background-color: #f4f4f4; */
 	outline: none;
+	border:none;
 }
 
 button:disabled {
@@ -80,7 +81,7 @@ button:not(:disabled):active {
 }
 
 button:focus {
-	border-color: #666;
+	border-color: #fff;
 }
 
 span.mdc-button__label {
@@ -131,4 +132,12 @@ to {
 
 .hidden {
 	visibility: hidden;
+}
+
+.opacity-25 {
+	opacity: 0.25
+}
+
+.opacity-100 {
+	opacity: 1
 }

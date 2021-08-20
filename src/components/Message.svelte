@@ -1,10 +1,11 @@
 <script lang='ts'>
 	import { fade, fly } from 'svelte/transition'
 	export let message:MessageT
+	export let theme = ''
 	// transition:fly='{{y:50}}'
 </script>
 
-<div class="timestamp">
+<div class="timestamp {theme}">
 	<span class="timestamp">{message.timestamp}</span>
 </div>
 <p 
@@ -13,8 +14,10 @@ class={message.sender}
 {message.content}</p>
 
 <style lang='scss'>
+	@import '../themes/allThemes';
+
 	p {
-		border: thin solid grey;
+		// border: thin solid grey;
 		border-radius: 2px;
 		padding: 1em;
 		height:min-content;
