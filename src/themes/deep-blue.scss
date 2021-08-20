@@ -21,7 +21,7 @@ deep-blue {
 			color: hsl(230, 100%, 80%)
 		}
 		
-		p.#{&}, span.#{&}.timestamp {
+		div.#{&} p, p.#{&}, span.#{&}.timestamp {
 			color:white;
 		}
 		

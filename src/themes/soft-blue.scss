@@ -21,7 +21,7 @@ soft-blue {
 			color: hsl(230, 100%, 30%)
 		}
 		
-		p.#{&}, span.#{&}.timestamp {
+		div.#{&} p, p.#{&}, span.#{&}.timestamp {
 			color:black;
 		}
 		

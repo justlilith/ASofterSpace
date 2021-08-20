@@ -38,11 +38,11 @@
 <div class={theme}>
 	{#if browser}
 	<p>current theme: {theme.replace('-', ' ')}</p>
-	<button on:click={() => Helpers.updateTheme(window.localStorage, theme)}>
+	<button class={theme} on:click={() => Helpers.updateTheme(window.localStorage, theme)}>
 		<span>Switch Theme</span>
 	</button>
 	<p>current listener: {listener}</p>
-	<button on:click={() => listener = Helpers.updateListener(window.localStorage, listener)}>
+	<button class={theme} on:click={() => listener = Helpers.updateListener(window.localStorage, listener)}>
 		<span>Switch Listener</span>
 	</button>
 	{/if}

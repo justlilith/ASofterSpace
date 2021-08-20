@@ -21,7 +21,7 @@ soft-pink {
 			color: hsl(0, 100%, 30%)
 		}
 		
-		p.#{&}, span.#{&}.timestamp {
+		div.#{&} p, p.#{&}, span.#{&}.timestamp {
 			color:black;
 		}
 		

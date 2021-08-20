@@ -5,8 +5,8 @@
 	// transition:fly='{{y:50}}'
 </script>
 
-<div class="timestamp {theme}">
-	<span class="timestamp">{message.timestamp}</span>
+<div class='timestamp {theme}'>
+	<span class='timestamp {theme}'>{message.timestamp}</span>
 </div>
 <p 
 class={message.sender}

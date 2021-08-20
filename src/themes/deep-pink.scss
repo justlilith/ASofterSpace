@@ -21,7 +21,7 @@ deep-pink {
 			color: hsl(300, 100%, 80%)
 		}
 		
-		p.#{&}, span.#{&}.timestamp {
+		div.#{&} p, p.#{&}, span.#{&}.timestamp {
 			color:white;
 		}
 		
