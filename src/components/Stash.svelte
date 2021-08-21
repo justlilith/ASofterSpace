@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/env'
 	import * as Helpers from './ts/helpers'
+	import { fade } from 'svelte/transition'
 	
 	if (browser) {
 		const appStorage = window.localStorage;	
@@ -33,16 +34,18 @@
 	</button>
 </div>
 {#if showStashSave == true}
+{#if browser}
 <input
+transition:fade='{{duration: 100, delay:100}}'
 class={theme}
 id="name"
 placeholder="Name this chat, please c:"
 bind:value={chatName}
 />
-{#if browser}
 <div id="stash-chat">
 	<button
-	class={theme}
+transition:fade='{{duration: 150, delay:150}}'
+class={theme}
 	on:click={() => {
 		Helpers.stashChat(window.localStorage, chatName, messageList);
 	}}
@@ -52,7 +55,8 @@ bind:value={chatName}
 </div>
 <div id="save-chat">
 	<button
-	class={theme}
+transition:fade='{{duration: 200, delay:200}}'
+class={theme}
 	on:click={() => {
 		Helpers.saveChat(chatName, messageList);
 	}}
@@ -62,7 +66,8 @@ bind:value={chatName}
 </div>
 <div id="clear-stash">
 	<button
-	class={theme}
+transition:fade='{{duration: 250, delay:250}}'
+class={theme}
 	on:click={() => {
 		Helpers.clearStash(window.localStorage);
 	}}
@@ -70,10 +75,10 @@ bind:value={chatName}
 	<span>Clear Stash</span>
 </button>
 </div>
-{/if}
 <div id="clear-chat">
 	<button
-	class={theme}
+transition:fade='{{duration: 300, delay:300}}'
+class={theme}
 	on:click={() => {
 		messageList = []
 	}}
@@ -81,6 +86,7 @@ bind:value={chatName}
 	<span>Clear Chat</span>
 </button>
 </div>
+{/if}
 {/if}
 </aside>
 
