@@ -50,8 +50,8 @@ const fetchTheme = (appStorage:Storage, themeStore, type:string):string => {
 		})
 		console.log(`theme found: ${theme}`)
 	} catch (error) {
-		theme = ''
-		console.log(error)
+		theme = 'deep-blue'
+		console.warn(error)
 	}
 	
 	try {

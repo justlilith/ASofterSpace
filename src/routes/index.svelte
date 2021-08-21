@@ -27,7 +27,15 @@
 		const appStorage = window.localStorage
 		
 		theme = Helpers.fetchTheme(appStorage, themeStore, 'theme')
+
+		if (!theme) {
+			theme = 'deep-blue'
+		}
 		
+		themeStore.subscribe((newTheme) => {
+			theme = newTheme
+		})
+
 		try {
 			let stash = JSON.parse(appStorage.getItem('chats'))
 			messageList = stash || messageList
@@ -35,6 +43,7 @@
 		} catch (error) {
 			console.warn(error)
 		}
+		
 		Helpers.setListenerOpacity(100)
 	})
 
