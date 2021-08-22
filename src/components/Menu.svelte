@@ -4,7 +4,7 @@
 	
 	export let authStatus:boolean = false
 	
-	let flyoutStatus = true
+	let flyoutStatus = false
 </script>
 
 <button
