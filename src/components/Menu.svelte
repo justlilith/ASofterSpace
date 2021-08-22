@@ -4,7 +4,7 @@
 	
 	export let authStatus:boolean = false
 	
-	let flyoutStatus = false
+	let flyoutStatus = true
 </script>
 
 <button
@@ -86,9 +86,9 @@ class={theme}>
 		left: 0px;
 		line-height: 2;
 		margin: 0;
-		padding: 0 7.5vw 10vh;
+		padding: 0 2vw 10vh 7.5vw;
 		text-align: left;
-		width: 5rem;
+		width: 10rem;
 	}
 	
 	ul {
