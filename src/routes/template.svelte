@@ -20,49 +20,27 @@
 	onMount(async () => {
 		const appStorage = window.localStorage
 		Helpers.setListenerOpacity(25)
-		
-		theme = Helpers.fetchTheme(appStorage, themeStore, 'theme')
-		
-		if (!theme) {
-			theme = 'deep-blue'
-		}
-		
-		themeStore.subscribe((newTheme) => {
-			theme = newTheme
-		})
+			
+			theme = Helpers.fetchTheme(appStorage, themeStore, 'theme')
+	
+			if (!theme) {
+				theme = 'deep-blue'
+			}
+			
+			themeStore.subscribe((newTheme) => {
+				theme = newTheme
+			})
 	})
-	// export let name: string;
 </script>
+
 
 
 
 <Menu {theme}></Menu>
 
 <main class={theme}>
-	<h1>Login</h1>
-	
-	<input 
-	transition:fade='{{duration: 100, delay:100}}'
-	id='email' placeholder="email@mailboxx.com">
-	
-	<input 
-	transition:fade='{{duration: 100, delay:150}}'
-	id='pass' type="password" placeholder="password">
-	
-	<div>
-		<button
-		class={theme}
-		transition:fade='{{duration: 100, delay:200}}'
-		on:click='{() => {}}'
-		>
-		Login
-	</button>
-</div>
-
-<p transition:fade='{{duration: 100, delay:250}}'>New to A Softer Space?
-	<a href='/signup'>Sign up here, okay?</a>
-</p>
-
+	<section id="p5Sketch"></section>
+	<section id="p5Sketch2"></section>
 </main>
 
 
@@ -87,17 +65,9 @@
 		position:relative;
 		text-align: center;
 		padding: 1em;
-		/* min-width: 400px; */
 		max-width: 85%;
-		/* width:100px; */
 		height:100%;
 		margin: 0 auto;
-	}
-	
-	h1 {
-		// text-transform: lowercase;
-		font-size: 3em;
-		font-weight: 600;
 	}
 	
 	@media (min-width: 500px) {

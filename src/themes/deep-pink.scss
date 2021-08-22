@@ -8,9 +8,16 @@
 }
 
 deep-pink {
+	$primary: hsl(320, 100%, 50%);
+	$secondary: hsl(20, 100%, 85%);
+	
 	@at-root {
-		button#menuButton.#{&} {
+		button#menuButton.#{&}, button#toggleButton.#{&} {
 			color:white;
+		}
+		
+		main.#{&} h1 {
+			color: $primary;
 		}
 		
 		nav.#{&} {
@@ -21,7 +28,7 @@ deep-pink {
 			color: hsl(300, 100%, 80%)
 		}
 		
-		div.#{&} p, p.#{&}, span.#{&}.timestamp {
+		main.#{&} p, div.#{&} p, p.#{&}, span.#{&}.timestamp {
 			color:white;
 		}
 		
@@ -32,6 +39,11 @@ deep-pink {
 		button.#{&} {
 			background-color: hsl(320, 100%, 40%);
 			color: white;
+		}
+		
+		main.#{&} a {
+			color: $secondary;
+			font-weight: 600;
 		}
 	}
 }
