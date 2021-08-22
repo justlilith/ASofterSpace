@@ -2,6 +2,7 @@ import { browser } from '$app/env'
 import themeStore from './themeStore'
 import { toastStore } from './toastStore'
 import { get } from 'svelte/store'
+import type { Session } from '@supabase/gotrue-js';
 
 
 if (browser) {
@@ -200,9 +201,18 @@ function updateListener (appStorage, currentListener:string):string {
 	return currentListener
 }
 
-function saveToLocal (appStorage, prop:string, value:string):void {
+function saveToLocal (appStorage, prop:string, value:string|Session):void {
 	appStorage.setItem(prop,JSON.stringify(value))
 	console.log(appStorage.getItem(prop))
+}
+
+function fetchFromLocal (appStorage:Storage, prop:string):void {
+	try {
+		let value = JSON.parse(appStorage.getItem(prop))
+		return value
+	} catch (error) {
+		console.warn(error)
+	}
 }
 
 
@@ -248,6 +258,7 @@ export {
 	, fetchTheme
 	, notify
 	, saveChat
+	, saveToLocal
 	, setListener
 	, setListenerOpacity
 	, stashChat

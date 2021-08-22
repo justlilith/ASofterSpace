@@ -13,10 +13,11 @@
 	import Stash from '../components/Stash.svelte'
 	import Menu from '../components/Menu.svelte'
 	import themeStore from '../components/ts/themeStore'
+	import Toast from '../components/Toast.svelte'
 	import * as Helpers from '../components/ts/helpers'
 
 	
-	import { login } from '../components/ts/auth'
+	import { signup } from '../components/ts/auth'
 
 	export let theme = ''
 	
@@ -38,16 +39,15 @@
 
 	let email:string
 	let password:string
+	let name:string
 
 	let user, session, error
 
-	function signin () {
-		console.log('signin invoked')
-		login(email, password)
-		.then(result => {
-			[user, session, error] = result
-		})
-		console.log(user, session, error)
+	async function newAccount() {
+		([user, session, error] = await signup(email, password, name))
+		if (error) {
+			Helpers.notify(JSON.stringify(error.message), 2000)
+		}
 	}
 	
 </script>
@@ -57,7 +57,12 @@
 <Menu {theme}></Menu>
 
 <main class={theme}>
-	<h1>Login</h1>
+	<h1>Sign Up</h1>
+	
+	<input 
+	bind:value={name}
+	transition:fade='{{duration: 100, delay:100}}'
+	id='name' placeholder="Your Name">
 	
 	<input 
 	bind:value={email}
@@ -74,17 +79,18 @@
 		class={theme}
 		transition:fade='{{duration: 100, delay:200}}'
 		on:click='{() => {
-			signin()
+			newAccount()
 			}}'
 		>
-		Login
+		Sign up
 	</button>
 </div>
 
-<p transition:fade='{{duration: 100, delay:250}}'>New to A Softer Space?
-	<a href='/signup'>Sign up here, okay?</a>
+<p transition:fade='{{duration: 100, delay:250}}'>Already have an account?
+	<a href='/login'>Log in here, okay?</a>
 </p>
 
+<Toast {theme}></Toast>
 </main>
 
 
