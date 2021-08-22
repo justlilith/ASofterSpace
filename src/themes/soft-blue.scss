@@ -8,9 +8,16 @@
 }
 
 soft-blue {
+	$primary: hsl(210, 100%, 50%);
+	$secondary: hsl(210, 100%, 25%);
+	
 	@at-root {
-		button#menuButton.#{&} {
+		button#menuButton.#{&}, button#toggleButton.#{&} {
 			color:black;
+		}
+		
+		main.#{&} h1 {
+			color: $primary;
 		}
 		
 		nav.#{&} {
@@ -21,7 +28,7 @@ soft-blue {
 			color: hsl(230, 100%, 30%)
 		}
 		
-		div.#{&} p, p.#{&}, span.#{&}.timestamp {
+		main.#{&} p, div.#{&} p, p.#{&}, span.#{&}.timestamp {
 			color:black;
 		}
 		
@@ -32,6 +39,11 @@ soft-blue {
 		button.#{&} {
 			background-color: hsl(210, 100%, 45%);
 			color: white;
+		}
+		
+		main.#{&} a {
+			color: $secondary;
+			font-weight: 600;
 		}
 	}
 }
