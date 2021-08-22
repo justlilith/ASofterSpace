@@ -108,7 +108,6 @@
 			// dispatch('voidInvoked')
 		}
 		timer = 7
-		
 	}
 </script>
 

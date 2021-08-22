@@ -2,6 +2,8 @@
 	import { fly } from 'svelte/transition'
 	export let theme = ''
 	
+	export let authStatus:boolean = false
+	
 	let flyoutStatus = false
 </script>
 
@@ -11,7 +13,7 @@ class={theme}
 on:click="{() => flyoutStatus = !flyoutStatus}"
 >
 <span class='material-icons {theme}'>menu</span>
-<span class={theme} id='menuButtonText'>Menu</span>
+<span class='{theme} menuButtonText'>Menu</span>
 </button>
 
 {#if flyoutStatus}
@@ -20,10 +22,30 @@ transition:fly='{{duration: 300, x: -200}}'
 class={theme}>
 <ul>
 	<li>
-		<a href="/">Chat</a>
+		<a href="/">
+			<span class='material-icons {theme}'>chat</span>
+			<span class='{theme} menuButtonText'>Chat</span>
+		</a>
+	</li>
+	{#if authStatus == true}
+	<li>
+		<a href="/history">
+			<span class='material-icons {theme}'>info</span>
+			History
+		</a>
+	</li>
+	{/if}
+	<li>
+		<a href="/settings">
+			<span class='material-icons {theme}'>settings</span>
+			Settings
+		</a>
 	</li>
 	<li>
-		<a href="/settings">Settings</a>
+		<a href="/login">
+			<span class='material-icons {theme}'>login</span>
+			Login
+		</a>
 	</li>
 </ul>
 </nav>
@@ -31,15 +53,15 @@ class={theme}>
 
 <style lang="scss">
 	@import '../themes/allThemes';
-
+	
 	nav, button {
 		bottom: 2vh;
 		left: 2vw;
 		position: fixed;
 		z-index: 10;
-		padding: 0 5vw;
+		padding: 0 7.5vw;
 	}
-
+	
 	#menuButton {
 		left: 0px;
 		background: none;
@@ -48,10 +70,14 @@ class={theme}>
 		margin: none;
 	}
 	
-	#menuButtonText {
-		vertical-align: top;
+	.menuButtonText {
+		vertical-align: middle;
 	}
-	
+
+	:global(.material-icons) {
+		vertical-align: middle;
+	}
+
 	nav {
 		bottom: 0vh;
 		display: flex;
@@ -60,7 +86,7 @@ class={theme}>
 		left: 0px;
 		line-height: 2;
 		margin: 0;
-		padding: 0 5vw 10vh;
+		padding: 0 7.5vw 10vh;
 		text-align: left;
 		width: 5rem;
 	}
@@ -73,8 +99,9 @@ class={theme}>
 	li {
 		text-decoration: none;
 		list-style: none;
+		padding: 2vh 0;
 	}
-
+	
 	@media (max-width: 500px) {
 		nav {
 			min-width: 30%;

@@ -28,7 +28,6 @@
 		themeStore.subscribe((newTheme) => {
 			theme = newTheme
 		})
-		
 	})
 
 	
