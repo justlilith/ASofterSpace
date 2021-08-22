@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/env'
 	import * as Helpers from './ts/helpers'
-	import { fade } from 'svelte/transition'
+	import { fade, fly } from 'svelte/transition'
 	
 	if (browser) {
 		const appStorage = window.localStorage;	
@@ -9,7 +9,9 @@
 	
 	const currentDate = new Date();
 	let dateString = currentDate.toDateString().replace(/\s/g, "-");
+	
 	let showStashSave: boolean = false;
+	
 	export let chatName: string = "";
 	export let messageList: MessageT[];
 	
@@ -22,19 +24,23 @@
 	}
 </script>
 
-<aside id="stash-component">
-	<div id="toggle-button">
-		<button
-		class={theme}
-		on:click={() => {
-			showStashSave = toggle(showStashSave);
-		}}
-		>
-		Chat Options
-	</button>
-</div>
+<button
+id="toggleButton"
+class={theme}
+on:click={() => {
+	showStashSave = toggle(showStashSave);
+}}
+>
+<span class='material-icons {theme}'>info</span>
+<span class={theme} id='toggleButtonText'>Chat Options</span>
+</button>
+
 {#if showStashSave == true}
 {#if browser}
+<aside
+id="stash-component"
+transition:fly='{{duration: 300, y:200}}'
+>
 <input
 transition:fade='{{duration: 100, delay:100}}'
 class={theme}
@@ -44,8 +50,8 @@ bind:value={chatName}
 />
 <div id="stash-chat">
 	<button
-transition:fade='{{duration: 150, delay:150}}'
-class={theme}
+	transition:fade='{{duration: 150, delay:150}}'
+	class={theme}
 	on:click={() => {
 		Helpers.stashChat(window.localStorage, chatName, messageList);
 	}}
@@ -55,8 +61,8 @@ class={theme}
 </div>
 <div id="save-chat">
 	<button
-transition:fade='{{duration: 200, delay:200}}'
-class={theme}
+	transition:fade='{{duration: 200, delay:200}}'
+	class={theme}
 	on:click={() => {
 		Helpers.saveChat(chatName, messageList);
 	}}
@@ -66,8 +72,8 @@ class={theme}
 </div>
 <div id="clear-stash">
 	<button
-transition:fade='{{duration: 250, delay:250}}'
-class={theme}
+	transition:fade='{{delay:250}}'
+	class={theme}
 	on:click={() => {
 		Helpers.clearStash(window.localStorage);
 	}}
@@ -77,8 +83,8 @@ class={theme}
 </div>
 <div id="clear-chat">
 	<button
-transition:fade='{{duration: 300, delay:300}}'
-class={theme}
+	transition:fade='{{duration: 300, delay:300}}'
+	class={theme}
 	on:click={() => {
 		messageList = []
 	}}
@@ -86,31 +92,67 @@ class={theme}
 	<span>Clear Chat</span>
 </button>
 </div>
-{/if}
-{/if}
 </aside>
+{/if}
+{/if}
 
 <style lang="scss">
 	@import '../themes/allThemes';
 	
-	#stash-component {
-		display: grid;
-		grid-template-areas:
-		"top top top top"
-		"middle middle middle middle"
-		"stash-chat save-chat clear-stash clear-chat";
-		justify-items: stretch;
-		width: 100%;
-		min-height: 50px;
-		gap: 5px;
+	nav, #toggleButton {
+		bottom: 2vh;
+		right: 0;
+		position: fixed;
+		z-index: 10;
+		padding: 0 7.5vw;
 	}
 	
-	#toggle-button {
-		grid-area: top;
+	#toggleButton {
+		background: none;
+		border: none;
+		z-index: 20;
+		margin: none;
+	}
+	
+	#toggleButtonText {
+		vertical-align: middle;
+	}
+	
+	nav {
+		bottom: 0vh;
+		display: flex;
+		flex-direction: column-reverse;
+		height: 100%;
+		left: 0px;
+		line-height: 2;
+		margin: 0;
+		padding: 0 5vw 10vh;
+		text-align: left;
+		width: 5rem;
+	}
+	
+	#stash-component {
+		position: fixed;
+		left: 0px;
+		right: 0px;
+		bottom:0px;
+		background-color: black;
+		padding: 2vh 7.5vw 10vh;
+		display: grid;
+		grid-template-areas:
+		"middle middle middle middle"
+		"stash-chat save-chat clear-stash clear-chat";
+		justify-items:stretch;
+		min-height: 50px;
+		gap: 2vw;
+		margin:auto;
 	}
 	
 	#name {
 		grid-area: middle;
+		width:85vw;
+		margin: auto;
+		// height:30px;
 	}
 	
 	#stash-chat {
@@ -124,5 +166,23 @@ class={theme}
 	}
 	#clear-chat {
 		grid-area: clear-chat;
+	}
+	
+	@media (min-width: 500px) {
+		#stash-component {
+			padding: 2vh 20vw 10vh;
+		}
+		#name {
+			width:60vw;
+		}
+	}
+	
+	@media (min-width: 1000px) {
+		#stash-component {
+			padding: 2vh 35vw 10vh;
+		}
+		#name {
+			width:30vw;
+		}
 	}
 </style>

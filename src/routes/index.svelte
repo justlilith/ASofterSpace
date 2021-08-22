@@ -189,7 +189,7 @@
 		/* align-items:flex-end; */
 		flex-direction: column-reverse;
 		/* justify-content: flex-end; */
-		height: 75vh;
+		height: 80vh;
 		min-height:1px;
 		overflow:scroll;
 		-webkit-mask-image: linear-gradient(to top, black 0%, transparent 80%);
