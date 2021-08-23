@@ -1,5 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
+import { writable, get } from 'svelte/store'
 import * as Helpers from './helpers'
+import fetch from 'isomorphic-fetch'
 
 const sbUrl = 'https://tdoulxkicweqdvxnuqmm.supabase.co'
 const sbKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyODk0NTUxNCwiZXhwIjoxOTQ0NTIxNTE0fQ.b5JJopf2VUmRy69rF6_jp21phjEHi6NHeVnGsJ7yC_A'
@@ -7,18 +9,33 @@ const sbKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6
 const supabase =
 createClient(sbUrl, sbKey)
 
+const authData = writable()
+
 // :Promise<(User | Session | Error)[]>
 async function login (email:string, password:string) {
 	const { user, session, error } = await supabase.auth.signIn({
 		email: email,
 		password: password,
+	}, {
+		redirectTo: 'https://asofter.space/'
+		// redirectTo: 'localhost:3000'
 	})
-
-	if (session) {
-		Helpers.saveToLocal(window.localStorage, 'session', session)
-	}
-
+	
 	console.log(user, session, error)
+	
+	if (session) {
+		const data = 
+			{ user: null
+			, session: null
+		}
+		data.user = user
+		data.session = session
+		authData.update(() => {
+			return data
+		})
+	}
+	
+	console.log(get(authData))
 	
 	return [user, session, error]
 }
@@ -47,4 +64,11 @@ async function signup (email:string, password:string, name:string) {
 	}
 }
 
-export { login, signup }
+
+async function authCheck () {
+	// const options = {}
+	// await fetch()
+	
+}
+
+export { login, signup, authCheck }

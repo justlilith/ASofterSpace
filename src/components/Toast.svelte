@@ -50,7 +50,7 @@
 	<!-- {serveToast()} -->
 	{#each currentToastQueue as toast}
 	{#if !toasterOccupied}
-	<div class='toastMessage {theme}'
+	<div class='toastMessage {theme} {toast.mood}'
 	in:fly='{{duration: 300, y: -100}}'
 	out:fade='{{duration:200}}'
 	>
@@ -92,5 +92,13 @@
 		// flex-direction: column;
 		text-align: center;
 		color: black;
+	}
+
+	.bad {
+		background-color: hsl(0, 100%, 75%) !important;
+	}
+
+	.good {
+		background-color: hsl(90, 100%, 75%) !important;;
 	}
 </style>

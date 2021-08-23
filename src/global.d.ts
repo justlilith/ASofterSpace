@@ -13,5 +13,6 @@ interface MessageT {
 interface ToastT {
 	message:string,
 	duration:number,
-	id:number
+	id:number,
+	mood:string
 }
