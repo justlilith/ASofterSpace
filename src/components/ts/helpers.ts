@@ -30,12 +30,13 @@ const clearChat = (messageList:MessageT[]):MessageT[] => {
 };
 
 
-function fetchFromLocal (appStorage:Storage, prop:string):void {
+function fetchFromLocal (appStorage:Storage, prop:string) {
 	try {
 		const value = JSON.parse(appStorage.getItem(prop))
 		return value
 	} catch (error) {
 		console.warn(error)
+		return error
 	}
 }
 
@@ -146,7 +147,7 @@ const saveChat = (filename:string, messageList:MessageT[]): void => {
 };
 
 
-function saveToLocal (appStorage, prop:string, value:string|Session):void {
+function saveToLocal (appStorage, prop:string, value:string|Session|UserData):void {
 	appStorage.setItem(prop,JSON.stringify(value))
 	console.log(appStorage.getItem(prop))
 }

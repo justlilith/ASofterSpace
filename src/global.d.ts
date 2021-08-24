@@ -5,14 +5,20 @@ declare module '@smui/fab';
 declare module '@smui/button';
 
 interface MessageT {
-	content:string,
-	sender:string,
-	timestamp:string,
+	content: string,
+	sender: string,
+	timestamp: string,
 }
 
 interface ToastT {
-	message:string,
-	duration:number,
-	id:number,
-	mood:string
+	message: string,
+	duration: number,
+	id: number,
+	mood: string
+}
+
+interface UserData {
+	isAuthed: boolean,
+	expiry: number,
+	error: null|Error
 }
