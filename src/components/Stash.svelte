@@ -175,7 +175,7 @@ bind:value={chatName}
 		#name {
 			width:60vw;
 		}
-
+		
 		#toggleButton {
 			padding:0 20vw 0 0;
 		}
@@ -190,6 +190,25 @@ bind:value={chatName}
 		}
 		#toggleButton {
 			padding:0 35vw 0 0;
+		}
+	}
+	
+	@media (max-height: 500px) {
+		#toggleButton {
+			visibility: hidden;
+			animation: 500ms fadeout;
+		}
+	}
+	
+	@keyframes fadeout {
+		from {
+			visibility: visible;
+			opacity: 100%;
+		}
+		
+		to {
+			visibility: hidden;
+			opacity: 0%;
 		}
 	}
 </style>

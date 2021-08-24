@@ -133,4 +133,24 @@ class={theme}>
 		}
 	}
 	
+	@media (max-height: 500px) {
+		#menuButton {
+			visibility: hidden;
+			animation: 500ms fadeout;
+		}	
+	}
+	
+	@keyframes fadeout {
+		from {
+			visibility: visible;
+			opacity: 100%;
+		}
+		
+		to {
+			visibility: hidden;
+			opacity: 0%;
+		}
+	}
+	
+	
 </style>
