@@ -90,7 +90,7 @@
 	<main class={theme}>
 		<h1>Login</h1>
 		{#if isAuthed}
-		<h2>Authed</h2>
+		<!-- <h2>Authed</h2> -->
 		{/if}
 		
 		<form action='/login' id='loginForm'>
@@ -118,11 +118,11 @@
 				signin()
 			}}'>Login
 		</button>
-		<button class={theme}
+		<!-- <button class={theme}
 		transition:fade='{{duration: 100, delay:200}}'
 		on:click='{() => {
 			testHeaders()
-		}}' >Test Headers
+		}}' >Test Headers -->
 	</button>
 		<button class={theme}
 		transition:fade='{{duration: 100, delay:200}}'
