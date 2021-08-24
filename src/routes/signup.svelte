@@ -15,10 +15,10 @@
 	import themeStore from '../components/ts/themeStore'
 	import Toast from '../components/Toast.svelte'
 	import * as Helpers from '../components/ts/helpers'
-
+	
 	
 	import { signup } from '../components/ts/auth'
-
+	
 	export let theme = ''
 	
 	onMount(async () => {
@@ -36,17 +36,22 @@
 		})
 	})
 	// export let name: string;
-
+	
 	let email:string
 	let password:string
 	let name:string
-
-	let user, session, error
-
+	
 	async function newAccount() {
+		let user, session, error
+		
 		([user, session, error] = await signup(email, password, name))
 		if (error) {
 			Helpers.notify(JSON.stringify(error.message), 2000)
+		}
+		if (session) {
+			Helpers.notify('congrats! check your email to confirm your account c:', 2000, 'good')
+			const form:HTMLFormElement = document.querySelector('#signupForm')
+			form.reset()
 		}
 	}
 	
@@ -59,20 +64,27 @@
 <main class={theme}>
 	<h1>Sign Up</h1>
 	
-	<input 
-	bind:value={name}
-	transition:fade='{{duration: 100, delay:100}}'
-	id='name' placeholder="Your Name">
-	
-	<input 
-	bind:value={email}
-	transition:fade='{{duration: 100, delay:100}}'
-	id='email' placeholder="email@mailboxx.com">
-	
-	<input 
-	bind:value={password}
-	transition:fade='{{duration: 100, delay:150}}'
-	id='pass' type="password" placeholder="password">
+	<form action='/signup' id='signupForm'>
+		<input 
+		bind:value={name}
+		transition:fade='{{duration: 100, delay:100}}'
+		id='name' placeholder="Your Name">
+		
+		<input 
+		bind:value={email}
+		transition:fade='{{duration: 100, delay:100}}'
+		id='email' placeholder="email@mailboxx.com">
+		
+		<input 
+		bind:value={password}
+		transition:fade='{{duration: 100, delay:150}}'
+		id='pass' type="password" placeholder="password">
+		
+		<input type='submit' style='display:none'
+		on:click|preventDefault="{() => {
+			newAccount()
+		}}">
+	</form>
 	
 	<div>
 		<button
@@ -80,7 +92,7 @@
 		transition:fade='{{duration: 100, delay:200}}'
 		on:click='{() => {
 			newAccount()
-			}}'
+		}}'
 		>
 		Sign up
 	</button>

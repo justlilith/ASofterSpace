@@ -30,6 +30,17 @@ const clearChat = (messageList:MessageT[]):MessageT[] => {
 };
 
 
+function fetchFromLocal (appStorage:Storage, prop:string) {
+	try {
+		const value = JSON.parse(appStorage.getItem(prop))
+		return value
+	} catch (error) {
+		console.warn(error)
+		return error
+	}
+}
+
+
 const fetchTheme = (appStorage:Storage, themeStore, type:string):string => {
 	const themes = 
 	[ 'deep-blue'
@@ -82,7 +93,7 @@ const fetchTheme = (appStorage:Storage, themeStore, type:string):string => {
 }
 
 
-function notify(toastMessage:string, duration?:number):void {
+function notify(toastMessage:string, duration?:number, mood = 'neutral'):void {
 	// const marshmallow = document.createElement(div)
 	// marshmallow.innerText = message
 	// document.body.appendChild(marshmallow)
@@ -95,7 +106,8 @@ function notify(toastMessage:string, duration?:number):void {
 	const toast:ToastT = {
 		message: toastMessage,
 		duration: duration,
-		id: crypto.getRandomValues(array)[0]
+		id: crypto.getRandomValues(array)[0],
+		mood: mood
 	}
 	
 	// const toastQueue = get(toastStore)
@@ -133,6 +145,12 @@ const saveChat = (filename:string, messageList:MessageT[]): void => {
 	download.onload = () => {URL.revokeObjectURL(link)}
 	document.body.removeChild(download)
 };
+
+
+function saveToLocal (appStorage, prop:string, value:string|Session|UserData):void {
+	appStorage.setItem(prop,JSON.stringify(value))
+	console.log(appStorage.getItem(prop))
+}
 
 
 function setListener (currentListener:string):string {
@@ -201,20 +219,6 @@ function updateListener (appStorage, currentListener:string):string {
 	return currentListener
 }
 
-function saveToLocal (appStorage, prop:string, value:string|Session):void {
-	appStorage.setItem(prop,JSON.stringify(value))
-	console.log(appStorage.getItem(prop))
-}
-
-function fetchFromLocal (appStorage:Storage, prop:string):void {
-	try {
-		let value = JSON.parse(appStorage.getItem(prop))
-		return value
-	} catch (error) {
-		console.warn(error)
-	}
-}
-
 
 function updateTheme (appStorage:Storage, theme:string):void {	
 	const themes = 
@@ -256,6 +260,7 @@ export {
 	clearChat
 	, clearStash
 	, fetchTheme
+	, fetchFromLocal
 	, notify
 	, saveChat
 	, saveToLocal

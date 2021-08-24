@@ -13,12 +13,20 @@
 	import Stash from '../components/Stash.svelte'
 	import Menu from '../components/Menu.svelte'
 	import themeStore from '../components/ts/themeStore'
+	import Toast from '../components/Toast.svelte'
 	import * as Helpers from '../components/ts/helpers'
-
+	import fetch from 'isomorphic-fetch'
 	
-	import { login } from '../components/ts/auth'
-
+	
+	import { authCheck, authDataStore, login, signOut, testHeaders } from '../components/ts/auth'
+	import type { Session, User } from '@supabase/gotrue-js';
+	import Settings from './settings.svelte';
+	
 	export let theme = ''
+	
+	let isAuthed:boolean
+	
+	
 	
 	onMount(async () => {
 		const appStorage = window.localStorage
@@ -33,57 +41,102 @@
 		themeStore.subscribe((newTheme) => {
 			theme = newTheme
 		})
+		authCheck()
+		.then(res => {
+			console.log(res)
+			isAuthed =  res
+		})
+		
 	})
 	// export let name: string;
-
+	
 	let email:string
 	let password:string
-
-	let user, session, error
-
-	function signin () {
-		console.log('signin invoked')
-		login(email, password)
-		.then(result => {
-			[user, session, error] = result
-		})
-		console.log(user, session, error)
-	}
 	
-</script>
-
-
-
-<Menu {theme}></Menu>
-
-<main class={theme}>
-	<h1>Login</h1>
 	
-	<input 
-	bind:value={email}
-	transition:fade='{{duration: 100, delay:100}}'
-	id='email' placeholder="email@mailboxx.com">
+	async function signin () {
+		// console.log('signin invoked')
+		let user, session, error
+		
+		[user, session, error] = await login(email, password)
+		
+		if (error) {
+			Helpers.notify(error.message,2000, 'bad')
+		}
+		if (session) {
+			Helpers.notify('Way to go! Login successful',2000, 'good')
+			// setTimeout(() => {
+				// 	window.location.href='/'
+				// },2000)
+				// Helpers.notify('login successful :>')
+			}
+			console.log(user, session, error)
+			isAuthed = true
+			const form:HTMLFormElement = document.querySelector('#loginForm')
+			form.reset()
+		}
+		
+		
+		function logout () {
+			signOut()
+			isAuthed = false
+		}
+	</script>
 	
-	<input 
-	bind:value={password}
-	transition:fade='{{duration: 100, delay:150}}'
-	id='pass' type="password" placeholder="password">
 	
-	<div>
-		<button
-		class={theme}
+	
+	<Menu {theme}></Menu>
+	
+	<main class={theme}>
+		<h1>Login</h1>
+		{#if isAuthed}
+		<h2>Authed</h2>
+		{/if}
+		
+		<form action='/login' id='loginForm'>
+			<input 
+			bind:value={email}
+			transition:fade='{{duration: 100, delay:100}}'
+			id='email' placeholder="email@mailboxx.com">
+			
+			<input
+			bind:value={password}
+			transition:fade='{{duration: 100, delay:150}}'
+			id='pass' type="password" placeholder="password">
+			
+			<input type='submit' style='display:none'
+			on:click|preventDefault="{() => {
+				signin()
+			}}">
+		</form>
+		
+		
+		<div>
+			<button class={theme}
+			transition:fade='{{duration: 100, delay:200}}'
+			on:click='{() => {
+				signin()
+			}}'>Login
+		</button>
+		<button class={theme}
 		transition:fade='{{duration: 100, delay:200}}'
 		on:click='{() => {
-			signin()
-			}}'
-		>
-		Login
+			testHeaders()
+		}}' >Test Headers
+	</button>
+		<button class={theme}
+		transition:fade='{{duration: 100, delay:200}}'
+		on:click='{() => {
+			logout()
+		}}' >Log Out
 	</button>
 </div>
 
 <p transition:fade='{{duration: 100, delay:250}}'>New to A Softer Space?
 	<a href='/signup'>Sign up here, okay?</a>
 </p>
+
+<Toast {theme}></Toast>
 
 </main>
 

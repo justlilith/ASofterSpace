@@ -33,6 +33,7 @@
   },
   "type": "module",
   "dependencies": {
-    "@supabase/supabase-js": "^1.22.2"
+    "@supabase/supabase-js": "^1.22.2",
+    "isomorphic-fetch": "^3.0.0"
   }
 }

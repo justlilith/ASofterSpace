@@ -17,9 +17,11 @@
 	import * as Helpers from '../components/ts/helpers'
 	
 	let theme:string = 'soft-blue'
+
+	let isAuthed:boolean = false
 	
 	let date = new Date()
-
+	
 	export let messageList:MessageT[] = [], timer:number = 8
 	
 	onMount(async () => {
@@ -27,15 +29,24 @@
 		const appStorage = window.localStorage
 		
 		theme = Helpers.fetchTheme(appStorage, themeStore, 'theme')
-
+		
 		if (!theme) {
 			theme = 'deep-blue'
+			themeStore.update(() => {
+				return theme
+			})
+			
+			console.log(`theme updated to ${theme} :>`)
+			const html = document.getElementsByTagName('html')[0] 
+			html.className = theme
+			
+			Helpers.saveToLocal(appStorage, 'theme', theme)
 		}
 		
 		themeStore.subscribe((newTheme) => {
 			theme = newTheme
 		})
-
+		
 		try {
 			let stash = JSON.parse(appStorage.getItem('chats'))
 			messageList = stash || messageList
@@ -46,7 +57,7 @@
 		
 		Helpers.setListenerOpacity(100)
 	})
-
+	
 	
 	
 	// export let name: string;
@@ -122,7 +133,7 @@
 		// 	3000)
 	</script>
 	
-	<Menu {theme}></Menu>
+	<Menu {theme} bind:isAuthed></Menu>
 	
 	<main class={theme}>
 		<div id='messages'>
@@ -143,7 +154,7 @@
 	{theme}
 	on:click='{()=> {
 		console.log('click')
-}}'
+	}}'
 	on:voidInvoked='{invokeVoid.bind(timer,responses,messageList)}'
 	bind:messageList
 	bind:timer
@@ -154,7 +165,7 @@
 	bind:messageList
 	bind:chatName></Stash>
 	
-<Toast {theme}></Toast>
+	<Toast {theme}></Toast>
 	
 	
 </main>
@@ -172,7 +183,7 @@
 	);
 	
 	@import '../themes/allThemes';
-
+	
 	main {
 		position:relative;
 		text-align: center;
