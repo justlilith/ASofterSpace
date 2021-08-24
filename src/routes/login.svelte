@@ -123,7 +123,7 @@
 		on:click='{() => {
 			testHeaders()
 		}}' >Test Headers -->
-	</button>
+	<!-- </button> -->
 		<button class={theme}
 		transition:fade='{{duration: 100, delay:200}}'
 		on:click='{() => {

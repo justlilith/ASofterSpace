@@ -177,7 +177,7 @@ bind:value={chatName}
 		}
 
 		#toggleButton {
-			padding:0 20vw;
+			padding:0 0 0 20vw;
 		}
 	}
 	
@@ -189,7 +189,7 @@ bind:value={chatName}
 			width:30vw;
 		}
 		#toggleButton {
-			padding:0 35vw;
+			padding:0 0 0 35vw;
 		}
 	}
 </style>

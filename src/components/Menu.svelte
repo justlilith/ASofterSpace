@@ -119,7 +119,7 @@ class={theme}>
 		}
 		
 		#menuButton {
-			padding: 0 20vw;
+			padding: 0 20vw 0 0;
 		}
 	}
 	
@@ -129,7 +129,7 @@ class={theme}>
 		}
 		
 		#menuButton {
-			padding: 0 35vw;
+			padding: 0 35vw 0 0;
 		}
 	}
 	
