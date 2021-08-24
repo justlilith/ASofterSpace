@@ -17,6 +17,8 @@
 	import * as Helpers from '../components/ts/helpers'
 	
 	let theme:string = 'soft-blue'
+
+	let isAuthed:boolean = false
 	
 	let date = new Date()
 	
@@ -131,7 +133,7 @@
 		// 	3000)
 	</script>
 	
-	<Menu {theme}></Menu>
+	<Menu {theme} bind:isAuthed></Menu>
 	
 	<main class={theme}>
 		<div id='messages'>

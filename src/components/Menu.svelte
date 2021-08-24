@@ -1,10 +1,21 @@
 <script lang='ts'>
 	import { fly } from 'svelte/transition'
+	import { onMount } from 'svelte'
+	import { authCheck, authDataStore, login, signOut, testHeaders } from '../components/ts/auth'
+	
 	export let theme = ''
 	
-	export let authStatus:boolean = false
+	export let isAuthed:boolean = false
 	
 	let flyoutStatus = false
+	
+	onMount(async () => {
+		authCheck()
+		.then(res => {
+			console.log(res)
+			isAuthed =  res
+		})
+	})
 </script>
 
 <button
@@ -27,7 +38,7 @@ class={theme}>
 			<span class='{theme} menuButtonText'>Chat</span>
 		</a>
 	</li>
-	{#if authStatus == true}
+	{#if isAuthed == true}
 	<li>
 		<a href="/history">
 			<span class='material-icons {theme}'>info</span>
@@ -73,11 +84,11 @@ class={theme}>
 	.menuButtonText {
 		vertical-align: middle;
 	}
-
+	
 	:global(.material-icons) {
 		vertical-align: middle;
 	}
-
+	
 	nav {
 		bottom: 0vh;
 		display: flex;
@@ -102,15 +113,23 @@ class={theme}>
 		padding: 2vh 0;
 	}
 	
-	@media (max-width: 500px) {
+	@media (min-width: 500px) {
 		nav {
 			min-width: 30%;
+		}
+		
+		#menuButton {
+			padding: 0 20vw;
 		}
 	}
 	
 	@media (min-width: 1000px) {
 		nav {
 			max-width: 10%;
+		}
+		
+		#menuButton {
+			padding: 0 35vw;
 		}
 	}
 	

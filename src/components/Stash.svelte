@@ -175,6 +175,10 @@ bind:value={chatName}
 		#name {
 			width:60vw;
 		}
+
+		#toggleButton {
+			padding:0 20vw;
+		}
 	}
 	
 	@media (min-width: 1000px) {
@@ -183,6 +187,9 @@ bind:value={chatName}
 		}
 		#name {
 			width:30vw;
+		}
+		#toggleButton {
+			padding:0 35vw;
 		}
 	}
 </style>
