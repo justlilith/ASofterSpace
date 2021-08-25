@@ -62,8 +62,15 @@ const fetchTheme = (appStorage:Storage, themeStore, type:string):string => {
 		})
 		console.log(`theme found: ${theme}`)
 	} catch (error) {
+		console.warn(error.message)
+		console.warn('%cdefaulting theme to %cdeep-blue', 'color:white;', 'color:cyan;')
 		theme = 'deep-blue'
-		console.warn(error)
+		themeStore.update(() => {
+			let currentThemeIndex = 0
+			currentThemeIndex = themes.indexOf(theme)
+			return themes[currentThemeIndex]
+		})
+		saveToLocal(appStorage,'theme',theme)
 	}
 	
 	try {
@@ -74,8 +81,9 @@ const fetchTheme = (appStorage:Storage, themeStore, type:string):string => {
 		console.log(`listener found: ${listener}`)
 	} catch (error) {
 		listener = 'the sun'
-		console.warn(error)
-		console.log('defaulting to sun)))')
+		console.warn(error.message)
+		console.warn('%cdefaulting listener to %cthe sun)))', 'color:white;','color:red')
+		saveToLocal(appStorage,'listener',listener)
 	}
 	listener = setListener(listener)
 	

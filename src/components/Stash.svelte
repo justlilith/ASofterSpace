@@ -63,7 +63,7 @@ bind:value={chatName}
 	class={theme}
 	on:click={async () => {
 		Helpers.stashChat(window.localStorage, chatName, messageList)
-		let res = await addChatToDB(chatName, messageList)
+		let res = await addChatToDB(messageList, chatName)
 		console.log(res)
 	}}
 	>
@@ -108,7 +108,8 @@ bind:value={chatName}
 {/if}
 
 <style lang="scss">
-	@import '../themes/allThemes';
+	@import '../themes/allThemes-button';
+	@import '../themes/allThemes-menu';
 
 	.modal {
 		background-color: black;

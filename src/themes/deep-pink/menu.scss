@@ -1,0 +1,18 @@
+deep-pink {
+	$primary: hsl(320, 100%, 50%);
+	$secondary: hsl(20, 100%, 85%);
+	
+	@at-root {
+		button#menuButton.#{&}, button#toggleButton.#{&} {
+			color:white;
+		}
+
+		nav.#{&} {
+			background-color: black;
+		}
+		
+		nav.#{&} a {
+			color: hsl(300, 100%, 80%)
+		}
+	}
+}
