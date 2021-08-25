@@ -2,7 +2,8 @@
 	import { fade, fly } from 'svelte/transition'
 	import { onMount } from 'svelte'
 	import { authCheck, authDataStore, login, signOut, testHeaders } from '../components/ts/auth'
-	
+	import * as Helpers from './ts/helpers'
+
 	export let theme = ''
 	
 	export let isAuthed:boolean = false
@@ -25,6 +26,7 @@ on:click="{() => {
 	showMenu = !showMenu
 }}"></div>
 {/if}
+
 <button
 id='menuButton'
 class={theme}
@@ -45,26 +47,40 @@ class={theme}>
 			<span class='{theme} menuButtonText'>Chat</span>
 		</a>
 	</li>
-	{#if isAuthed == true}
+	{#if isAuthed}
 	<li>
 		<a href="/history">
-			<span class='material-icons {theme}'>info</span>
-			History
+			<span class='material-icons {theme}'>history</span>
+			<span class='{theme} menuButtonText'>History</span>
 		</a>
 	</li>
 	{/if}
 	<li>
 		<a href="/settings">
 			<span class='material-icons {theme}'>settings</span>
-			Settings
+			<span class='{theme} menuButtonText'>Settings</span>
 		</a>
 	</li>
+	{#if !isAuthed}
 	<li>
 		<a href="/login">
 			<span class='material-icons {theme}'>login</span>
-			Login
+			<span class='{theme} menuButtonText'>Login</span>
 		</a>
 	</li>
+	{/if}
+	{#if isAuthed}
+	<li>
+		<a href="/"
+		on:click='{async () => {
+			isAuthed = await signOut(isAuthed)
+			Helpers.notify('You\'ve been successfully logged out ✔️', 2000, 'good')
+		}}'>
+			<span class='material-icons {theme}'>logout</span>
+			<span class='{theme} menuButtonText'>Logout</span>
+		</a>
+	</li>
+	{/if}
 </ul>
 </nav>
 {/if}
@@ -81,7 +97,7 @@ class={theme}>
 		left:0;
 		top: 0;
 	}
-	
+
 	nav, button {
 		bottom: 2vh;
 		left: 2vw;

@@ -1,5 +1,5 @@
 <svelte:head>
-<title>a softer space :: settings</title>
+<title>a softer space :: login</title>
 
 <!-- <script id='p5' defer src="/p5/sketch.js"></script> -->
 <!-- <script id='p5' defer src="/p5/sketch2.js"></script> -->
@@ -64,22 +64,16 @@
 			Helpers.notify(error.message,2000, 'bad')
 		}
 		if (session) {
-			Helpers.notify('Way to go! Login successful',2000, 'good')
-			// setTimeout(() => {
-				// 	window.location.href='/'
-				// },2000)
+			Helpers.notify('way to go! login successful ✨',2000, 'good')
+			setTimeout(() => {
+					window.location.href='/'
+				},2000)
 				// Helpers.notify('login successful :>')
 			}
 			console.log(user, session, error)
 			isAuthed = true
 			const form:HTMLFormElement = document.querySelector('#loginForm')
 			form.reset()
-		}
-		
-		
-		function logout () {
-			signOut()
-			isAuthed = false
 		}
 	</script>
 	
@@ -124,12 +118,6 @@
 			testHeaders()
 		}}' >Test Headers -->
 	<!-- </button> -->
-		<button class={theme}
-		transition:fade='{{duration: 100, delay:200}}'
-		on:click='{() => {
-			logout()
-		}}' >Log Out
-	</button>
 </div>
 
 <p transition:fade='{{duration: 100, delay:250}}'>New to A Softer Space?
