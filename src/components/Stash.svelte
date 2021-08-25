@@ -3,6 +3,8 @@
 	import * as Helpers from './ts/helpers'
 	import { fade, fly } from 'svelte/transition'
 	
+	import { addChatToDB } from './ts/database'
+	
 	if (browser) {
 		const appStorage = window.localStorage;	
 	}
@@ -10,7 +12,7 @@
 	const currentDate = new Date();
 	let dateString = currentDate.toDateString().replace(/\s/g, "-");
 	
-	let showStashSave: boolean = false;
+	export let showStashSave: boolean = false;
 	
 	export let chatName: string = "";
 	export let messageList: MessageT[];
@@ -24,6 +26,13 @@
 	}
 </script>
 
+{#if showStashSave}
+<div class='modal'
+transition:fade='{{duration:300}}'
+on:click="{() => {
+	showStashSave = !showStashSave
+}}"></div>
+{/if}
 <button
 id="toggleButton"
 class={theme}
@@ -35,7 +44,7 @@ on:click={() => {
 <span class={theme} id='toggleButtonText'>Chat Options</span>
 </button>
 
-{#if showStashSave == true}
+{#if showStashSave}
 {#if browser}
 <aside
 id="stash-component"
@@ -52,8 +61,10 @@ bind:value={chatName}
 	<button
 	transition:fade='{{duration: 150, delay:150}}'
 	class={theme}
-	on:click={() => {
-		Helpers.stashChat(window.localStorage, chatName, messageList);
+	on:click={async () => {
+		Helpers.stashChat(window.localStorage, chatName, messageList)
+		let res = await addChatToDB(chatName, messageList)
+		console.log(res)
 	}}
 	>
 	<span>Stash Chat</span>
@@ -98,6 +109,16 @@ bind:value={chatName}
 
 <style lang="scss">
 	@import '../themes/allThemes';
+
+	.modal {
+		background-color: black;
+		opacity: 0.5;
+		height: 100vh;
+		width: 100vw;
+		position: fixed;
+		left:0;
+		top: 0;
+	}
 	
 	nav, #toggleButton {
 		bottom: 2vh;
