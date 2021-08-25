@@ -1,5 +1,5 @@
 <svelte:head>
-<title>a softer space :: settings</title>
+<title>a softer space :: signup</title>
 
 <!-- <script id='p5' defer src="/p5/sketch.js"></script> -->
 <!-- <script id='p5' defer src="/p5/sketch2.js"></script> -->

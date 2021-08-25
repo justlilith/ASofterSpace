@@ -147,8 +147,11 @@ async function login (email:string, password:string):Promise<(User|Session|Error
 }
 
 
-async function signOut() {
+async function signOut(isAuthed:boolean):Promise<boolean> {
+	isAuthed = false
 	await supabase.auth.signOut()
+	return isAuthed
+	window.location.href = '/'
 }
 
 
