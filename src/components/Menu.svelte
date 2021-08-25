@@ -1,5 +1,5 @@
 <script lang='ts'>
-	import { fly } from 'svelte/transition'
+	import { fade, fly } from 'svelte/transition'
 	import { onMount } from 'svelte'
 	import { authCheck, authDataStore, login, signOut, testHeaders } from '../components/ts/auth'
 	
@@ -7,7 +7,7 @@
 	
 	export let isAuthed:boolean = false
 	
-	let flyoutStatus = false
+	export let showMenu = false
 	
 	onMount(async () => {
 		authCheck()
@@ -18,16 +18,23 @@
 	})
 </script>
 
+{#if showMenu}
+<div class='modal'
+transition:fade='{{duration:300}}'
+on:click="{() => {
+	showMenu = !showMenu
+}}"></div>
+{/if}
 <button
 id='menuButton'
 class={theme}
-on:click="{() => flyoutStatus = !flyoutStatus}"
+on:click="{() => showMenu = !showMenu}"
 >
 <span class='material-icons {theme}'>menu</span>
 <span class='{theme} menuButtonText'>Menu</span>
 </button>
 
-{#if flyoutStatus}
+{#if showMenu}
 <nav
 transition:fly='{{duration: 300, x: -200}}'
 class={theme}>
@@ -64,6 +71,16 @@ class={theme}>
 
 <style lang="scss">
 	@import '../themes/allThemes';
+	
+	.modal {
+		background-color: black;
+		opacity: 0.5;
+		height: 100vh;
+		width: 100vw;
+		position: fixed;
+		left:0;
+		top: 0;
+	}
 	
 	nav, button {
 		bottom: 2vh;

@@ -4,7 +4,7 @@
 
 <script lang="ts">
 	// import Fab from '@smui/fab'
-	import { fade, slide } from 'svelte/transition'
+	import { fade, fly, slide } from 'svelte/transition'
 	import { bind } from 'svelte/internal'
 	import { onMount } from 'svelte'
 	import Input from '../components/Input.svelte'
@@ -17,15 +17,17 @@
 	import * as Helpers from '../components/ts/helpers'
 	
 	let theme:string = 'soft-blue'
-
+	
 	let isAuthed:boolean = false
 	
 	let date = new Date()
 	
+	let showStashSave:boolean = false
+	let showMenu:boolean = false
+	
 	export let messageList:MessageT[] = [], timer:number = 8
 	
 	onMount(async () => {
-		
 		const appStorage = window.localStorage
 		
 		theme = Helpers.fetchTheme(appStorage, themeStore, 'theme')
@@ -56,9 +58,8 @@
 		}
 		
 		Helpers.setListenerOpacity(100)
+		
 	})
-	
-	
 	
 	// export let name: string;
 	
@@ -126,48 +127,45 @@
 		console.log(event)
 		messageList = voidResponse(timer, responses, messageList,voidFlag,voidFlag)
 	}
-	
-	// setInterval(function() {
-		// 	messageList = removeMessage(messageList)
-		// }.bind(messageList),
-		// 	3000)
-	</script>
-	
-	<Menu {theme} bind:isAuthed></Menu>
-	
-	<main class={theme}>
-		<div id='messages'>
-			<section id='animatedList'>
-				{#if messageList.length !== 0}
-				{#each messageList as message}
-				<span
-				transition:slide='{{ duration: 200 }}'>
-				<Message {theme} {message}></Message>
-			</span>
-			{/each}
-			{:else}
-			<p transition:fade|local>Talk to me.</p>
-			{/if}
-		</section>
-	</div>
-	<Input
-	{theme}
-	on:click='{()=> {
-		console.log('click')
-	}}'
-	on:voidInvoked='{invokeVoid.bind(timer,responses,messageList)}'
-	bind:messageList
-	bind:timer
-	bind:chatName
-	bind:fileName></Input>
-	<Stash
-	{theme}
-	bind:messageList
-	bind:chatName></Stash>
-	
-	<Toast {theme}></Toast>
-	
-	
+</script>
+
+<main class={theme}>
+	<div id='messages'>
+		<section id='animatedList'>
+			{#if messageList.length !== 0}
+			{#each messageList as message}
+			<span
+			transition:slide='{{ duration: 200 }}'>
+			<Message {theme} {message}></Message>
+		</span>
+		{/each}
+		{:else}
+		<p transition:fade|local>Talk to me.</p>
+		{/if}
+	</section>
+</div>
+<Input
+{theme}
+on:click='{()=> {
+	console.log('click')
+}}'
+on:voidInvoked='{invokeVoid.bind(timer,responses,messageList)}'
+bind:messageList
+bind:timer
+bind:chatName
+bind:fileName></Input>
+<Menu {theme}
+bind:isAuthed
+bind:showMenu></Menu>
+<Stash
+{theme}
+bind:messageList
+bind:chatName
+bind:showStashSave></Stash>
+
+<Toast {theme}></Toast>
+
+
 </main>
 <style lang='scss'>
 	@use '@material/theme/color-palette';
