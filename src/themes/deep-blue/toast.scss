@@ -1,3 +1,5 @@
+@import './deep-blue.scss';
+
 deep-blue {
 	@at-root {
 		div.#{&}.toastMessage {

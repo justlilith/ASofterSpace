@@ -16,7 +16,7 @@
 	import Toast from '../components/Toast.svelte'
 	import * as Helpers from '../components/ts/helpers'
 	
-	let theme:string = 'soft-blue'
+	let theme:string = 'deep-blue'
 	
 	let isAuthed:boolean = false
 	
