@@ -4,6 +4,13 @@ declare module '@smui/common';
 declare module '@smui/fab';
 declare module '@smui/button';
 
+interface ChatPacketT {
+	timestamp: number,
+	chatFullText: MessageT[],
+	chatName: string,
+	chatId: uuid
+}
+
 interface MessageT {
 	content: string,
 	sender: string,

@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { dataset_dev } from 'svelte/internal'
 // import { writable, get } from 'svelte/store'
 // import * as Helpers from './helpers'
 // import fetch from 'isomorphic-fetch'
@@ -20,19 +21,19 @@ async function addChatToDB (messageList:MessageT[], chatName?):Promise<(Error|st
 		const date = new Date
 		const uuid = uuidv4()
 		const uid = user.id
-
+		
 		chatName = chatName ? chatName : "Saved Chat"
 		const chatNameFinal = `${chatName} (from ${date.toDateString()})`
-
+		
 		supabase
 		.from('chatfulltexts')
 		.insert([
 			{ chatfulltext: JSON.stringify(messageList)
-			, chatid: uuid
-			, uid: uid
-			, chattimestamp: `${date.toUTCString()}`
-			, chatname: chatNameFinal || chatName
-		}
+				, chatid: uuid
+				, uid: uid
+				, chattimestamp: `${date.toUTCString()}`
+				, chatname: chatNameFinal || chatName
+			}
 		])
 		.then((data, error) => {
 			if (error) {
@@ -44,8 +45,37 @@ async function addChatToDB (messageList:MessageT[], chatName?):Promise<(Error|st
 	})
 }
 
+async function fetchChatsFromDB ():ChatPacketT[] {
+	
+	const { data, error } = await supabase
+	.from('chatfulltexts')
+	.select('chatid, chatname, chattimestamp, chatfulltext')
+	
+	return new Promise((resolve, reject) => {
+		if (error) {
+			reject(error)
+		}
+		
+		let results = data.map(chunk => {
+			let chatPacket:ChatPacketT = {
+				chatId: 0,
+				chatName: '',
+				chatFullText: [],
+				timestamp: 0
+			}
+			chatPacket.chatId = chunk.chatid
+			chatPacket.chatName = chunk.chatname
+			chatPacket.chatFullText = JSON.parse(chunk.chatfulltext)
+			chatPacket.timestamp = chunk.chattimestamp
+			return chatPacket
+		})
+		
+		resolve(results)
+	})
+}
 
 
 export { 
 	addChatToDB
+	, fetchChatsFromDB
 }
