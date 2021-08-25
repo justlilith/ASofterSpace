@@ -15,12 +15,15 @@ const user = supabase.auth.user()
 // let user:User, session:Session, error:Error, isAuthed:boolean
 
 
-async function addChatToDB (chatname?, messageList:MessageT[]):Promise<(Error|string)> {
+async function addChatToDB (messageList:MessageT[], chatName?):Promise<(Error|string)> {
 	return new Promise((resolve, reject) => {
 		const date = new Date
 		const uuid = uuidv4()
 		const uid = user.id
-		console.log(uuid)
+
+		chatName = chatName ? chatName : "Saved Chat"
+		const chatNameFinal = `${chatName} (from ${date.toDateString()})`
+
 		supabase
 		.from('chatfulltexts')
 		.insert([
@@ -28,7 +31,7 @@ async function addChatToDB (chatname?, messageList:MessageT[]):Promise<(Error|st
 			, chatid: uuid
 			, uid: uid
 			, chattimestamp: `${date.toUTCString()}`
-			, chatname: chatname || null
+			, chatname: chatNameFinal || chatName
 		}
 		])
 		.then((data, error) => {

@@ -1,0 +1,7 @@
+soft-pink {
+	@at-root {
+		div.#{&}.toastMessage {
+			background-color: hsl(330, 50%, 90%);
+		}
+	}
+}

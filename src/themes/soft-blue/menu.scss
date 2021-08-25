@@ -1,0 +1,18 @@
+soft-blue {
+	$primary: hsl(210, 100%, 50%);
+	$secondary: hsl(210, 100%, 25%);
+	
+	@at-root {
+		button#menuButton.#{&}, button#toggleButton.#{&} {
+			color:black;
+		}
+
+		nav.#{&} {
+			background-color: white;
+		}
+		
+		nav.#{&} a {
+			color: hsl(230, 100%, 30%)
+		}
+	}
+}

@@ -63,7 +63,7 @@
 
 
 <style lang='scss'>
-	@import '../themes/allThemes';
+	@import '../themes/allThemes-toast';
 
 	#toastContainer {
 		position:absolute;

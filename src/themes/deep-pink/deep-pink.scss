@@ -1,13 +1,13 @@
-:global(html.deep-pink) {
-	background:
-	linear-gradient(130deg, hsl(0, 90%, 12%) 0%, hsla(0, 100%, 30%, 0.1) 70%, hsla(330, 100%, 100%, 0) 100%),
-	radial-gradient(circle at top, hsl(300, 100%, 25%) 30%, hsla(280, 90%, 19%, 0.8) 60%, hsla(30, 0%, 0%, 0) 100%),
-	radial-gradient(circle at bottom, hsl(300, 100%, 35%) 10%, hsl(240, 100%, 10%) 30%, hsl(270, 100%, 0%) 50%)
-	;
-	background-attachment: fixed;
-}
-
 deep-pink {
+	:global(html.#{&}) {
+		background:
+		linear-gradient(130deg, hsl(0, 90%, 12%) 0%, hsla(0, 100%, 30%, 0.1) 70%, hsla(330, 100%, 100%, 0) 100%),
+		radial-gradient(circle at top, hsl(300, 100%, 25%) 30%, hsla(280, 90%, 19%, 0.8) 60%, hsla(30, 0%, 0%, 0) 100%),
+		radial-gradient(circle at bottom, hsl(300, 100%, 35%) 10%, hsl(240, 100%, 10%) 30%, hsl(270, 100%, 0%) 50%)
+		;
+		background-attachment: fixed;
+	}
+	
 	$primary: hsl(320, 100%, 50%);
 	$secondary: hsl(20, 100%, 85%);
 	
@@ -30,10 +30,6 @@ deep-pink {
 		
 		main.#{&} p, div.#{&} p, p.#{&}, span.#{&}.timestamp {
 			color:white;
-		}
-		
-		div.#{&}.toastMessage {
-			background-color: hsl(300, 50%, 90%);
 		}
 		
 		button.#{&} {

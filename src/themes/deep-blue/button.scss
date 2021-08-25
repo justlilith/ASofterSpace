@@ -1,0 +1,8 @@
+deep-blue {
+	@at-root {
+		button.#{&} {
+			background-color: hsl(230, 100%, 45%);
+			color: white;
+		}
+	}
+}
