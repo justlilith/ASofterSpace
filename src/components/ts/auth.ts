@@ -10,11 +10,12 @@ const sbKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6
 const supabase = createClient(sbUrl, sbKey)
 
 // let user:User|Session|Error, session:User|Session|Error, error:User|Session|Error
-let user:User, session:Session, error:Error, isAuthed:boolean
+let user:User, session:Session, error:Error, isAuthed:boolean, refreshTokenFetcherActive:boolean
 
 const authDataStore = writable({
 	user, session, error
 })
+
 
 async function authCheck ():Promise<boolean> {
 	
@@ -38,7 +39,7 @@ async function authCheck ():Promise<boolean> {
 	if (userData.isAuthed) {
 		({user, session, error} = await tryRefreshToken())
 		if (error) {
-			console.log('oh noooo', error);
+			console.warn('%coh noooo', 'color:red;', error);
 			isAuthed = false
 			userData.error = error
 			userData.expiry = null
@@ -54,7 +55,7 @@ async function authCheck ():Promise<boolean> {
 			userData.error = null
 			userData.expiry = session.expires_at
 			userData.isAuthed = true
-			
+			// console.log(session.refresh_token)
 			document.cookie = 'asofterspace_refresh_token=' + session.refresh_token + ';'
 			
 			Helpers.saveToLocal(appStorage,'userData',userData)
@@ -63,6 +64,22 @@ async function authCheck ():Promise<boolean> {
 			})
 			return true
 		}
+	}
+}
+
+
+async function getRefreshToken():Promise<void> {
+	if (refreshTokenFetcherActive) {
+		return
+	}
+	console.log('%cchecking refresh token . . .', 'color:hsl(120,100%,50%); font-weight:bold;')
+	refreshTokenFetcherActive = true
+	const date = new Date()
+	const timeRemaining = date.getTime() - (session.expires_at * 1000)
+	if (timeRemaining < (1000 * 60 * 4)) {
+		console.log('%cfetching refresh token~', 'color:hsl(120,100%,50%); font-weight:bold;')
+		const fetched:boolean = await authCheck()
+		console.log(fetched)
 	}
 }
 
@@ -79,12 +96,16 @@ async function tryRefreshToken ():Promise<{
 		.split('=')[1];
 		
 		if (refreshToken) {
-			console.log('parsed')
+			console.log('%cparsed', 'color:hsl(120,100%,50%); font-weight:bold;')
 			console.log(refreshToken);
 			({ user, session, error } = await supabase.auth.signIn({
 				refreshToken: refreshToken
 			}))
-			return new Promise((resolve) => {
+			return new Promise((resolve, reject) => {
+				if (error) {
+					reject( {user:null, session:null, error})
+				}
+				// console.log(session)
 				resolve( { user, session, error } )
 			})
 		} else {
@@ -131,7 +152,7 @@ async function login (email:string, password:string):Promise<(User|Session|Error
 			isAuthed: true
 		}
 		
-		console.log(session.refresh_token)
+		// console.log(session.refresh_token)
 		// document.cookie.
 		document.cookie = 'asofterspace_refresh_token=' + session.refresh_token + ';'
 		
@@ -141,7 +162,7 @@ async function login (email:string, password:string):Promise<(User|Session|Error
 		})
 	}
 	
-	console.log(get(authDataStore))
+	// console.log(get(authDataStore))
 	
 	return [user, session, error]
 }
@@ -150,8 +171,8 @@ async function login (email:string, password:string):Promise<(User|Session|Error
 async function signOut(isAuthed:boolean):Promise<boolean> {
 	isAuthed = false
 	await supabase.auth.signOut()
-	return isAuthed
 	window.location.href = '/'
+	return isAuthed
 }
 
 
@@ -202,7 +223,9 @@ async function testHeaders ():Promise<void> {
 
 export { authDataStore
 	, isAuthed
+	, getRefreshToken
 	, login
+	, refreshTokenFetcherActive
 	, signOut
 	, signup
 	, authCheck
