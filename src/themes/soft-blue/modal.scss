@@ -1,0 +1,9 @@
+@import './soft-blue.scss';
+
+soft-blue {
+	@at-root {
+		#modal {
+			background-color: hsl(200, 50%, 90%);
+		}
+	}
+}

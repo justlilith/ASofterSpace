@@ -1,0 +1,9 @@
+@import './deep-pink.scss';
+
+deep-pink {
+	@at-root {
+		#modal {
+			background-color: hsl(300, 50%, 90%);
+		}
+	}
+}

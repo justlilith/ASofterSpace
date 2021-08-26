@@ -4,6 +4,8 @@
 	import { fade, fly } from 'svelte/transition'
 	
 	import { addChatToDB } from './ts/database'
+
+	import Modal from './Modal.svelte'
 	
 	if (browser) {
 		const appStorage = window.localStorage;	
@@ -19,6 +21,22 @@
 	export let theme = ''
 
 	export let isAuthed:boolean
+
+	let showModal:boolean = false
+
+	let message =
+`Hi, and welcome to A Softer Space.
+
+This is a place where you can vent your feelings, like you're texting a friend, without worrying that they're too heavy to handle.
+
+You can stash your chats to continue later, or save (download) them to your device.
+
+If you want to access your chats from another device, you'll need to sign up and make an account.
+
+We hope you find solace in using this little app.
+
+Thank you.
+`
 	
 	const toggle = (stashToggle: boolean): boolean => {
 		stashToggle = !stashToggle;
@@ -26,6 +44,7 @@
 		return stashToggle;
 	}
 </script>
+
 
 {#if showStashSave}
 <div class='modal'
@@ -41,7 +60,7 @@ on:click={() => {
 	showStashSave = toggle(showStashSave);
 }}
 >
-<span class='material-icons {theme}'>info</span>
+<span class='material-icons-outlined {theme}'>info</span>
 <span class={theme} id='toggleButtonText'>Chat Options</span>
 </button>
 
@@ -49,6 +68,7 @@ on:click={() => {
 {#if browser}
 <aside
 id="stash-component"
+class={theme}
 transition:fly='{{duration: 300, y:200}}'
 >
 <input
@@ -107,9 +127,21 @@ bind:value={chatPacket.chatName}
 	<span>Clear Chat</span>
 </button>
 </div>
+<button
+class={theme}
+id='modalButton'
+on:click="{() => {showModal = !showModal}}">
+<span class='material-icons-outlined {theme}'>info</span>
+	What is A Softer Space?
+</button>
 </aside>
 {/if}
 {/if}
+
+{#if showModal}
+	<Modal bind:showModal {message} {theme}></Modal>
+{/if}
+
 
 <style lang="scss">
 	@import '../themes/allThemes-button';
@@ -167,7 +199,8 @@ bind:value={chatPacket.chatName}
 		display: grid;
 		grid-template-areas:
 		"middle middle middle middle"
-		"stash-chat save-chat clear-stash clear-chat";
+		"stash-chat save-chat clear-stash clear-chat"
+		"bottom bottom bottom bottom";
 		justify-items:stretch;
 		min-height: 50px;
 		gap: 2vw;
@@ -194,6 +227,11 @@ bind:value={chatPacket.chatName}
 		grid-area: clear-chat;
 	}
 	
+	#modalButton {
+		background:none;
+		grid-area: bottom;
+	}
+
 	@media (min-width: 500px) {
 		#stash-component {
 			padding: 2vh 20vw 10vh;

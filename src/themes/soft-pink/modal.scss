@@ -1,0 +1,9 @@
+@import './soft-pink.scss';
+
+soft-pink {
+	@at-root {
+		#modal {
+			background-color: hsl(330, 50%, 90%);
+		}
+	}
+}

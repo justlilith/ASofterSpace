@@ -1,0 +1,9 @@
+@import './deep-blue.scss';
+
+deep-blue {
+	@at-root {
+		#modal {
+			background-color: hsl(230, 50%, 90%);
+		}
+	}
+}

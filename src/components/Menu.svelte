@@ -44,7 +44,7 @@ id='menuButton'
 class={theme}
 on:click="{() => showMenu = !showMenu}"
 >
-<span class='material-icons {theme}'>menu</span>
+<span class='material-icons-outlined {theme}'>menu</span>
 <span class='{theme} menuButtonText'>Menu</span>
 </button>
 
@@ -57,7 +57,7 @@ class={theme}>
 		<a href="/"
 		transition:fade='{{duration: 100, delay:100}}'
 		>
-		<span class='material-icons {theme}'>chat</span>
+		<span class='material-icons-outlined {theme}'>chat</span>
 		<span class='{theme} menuButtonText'>Chat</span>
 	</a>
 </li>
@@ -66,7 +66,7 @@ class={theme}>
 	<a href="/history"
 	transition:fade='{{duration: 100, delay:150}}'
 	>
-	<span class='material-icons {theme}'>history</span>
+	<span class='material-icons-outlined {theme}'>history</span>
 	<span class='{theme} menuButtonText'>History</span>
 </a>
 </li>
@@ -75,7 +75,7 @@ class={theme}>
 	<a href="/settings"
 	transition:fade='{{duration: 100, delay:200}}'
 	>
-	<span class='material-icons {theme}'>settings</span>
+	<span class='material-icons-outlined {theme}'>settings</span>
 	<span class='{theme} menuButtonText'>Settings</span>
 </a>
 </li>
@@ -84,7 +84,7 @@ class={theme}>
 	<a href="/login"
 	transition:fade='{{duration: 100, delay:250}}'
 	>
-	<span class='material-icons {theme}'>login</span>
+	<span class='material-icons-outlined {theme}'>login</span>
 	<span class='{theme} menuButtonText'>Login</span>
 </a>
 </li>
@@ -102,7 +102,7 @@ class={theme}>
 	}}'
 	transition:fade='{{duration: 100, delay:300}}'
 	>
-	<span class='material-icons {theme}'>logout</span>
+	<span class='material-icons-outlined {theme}'>logout</span>
 	<span class='{theme} menuButtonText'>Logout</span>
 </a>
 </li>
