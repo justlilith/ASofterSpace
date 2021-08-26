@@ -124,7 +124,7 @@
 				event.preventDefault()
 			}}
 			>
-			<span id='sendButton' class="material-icons">send</span>
+			<span id='sendButton' class="material-icons-outlined">send</span>
 			Send
 		</button>
 		<!-- </Fab> -->
