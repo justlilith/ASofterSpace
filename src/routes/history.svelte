@@ -110,7 +110,7 @@
 	}
 
 	.animatedList:first-child {
-		margin-top:10vh;
+		margin-top:15vh;
 	}
 	
 	.animatedList > p {

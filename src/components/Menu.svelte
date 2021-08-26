@@ -1,7 +1,7 @@
 <script lang='ts'>
 	import { fade, fly } from 'svelte/transition'
 	import { onMount } from 'svelte'
-	import { authCheck, authDataStore, login, signOut, testHeaders } from '../components/ts/auth'
+	import * as Auth from '../components/ts/auth'
 	import * as Helpers from './ts/helpers'
 	
 	export let theme = ''
@@ -17,10 +17,16 @@
 	onMount(async () => {
 		appStorage = window.localStorage
 
-		authCheck()
+		Auth.authCheck()
 		.then(res => {
-			console.log(res)
-			isAuthed =  res
+			isAuthed = res
+			if (isAuthed){
+				if (!Auth.refreshTokenFetcherActive) {
+					setInterval(() => {
+						Auth.getRefreshToken()
+					},1000 * 60 * 3)
+				}
+			}
 		})
 	})
 </script>
@@ -89,8 +95,9 @@ class={theme}>
 	on:click='{async () => {
 		chatPacket.chatFullText = Helpers.clearChat(chatPacket)
 		Helpers.clearStash(appStorage)
-		isAuthed = await signOut(isAuthed)
+		isAuthed = await Auth.signOut(isAuthed)
 		appStorage.setItem('userData', '')
+		appStorage.setItem('chats', '')
 		Helpers.notify('You\'ve been successfully logged out ✔️', 2000, 'good')
 	}}'
 	transition:fade='{{duration: 100, delay:300}}'

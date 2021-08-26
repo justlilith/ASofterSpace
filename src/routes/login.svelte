@@ -18,7 +18,7 @@
 	import fetch from 'isomorphic-fetch'
 	
 	
-	import { authCheck, authDataStore, login, signOut, testHeaders } from '../components/ts/auth'
+	import * as Auth from '../components/ts/auth'
 	import type { Session, User } from '@supabase/gotrue-js';
 	import Settings from './settings.svelte';
 	
@@ -26,7 +26,7 @@
 	
 	let isAuthed:boolean
 	
-	
+	let chatPacket:ChatPacketT
 	
 	onMount(async () => {
 		const appStorage = window.localStorage
@@ -41,10 +41,18 @@
 		themeStore.subscribe((newTheme) => {
 			theme = newTheme
 		})
-		authCheck()
+		Auth.authCheck()
 		.then(res => {
-			console.log(res)
-			isAuthed =  res
+			// console.log(res)
+			isAuthed = res
+			
+			if (res) {
+				if (!Auth.refreshTokenFetcherActive) {
+					setInterval(() => {
+						Auth.getRefreshToken()
+					},1000 * 60 * 3)
+				}
+			}
 		})
 		
 	})
@@ -58,74 +66,74 @@
 		// console.log('signin invoked')
 		let user, session, error
 		
-		[user, session, error] = await login(email, password)
+		[user, session, error] = await Auth.login(email, password)
 		
 		if (error) {
 			Helpers.notify(error.message,2000, 'bad')
 		}
 		if (session) {
-			Helpers.notify('way to go! login successful ✨',2000, 'good')
+			Helpers.notify('way to go! login successful ✨',1500, 'good')
 			setTimeout(() => {
-					window.location.href='/'
-				},2000)
-				// Helpers.notify('login successful :>')
-			}
-			console.log(user, session, error)
-			isAuthed = true
-			const form:HTMLFormElement = document.querySelector('#loginForm')
-			form.reset()
+				window.location.href='/'
+			},2000)
+			// Helpers.notify('login successful :>')
 		}
-	</script>
+		console.log(user, session, error)
+		isAuthed = true
+		const form:HTMLFormElement = document.querySelector('#loginForm')
+		form.reset()
+	}
+</script>
+
+
+
+<Menu {chatPacket} {theme}></Menu>
+
+<main class={theme}>
+	<h1>Login</h1>
+	{#if isAuthed}
+	<!-- <h2>Authed</h2> -->
+	{/if}
 	
-	
-	
-	<Menu {theme}></Menu>
-	
-	<main class={theme}>
-		<h1>Login</h1>
-		{#if isAuthed}
-		<!-- <h2>Authed</h2> -->
-		{/if}
+	<form action='/login' id='loginForm'>
+		<input 
+		bind:value={email}
+		transition:fade='{{duration: 100, delay:100}}'
+		id='email' placeholder="email@mailboxx.com">
 		
-		<form action='/login' id='loginForm'>
-			<input 
-			bind:value={email}
-			transition:fade='{{duration: 100, delay:100}}'
-			id='email' placeholder="email@mailboxx.com">
-			
-			<input
-			bind:value={password}
-			transition:fade='{{duration: 100, delay:150}}'
-			id='pass' type="password" placeholder="password">
-			
-			<input type='submit' style='display:none'
-			on:click|preventDefault="{() => {
-				signin()
-			}}">
-		</form>
+		<input
+		bind:value={password}
+		transition:fade='{{duration: 100, delay:150}}'
+		id='pass' type="password" placeholder="password">
 		
-		
-		<div>
-			<button class={theme}
-			transition:fade='{{duration: 100, delay:200}}'
-			on:click='{() => {
-				signin()
-			}}'>Login
-		</button>
-		<!-- <button class={theme}
+		<input type='submit' style='display:none'
+		on:click|preventDefault="{() => {
+			signin()
+		}}">
+	</form>
+	
+	
+	<div>
+		<button class={theme}
+		transition:fade='{{duration: 100, delay:200}}'
+		on:click='{() => {
+			signin()
+		}}'>Login
+	</button>
+	<!-- <button class={theme}
 		transition:fade='{{duration: 100, delay:200}}'
 		on:click='{() => {
 			testHeaders()
 		}}' >Test Headers -->
-	<!-- </button> -->
-</div>
-
-<p transition:fade='{{duration: 100, delay:250}}'>New to A Softer Space?
-	<a href='/signup'>Sign up here, okay?</a>
-</p>
-
-<Toast {theme}></Toast>
-
+		<!-- </button> -->
+	</div>
+	
+	<p transition:fade='{{duration: 100, delay:250}}'>New to A Softer Space?
+		<a href='/signup'>Sign up here, okay?</a>
+	</p>
+	
+	<Toast {theme}></Toast>
+	
 </main>
 
 

@@ -157,7 +157,7 @@ const saveChat = (chatPacket:ChatPacketT): void => {
 
 function saveToLocal (appStorage:Storage, prop:string, value:string|Session|UserData):void {
 	appStorage.setItem(prop,JSON.stringify(value))
-	console.log(appStorage.getItem(prop))
+	console.log(prop, appStorage.getItem(prop))
 }
 
 

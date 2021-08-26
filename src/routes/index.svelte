@@ -17,6 +17,7 @@
 	import themeStore from '../components/ts/themeStore'
 	import Toast from '../components/Toast.svelte'
 	import * as Helpers from '../components/ts/helpers'
+	import * as Auth from '../components/ts/auth';
 	
 	let theme:string = 'deep-blue'
 	
@@ -56,16 +57,25 @@
 			theme = newTheme
 		})
 		
+		isAuthed = await Auth.authCheck()
+		
+		if (isAuthed) {
+			if (!Auth.refreshTokenFetcherActive) {
+				setInterval(async () => {
+					await Auth.getRefreshToken()
+				},1000 * 60 * 3)
+			}
+		}
+		
 		try {
 			let stash:ChatPacketT = JSON.parse(appStorage.getItem('chats'))
 			if (stash) {
 				chatPacket = {...stash}
-			} else {
-				throw new Error('couldn\'t get the chats sowwy')
 			}
 			console.log(stash)
 		} catch (error) {
-			console.warn(error)
+			console.warn('couldn\'t get the chats sowwy')
+			console.warn(error.message)
 		}
 		
 		chatPacket.chatId = chatPacket.chatId || uuidv4()
@@ -169,6 +179,10 @@ bind:showStashSave></Stash>
 	#animatedList {
 		display:flex;
 		flex-direction: column;
+	}
+
+	.animatedList:first-child {
+		margin-top:20vh;
 	}
 	
 	#animatedList > p {
