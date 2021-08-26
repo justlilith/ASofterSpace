@@ -37,6 +37,8 @@
 	
 	onMount(async () => {
 		const appStorage = window.localStorage
+
+		// Helpers.newModal()
 		
 		theme = Helpers.fetchTheme(appStorage, themeStore, 'theme')
 		

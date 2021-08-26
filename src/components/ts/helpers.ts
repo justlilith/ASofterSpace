@@ -101,6 +101,37 @@ const fetchTheme = (appStorage:Storage, themeStore, type:string):string => {
 }
 
 
+function newModal(message?:string):void {
+	const modal:HTMLElement = document.createElement('aside')
+	const backdrop:HTMLElement = document.createElement('div')
+
+	modal.innerText = message || `test`
+	modal.setAttribute('id','modalPopup')
+	modal.setAttribute('style',`
+	margin: auto;
+	position: fixed;
+	min-height: 20vh;
+	min-width: 20vw;
+	top: 40vh;
+	`)
+	backdrop.setAttribute('id','backdrop')
+	backdrop.setAttribute('style',`
+background-color: black;
+position:fixed;
+height: 100vh;
+opacity: 0.5;
+width: 100vw;
+top: 0vh;
+	`)
+	backdrop.addEventListener('click', function removeModal(){
+		document.body.removeChild(document.getElementById('modalPopup'))
+		document.body.removeChild(document.getElementById('backdrop'))
+	})
+	document.body.appendChild(backdrop)
+	document.body.appendChild(modal)
+}
+
+
 function notify(toastMessage:string, duration?:number, mood = 'neutral'):void {
 	// const marshmallow = document.createElement(div)
 	// marshmallow.innerText = message
@@ -269,6 +300,7 @@ export {
 	, clearStash
 	, fetchTheme
 	, fetchFromLocal
+	, newModal
 	, notify
 	, saveChat
 	, saveToLocal
