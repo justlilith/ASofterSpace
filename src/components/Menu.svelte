@@ -9,8 +9,14 @@
 	export let isAuthed:boolean = false
 	
 	export let showMenu = false
+
+	export let messageList = []
 	
+	let appStorage
+
 	onMount(async () => {
+		appStorage = window.localStorage
+
 		authCheck()
 		.then(res => {
 			console.log(res)
@@ -83,6 +89,9 @@ class={theme}>
 	on:click='{async () => {
 		isAuthed = await signOut(isAuthed)
 		Helpers.notify('You\'ve been successfully logged out ✔️', 2000, 'good')
+		messageList = Helpers.clearChat(messageList)
+		Helpers.clearStash(appStorage)
+		appStorage.setItem('userData', '')
 	}}'
 	transition:fade='{{duration: 100, delay:300}}'
 	>

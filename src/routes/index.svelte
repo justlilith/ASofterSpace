@@ -156,7 +156,9 @@ bind:chatName
 bind:fileName></Input>
 <Menu {theme}
 bind:isAuthed
-bind:showMenu></Menu>
+bind:showMenu
+bind:messageList
+></Menu>
 <Stash
 {theme}
 bind:messageList
