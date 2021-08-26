@@ -10,7 +10,7 @@
 	
 	export let showMenu = false
 
-	export let messageList = []
+	export let chatPacket:ChatPacketT
 	
 	let appStorage
 
@@ -87,11 +87,11 @@ class={theme}>
 <li>
 	<a href="/"
 	on:click='{async () => {
-		isAuthed = await signOut(isAuthed)
-		Helpers.notify('You\'ve been successfully logged out ✔️', 2000, 'good')
-		messageList = Helpers.clearChat(messageList)
+		chatPacket.chatFullText = Helpers.clearChat(chatPacket)
 		Helpers.clearStash(appStorage)
+		isAuthed = await signOut(isAuthed)
 		appStorage.setItem('userData', '')
+		Helpers.notify('You\'ve been successfully logged out ✔️', 2000, 'good')
 	}}'
 	transition:fade='{{duration: 100, delay:300}}'
 	>

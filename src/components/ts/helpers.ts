@@ -1,7 +1,7 @@
 import { browser } from '$app/env'
 import themeStore from './themeStore'
 import { toastStore } from './toastStore'
-import { get } from 'svelte/store'
+// import { get } from 'svelte/store'
 import type { Session } from '@supabase/gotrue-js';
 
 
@@ -22,11 +22,11 @@ const clearStash = (appStorage: Storage): void => {
 };
 
 
-const clearChat = (messageList:MessageT[]):MessageT[] => {
-	messageList = [];
+const clearChat = (chatPacket:ChatPacketT):MessageT[] => {
+	chatPacket.chatFullText = [];
 	console.log("chat cleared");
 	notify(`chat cleared! c:`, 3000)
-	return messageList
+	return chatPacket.chatFullText
 };
 
 
@@ -129,17 +129,17 @@ function notify(toastMessage:string, duration?:number, mood = 'neutral'):void {
 }
 
 
-const saveChat = (filename:string, messageList:MessageT[]): void => {
+const saveChat = (chatPacket:ChatPacketT): void => {
 	notify('downloading chat! c:', 1000)
-	filename = filename ? filename : "Saved Chat"
-	const chat = messageList
+	chatPacket.chatName = chatPacket.chatName ? chatPacket.chatName : "Saved Chat"
+	const chat = chatPacket.chatFullText
 	.map((message) => `${message.timestamp} from ${message.sender}:
 	${message.content}
 	`)
 	.join("\n");
 	console.log(chat);
 	const date = new Date()
-	const filenameFinal = `${filename} (from ${date.toDateString()})`
+	const filenameFinal = `${chatPacket.chatName} (from ${date.toDateString()})`
 	const file = new File([chat], filenameFinal, {
 		type: 'text/plain'
 	})
@@ -155,7 +155,7 @@ const saveChat = (filename:string, messageList:MessageT[]): void => {
 };
 
 
-function saveToLocal (appStorage, prop:string, value:string|Session|UserData):void {
+function saveToLocal (appStorage:Storage, prop:string, value:string|Session|UserData):void {
 	appStorage.setItem(prop,JSON.stringify(value))
 	console.log(appStorage.getItem(prop))
 }
@@ -194,10 +194,10 @@ function setListenerOpacity (opacity):void {
 }
 
 
-const stashChat = (appStorage:Storage, chatName:string, messageList:MessageT[]): void => {
+const stashChat = (appStorage:Storage, chatPacket:ChatPacketT): void => {
 	// const stashName: string = `${dateString}-${chatName.replace(/\s/g, "-")}`;
 	// const messages = new Set(messageList);
-	appStorage.setItem("chats", JSON.stringify(messageList));
+	appStorage.setItem("chats", JSON.stringify(chatPacket));
 	console.log(appStorage.getItem("chats"));
 	notify('chat stashed! c:', 1000)
 };

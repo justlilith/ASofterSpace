@@ -14,10 +14,11 @@
 	
 	export let showStashSave: boolean = false;
 	
-	export let chatName: string = "";
-	export let messageList: MessageT[];
+	export let chatPacket:ChatPacketT
 	
 	export let theme = ''
+
+	export let isAuthed:boolean
 	
 	const toggle = (stashToggle: boolean): boolean => {
 		stashToggle = !stashToggle;
@@ -55,16 +56,19 @@ transition:fade='{{duration: 100, delay:100}}'
 class={theme}
 id="name"
 placeholder="Name this chat, please c:"
-bind:value={chatName}
+bind:value={chatPacket.chatName}
 />
 <div id="stash-chat">
 	<button
 	transition:fade='{{duration: 150, delay:150}}'
 	class={theme}
 	on:click={async () => {
-		Helpers.stashChat(window.localStorage, chatName, messageList)
-		let res = await addChatToDB(messageList, chatName)
-		console.log(res)
+		Helpers.stashChat(window.localStorage, chatPacket)
+		if (isAuthed) {
+			let res = await addChatToDB(chatPacket)
+			console.log(res)
+
+		}
 	}}
 	>
 	<span>Stash Chat</span>
@@ -75,7 +79,7 @@ bind:value={chatName}
 	transition:fade='{{duration: 200, delay:200}}'
 	class={theme}
 	on:click={() => {
-		Helpers.saveChat(chatName, messageList);
+		Helpers.saveChat(chatPacket);
 	}}
 	>
 	<span>Save Chat</span>
@@ -97,7 +101,7 @@ bind:value={chatName}
 	transition:fade='{{duration: 300, delay:300}}'
 	class={theme}
 	on:click={() => {
-		messageList = []
+		chatPacket.chatFullText = []
 	}}
 	>
 	<span>Clear Chat</span>

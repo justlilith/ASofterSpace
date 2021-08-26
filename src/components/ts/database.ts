@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { dataset_dev } from 'svelte/internal'
+// import { dataset_dev } from 'svelte/internal'
 // import { writable, get } from 'svelte/store'
 // import * as Helpers from './helpers'
 // import fetch from 'isomorphic-fetch'
@@ -16,23 +16,22 @@ const user = supabase.auth.user()
 // let user:User, session:Session, error:Error, isAuthed:boolean
 
 
-async function addChatToDB (messageList:MessageT[], chatName?):Promise<(Error|string)> {
+async function addChatToDB (chatPacket:ChatPacketT):Promise<(Error|string)> {
 	return new Promise((resolve, reject) => {
 		const date = new Date
-		const uuid = uuidv4()
-		const uid = user.id
+		const uid = user ? user.id : null
 		
-		chatName = chatName ? chatName : "Saved Chat"
-		const chatNameFinal = `${chatName} (from ${date.toDateString()})`
+		chatPacket.chatName = chatPacket.chatName ? chatPacket.chatName : "Saved Chat"
+		const chatNameFinal = `${chatPacket.chatName} (from ${date.toDateString()})`
 		
 		supabase
 		.from('chatfulltexts')
-		.insert([
-			{ chatfulltext: JSON.stringify(messageList)
-				, chatid: uuid
+		.upsert([
+			{ chatfulltext: JSON.stringify(chatPacket.chatFullText)
+				, chatid: chatPacket.chatId
 				, uid: uid
 				, chattimestamp: `${date.toUTCString()}`
-				, chatname: chatNameFinal || chatName
+				, chatname: chatNameFinal || chatPacket.chatName
 			}
 		])
 		.then((data, error) => {
@@ -45,7 +44,7 @@ async function addChatToDB (messageList:MessageT[], chatName?):Promise<(Error|st
 	})
 }
 
-async function fetchChatsFromDB ():ChatPacketT[] {
+async function fetchChatsFromDB ():Promise<ChatPacketT[]> {
 	
 	const { data, error } = await supabase
 	.from('chatfulltexts')
@@ -56,12 +55,12 @@ async function fetchChatsFromDB ():ChatPacketT[] {
 			reject(error)
 		}
 		
-		let results = data.map(chunk => {
+		const results = data.map(chunk => {
 			let chatPacket:ChatPacketT = {
 				chatId: 0,
 				chatName: '',
 				chatFullText: [],
-				timestamp: 0
+				timestamp: ''
 			}
 			chatPacket.chatId = chunk.chatid
 			chatPacket.chatName = chunk.chatname

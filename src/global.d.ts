@@ -5,7 +5,7 @@ declare module '@smui/fab';
 declare module '@smui/button';
 
 interface ChatPacketT {
-	timestamp: number,
+	timestamp: string,
 	chatFullText: MessageT[],
 	chatName: string,
 	chatId: uuid
