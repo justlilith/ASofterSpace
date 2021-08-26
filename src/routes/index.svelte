@@ -7,6 +7,8 @@
 	import { fade, fly, slide } from 'svelte/transition'
 	import { bind } from 'svelte/internal'
 	import { onMount } from 'svelte'
+	import {v4 as uuidv4 } from 'uuid'
+	
 	import Input from '../components/Input.svelte'
 	import Message from '../components/Message.svelte'
 	import Stash from '../components/Stash.svelte'
@@ -25,7 +27,12 @@
 	let showStashSave:boolean = false
 	let showMenu:boolean = false
 	
-	export let messageList:MessageT[] = [], timer:number = 8
+	export let chatPacket:ChatPacketT = {
+		chatId: 0,
+		chatName: '',
+		chatFullText: [],
+		timestamp: ''
+	}
 	
 	onMount(async () => {
 		const appStorage = window.localStorage
@@ -50,18 +57,22 @@
 		})
 		
 		try {
-			let stash = JSON.parse(appStorage.getItem('chats'))
-			messageList = stash || messageList
+			let stash:ChatPacketT = JSON.parse(appStorage.getItem('chats'))
+			if (stash) {
+				chatPacket = {...stash}
+			} else {
+				throw new Error('couldn\'t get the chats sowwy')
+			}
 			console.log(stash)
 		} catch (error) {
 			console.warn(error)
 		}
 		
-		Helpers.setListenerOpacity(100)
+		chatPacket.chatId = chatPacket.chatId || uuidv4()
+		chatPacket.timestamp = `${date.toUTCString()}`
 		
+		Helpers.setListenerOpacity(100)
 	})
-	
-	// export let name: string;
 	
 	let chatName = ''
 	let fileName = ''
@@ -76,64 +87,13 @@
 			return list
 		}
 	}
-	
-	const responses:string[] =
-	[ `I'm just here to listen. :)`
-	, `Your feelings are valid. Keep talking. It's okay.`
-	, 'Keep going. :)'
-	, '*nods* Okay...'
-	]
-	
-	let voidFlag = 0
-	
-	const voidResponse = (timer:number, listofResponses:string[], messages:MessageT[],voidFlag,innerVoidFlag,) => {
-		if (voidFlag !== innerVoidFlag) {
-			return messageList
-		}
-		switch (timer){
-			case (8):
-			break
-			case (0):
-			let multiplier = Math.random()
-			let index:number = (100 * multiplier) % 4
-			index = Math.floor(index)
-			console.log(listofResponses[index])
-			let date = new Date()
-			let localTime = date.toLocaleTimeString()
-			let localDate = date.toLocaleDateString()
-			.split('/')
-			.reverse()
-			.join('.')
-			messageList = [...messages,
-			{ content:listofResponses[index]
-				, sender:'theVoid'
-				, timestamp: `${localDate} - ${localTime}`
-			}
-			]
-			voidFlag = 0
-			timer = 8
-			return messageList
-			default:
-			voidFlag = 1
-			setTimeout(()=> {
-				console.log('void called')
-				timer = timer - 1
-				voidResponse(timer, listofResponses, messages,voidFlag,1)
-			},1000)
-		}
-	}
-	
-	const invokeVoid = (event) => {
-		console.log(event)
-		messageList = voidResponse(timer, responses, messageList,voidFlag,voidFlag)
-	}
 </script>
 
 <main class={theme}>
 	<div id='messages'>
 		<section id='animatedList'>
-			{#if messageList.length !== 0}
-			{#each messageList as message}
+			{#if chatPacket.chatFullText.length !== 0}
+			{#each chatPacket.chatFullText as message}
 			<span
 			transition:slide='{{ duration: 200 }}'>
 			<Message {theme} {message}></Message>
@@ -149,20 +109,17 @@
 on:click='{()=> {
 	console.log('click')
 }}'
-on:voidInvoked='{invokeVoid.bind(timer,responses,messageList)}'
-bind:messageList
-bind:timer
-bind:chatName
+bind:chatPacket
 bind:fileName></Input>
 <Menu {theme}
 bind:isAuthed
 bind:showMenu
-bind:messageList
+bind:chatPacket
 ></Menu>
 <Stash
 {theme}
-bind:messageList
-bind:chatName
+bind:chatPacket
+bind:isAuthed
 bind:showStashSave></Stash>
 
 <Toast {theme}></Toast>

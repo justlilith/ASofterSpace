@@ -28,6 +28,8 @@
 	})
 	
 	let chats:ChatPacketT[]
+
+	let chatPacket:ChatPacketT
 	
 	onMount(async () => {
 		const appStorage = window.localStorage
@@ -59,7 +61,7 @@
 	</div>
 	{/each}
 	{/if}
-	<Menu {theme}></Menu>
+	<Menu {chatPacket} {theme}></Menu>
 </main>
 
 <style lang='scss'>

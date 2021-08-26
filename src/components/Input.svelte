@@ -7,11 +7,9 @@
 	import { onMount } from 'svelte'
 	
 	
-	export let messageList:MessageT[]
+	export let chatPacket:ChatPacketT
 	export let timer:number = 0
 	// export const animateList = function(){}
-	export let chatName
-	export let fileName
 	
 	export let theme = ''
 	
@@ -51,10 +49,10 @@
 				}
 				break
 				case 'save':
-				Helpers.saveChat(fileName, messageList)
+				Helpers.saveChat(chatPacket)
 				break
 				case 'stash':
-				Helpers.stashChat(window.localStorage, chatName, messageList)
+				Helpers.stashChat(window.localStorage, chatPacket)
 				break
 				case 'clear':
 				console.log(command)
@@ -63,7 +61,7 @@
 					Helpers.clearStash(window.localStorage)
 					break
 					case 'chat':
-					messageList = []
+					chatPacket.chatFullText = []
 					break
 					default:
 					Helpers.notify('Invalid slash command :x',500)
@@ -88,8 +86,8 @@
 		.split('/')
 		.reverse()
 		.join('.')
-		messageList = [
-		...messageList
+		chatPacket.chatFullText = [
+		...chatPacket.chatFullText
 		, { content: message
 			, sender: 'user'
 			,	timestamp: `${localDate} - ${localTime}`
