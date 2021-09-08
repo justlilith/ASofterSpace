@@ -18,6 +18,11 @@
 	import { fetchChatsFromDB } from '../components/ts/database'
 	import * as Helpers from '../components/ts/helpers'
 	import Message from '../components/Message.svelte'
+	import HistoryMenu from '../components/HistoryMenu.svelte'
+	import * as Database from '../components/ts/database'
+	import Modal from '../components/Modal.svelte'
+	import Index from './index.svelte'
+	import Toast from '../components/Toast.svelte';
 	
 	let date = new Date()
 	
@@ -28,7 +33,7 @@
 	})
 	
 	let chats:ChatPacketT[]
-
+	
 	let chatPacket:ChatPacketT
 	
 	onMount(async () => {
@@ -41,6 +46,9 @@
 	
 	
 	// export let name: string;
+	
+	let showModal:boolean = false
+	let message:string
 	
 </script>
 
@@ -59,84 +67,104 @@
 			</section>
 		</div>
 	</div>
+	<HistoryMenu {theme} on:message='{async (event) => {
+		switch (event.detail.method) {
+			case 'delete':
+			default:
+			console.log('replace me sempai')
+			const res = await Database.deleteChatFromDB(chat)
+			console.log(res)
+			if (!res.error) {
+				Helpers.notify('Chat deleted!')
+				chats = await fetchChatsFromDB()
+			}
+		}
+	}}'></HistoryMenu>
 	{/each}
 	{/if}
 	<Menu {chatPacket} {theme}></Menu>
+	
 </main>
 
-<style lang='scss'>
-	@use '@material/theme/color-palette';
+<Toast {theme}></Toast>
+<!-- 
+	{#if showModal}
+	<Modal bind:showModal bind:message {theme}></Modal>
+	{/if} -->
 	
-	$background: #000;
-	
-	@use '@material/theme/index' as theme with (
-	$primary: color-palette.$blue-500,
-	$secondary: color-palette.$teal-600,
-	$surface: #fff,
-	$background: $background,
-	$error: #b00020,
-	);
-	
-	@import '../themes/allThemes';
-	
-	main {
-		position:relative;
-		text-align: center;
-		padding: 1em;
-		/* min-width: 400px; */
-		max-width: 85%;
-		/* width:100px; */
-		height:100%;
-		margin: 0 auto;
-	}
-	
-	.messages {
-		display:flex;
-		/* align-items:flex-end; */
-		flex-direction: column-reverse;
-		/* justify-content: flex-end; */
-		height: 20vh;
-		min-height:1px;
-		overflow:scroll;
-		-webkit-mask-image: linear-gradient(to top, black 0%, transparent 80%);
-		mask-image: linear-gradient(to top, black 0%, transparent 80%);
-		scrollbar-width: none;
-		/* border: thin solid white; */
-	}
-	
-	.animatedList {
-		display:flex;
-		flex-direction: column;
-	}
-
-	.animatedList:first-child {
-		margin-top:15vh;
-	}
-	
-	.animatedList > p {
-		color:white;
-	}
-	
-	#messages::-webkit-scrollbar {
-		display:none;
-	}
-	
-	/* h1 {
-		color: #fff;
-		text-transform: lowercase;
-		font-size: 3em;
-		font-weight: 600;
-	} */
-	
-	@media (min-width: 500px) {
+	<style lang='scss'>
+		@use '@material/theme/color-palette';
+		
+		$background: #000;
+		
+		@use '@material/theme/index' as theme with (
+		$primary: color-palette.$blue-500,
+		$secondary: color-palette.$teal-600,
+		$surface: #fff,
+		$background: $background,
+		$error: #b00020,
+		);
+		
+		@import '../themes/allThemes';
+		
 		main {
-			max-width: 60%;
+			position:relative;
+			text-align: center;
+			padding: 1em;
+			/* min-width: 400px; */
+			max-width: 85%;
+			/* width:100px; */
+			height:100%;
+			margin: 0 auto;
 		}
-	}
-	
-	@media (min-width: 1000px) {
-		main {
-			max-width: 30%;
+		
+		.messages {
+			display:flex;
+			/* align-items:flex-end; */
+			flex-direction: column-reverse;
+			/* justify-content: flex-end; */
+			height: 20vh;
+			min-height:1px;
+			overflow:scroll;
+			-webkit-mask-image: linear-gradient(to top, black 0%, transparent 80%);
+			mask-image: linear-gradient(to top, black 0%, transparent 80%);
+			scrollbar-width: none;
+			/* border: thin solid white; */
 		}
-	}
-</style>
+		
+		.animatedList {
+			display:flex;
+			flex-direction: column;
+		}
+		
+		.animatedList:first-child {
+			margin-top:15vh;
+		}
+		
+		.animatedList > p {
+			color:white;
+		}
+		
+		#messages::-webkit-scrollbar {
+			display:none;
+		}
+		
+		/* h1 {
+			color: #fff;
+			text-transform: lowercase;
+			font-size: 3em;
+			font-weight: 600;
+		} */
+		
+		@media (min-width: 500px) {
+			main {
+				max-width: 60%;
+			}
+		}
+		
+		@media (min-width: 1000px) {
+			main {
+				max-width: 30%;
+			}
+		}
+	</style>
