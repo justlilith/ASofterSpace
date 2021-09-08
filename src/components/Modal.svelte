@@ -3,12 +3,16 @@
 	export let theme = ''
 	export let message = ''
 	export let showModal:boolean = false
-
+	export let showByline:boolean = false
+	
 	let paragraphs = message.split('\n')
-
+	
 </script>
 
-<div transition:fade='{{duration:300}}' on:click='{()=>{showModal = !showModal}}' id='backdrop'>
+<div transition:fade='{{duration:300}}' on:click='{()=>{
+	showModal = false
+	console.log('kay??')
+}}' id='backdrop'>
 </div>
 <aside transition:fade='{{duration:300}}' id='modal' class='theme'>
 	<p id='modalMessage'>
@@ -16,7 +20,10 @@
 		{#each paragraphs as paragraph}
 		<p>{paragraph}</p>
 		{/each}
+		<slot></slot>
+		{#if showByline}
 		<p><a target=_blank href='https://twitter.com/imjustlilith'>—@imjustlilith</a> / A Softer Space Team</p>
+		{/if}
 		{:else}
 		test
 		{/if}
@@ -25,18 +32,19 @@
 
 <style lang='scss'>
 	@import '../themes/allThemes-modal';
-
+	
 	#modal {
 		background: white;
 		border-radius: 2px;
 		margin: auto;
-		min-height: 20vh;
+		min-height: 5vh;
 		min-width: 20vw;
 		padding: 5vh 5vw;
 		position: fixed;
 		top: 50vh;
 		left: 50vw;
 		transform: translate(-50%, -50%);
+		z-index:9001;
 	}
 	
 	#modalMessage {
@@ -51,8 +59,9 @@
 		position:fixed;
 		top: 0vh;
 		width: 100vw;
+		z-index:9000;
 	}
-
+	
 	@media (max-width: 500px) {
 		#modal {
 			width: 80vw;

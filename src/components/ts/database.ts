@@ -5,6 +5,7 @@ import { createClient } from '@supabase/supabase-js'
 // import fetch from 'isomorphic-fetch'
 // import type { Session, User } from '@supabase/gotrue-js'
 import {v4 as uuidv4 } from 'uuid'
+import type PostgrestResponse from '@supabase/supabase-js'
 
 const sbUrl = 'https://tdoulxkicweqdvxnuqmm.supabase.co'
 const sbKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyODk0NTUxNCwiZXhwIjoxOTQ0NTIxNTE0fQ.b5JJopf2VUmRy69rF6_jp21phjEHi6NHeVnGsJ7yC_A'
@@ -16,7 +17,7 @@ const user = supabase.auth.user()
 // let user:User, session:Session, error:Error, isAuthed:boolean
 
 
-async function addChatToDB (chatPacket:ChatPacketT):Promise<(Error|string)> {
+async function addChatToDB (chatPacket:ChatPacketT):Promise<(Error|PostgrestResponse.PostgrestResponse<string>)> {
 	return new Promise((resolve, reject) => {
 		const date = new Date
 		const uid = user ? user.id : null
@@ -34,11 +35,31 @@ async function addChatToDB (chatPacket:ChatPacketT):Promise<(Error|string)> {
 				, chatname: chatNameFinal || chatPacket.chatName
 			}
 		])
-		.then((data, error) => {
-			if (error) {
-				reject(error)
+		.then((res) => {
+			if (res.error) {
+				reject(res.error)
 			} else {
-				resolve(data)
+				resolve(res)
+			}
+		})
+	})
+}
+
+
+async function deleteChatFromDB(chat:ChatPacketT): Promise<PostgrestResponse.PostgrestResponse<string>|PostgrestResponse.PostgrestError>{
+	console.log(chat.chatId)
+	return new Promise((resolve, reject) => {
+		supabase
+		.from('chatfulltexts')
+		// .select('*')
+		.delete({returning: 'representation'})
+		.match({chatid:chat.chatId})
+		.then((res) => {
+			if (res.error) {
+				console.warn(res.error)
+				reject(res)
+			} else {
+				resolve(res)
 			}
 		})
 	})
@@ -56,7 +77,7 @@ async function fetchChatsFromDB ():Promise<ChatPacketT[]> {
 		}
 		
 		const results = data.map(chunk => {
-			let chatPacket:ChatPacketT = {
+			const chatPacket:ChatPacketT = {
 				chatId: 0,
 				chatName: '',
 				chatFullText: [],
@@ -76,5 +97,6 @@ async function fetchChatsFromDB ():Promise<ChatPacketT[]> {
 
 export { 
 	addChatToDB
+	, deleteChatFromDB
 	, fetchChatsFromDB
 }
