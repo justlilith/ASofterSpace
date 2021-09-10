@@ -36,8 +36,6 @@
 
 
 
-<Menu {theme}></Menu>
-
 <main class={theme}>
 	<section id="p5Sketch"></section>
 	<section id="p5Sketch2"></section>

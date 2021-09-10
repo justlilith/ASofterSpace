@@ -14,14 +14,24 @@
 	import Menu from '../components/Menu.svelte'
 	import ThemeSwitcher from '../components/ThemeSwitcher.svelte'
 	import * as Helpers from '../components/ts/helpers'
+	import * as Auth from '../components/ts/auth';
 	
 	let date = new Date()
-	
-	export let theme = ''
+	let theme = ''
+	let isAuthed:boolean = false
 	
 	onMount(async () => {
 		const appStorage = window.localStorage
 		Helpers.setListenerOpacity(25)
+		
+		isAuthed = await Auth.authCheck()
+		if (isAuthed) {
+			if (!Auth.refreshTokenFetcherActive) {
+				setInterval(() => {
+					Auth.getRefreshToken()
+				},1000 * 60 * 3)
+			}
+		}
 	})
 	
 	
@@ -29,7 +39,7 @@
 	
 </script>
 
-<Menu {theme}></Menu>
+<Menu {isAuthed} {theme}></Menu>
 
 
 <main class={theme}>

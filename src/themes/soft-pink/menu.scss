@@ -13,6 +13,10 @@ soft-pink {
 			background-color: white;
 		}
 		
+		aside.#{&}#stash-component {
+			background-color: white;
+		}
+		
 		nav.#{&} a {
 			color: hsl(0, 100%, 30%)
 		}

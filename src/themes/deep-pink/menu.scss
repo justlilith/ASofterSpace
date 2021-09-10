@@ -13,6 +13,10 @@ deep-pink {
 			background-color: black;
 		}
 		
+		aside.#{&}#stash-component {
+			background-color: black;
+		}
+		
 		nav.#{&} a {
 			color: hsl(300, 100%, 80%)
 		}

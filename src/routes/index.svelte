@@ -20,11 +20,8 @@
 	import * as Auth from '../components/ts/auth';
 	
 	let theme:string = 'deep-blue'
-	
 	let isAuthed:boolean = false
-	
 	let date = new Date()
-	
 	let showStashSave:boolean = false
 	let showMenu:boolean = false
 	
@@ -37,8 +34,6 @@
 	
 	onMount(async () => {
 		const appStorage = window.localStorage
-
-		// Helpers.newModal()
 		
 		theme = Helpers.fetchTheme(appStorage, themeStore, 'theme')
 		
@@ -60,17 +55,12 @@
 		})
 		
 		isAuthed = await Auth.authCheck()
-		
 		if (isAuthed) {
-			if (!Auth.refreshTokenFetcherActive) {
-				setInterval(async () => {
-					await Auth.getRefreshToken()
-				},1000 * 60 * 3)
-			}
+			Auth.awaitRefreshToken()
 		}
 		
 		try {
-			let stash:ChatPacketT = JSON.parse(appStorage.getItem('chats'))
+			let stash:ChatPacketT = Helpers.fetchFromLocal(appStorage,'chats')
 			if (stash) {
 				chatPacket = {...stash}
 			}
@@ -122,7 +112,7 @@ on:click='{()=> {
 	console.log('click')
 }}'
 bind:chatPacket
-bind:fileName></Input>
+></Input>
 <Menu {theme}
 bind:isAuthed
 bind:showMenu
@@ -136,8 +126,9 @@ bind:showStashSave></Stash>
 
 <Toast {theme}></Toast>
 
-
 </main>
+
+
 <style lang='scss'>
 	@use '@material/theme/color-palette';
 	
@@ -182,7 +173,7 @@ bind:showStashSave></Stash>
 		display:flex;
 		flex-direction: column;
 	}
-
+	
 	.animatedList:first-child {
 		margin-top:20vh;
 	}

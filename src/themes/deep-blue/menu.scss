@@ -13,6 +13,10 @@ deep-blue {
 			background-color: black;
 		}
 		
+		aside.#{&}#stash-component {
+			background-color: black;
+		}
+		
 		nav.#{&} a {
 			color: hsl(230, 100%, 80%)
 		}

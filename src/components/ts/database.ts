@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js'
 // import * as Helpers from './helpers'
 // import fetch from 'isomorphic-fetch'
 // import type { Session, User } from '@supabase/gotrue-js'
-import {v4 as uuidv4 } from 'uuid'
+// import {v4 as uuidv4 } from 'uuid'
 import type PostgrestResponse from '@supabase/supabase-js'
 
 const sbUrl = 'https://tdoulxkicweqdvxnuqmm.supabase.co'
@@ -46,7 +46,7 @@ async function addChatToDB (chatPacket:ChatPacketT):Promise<(Error|PostgrestResp
 }
 
 
-async function deleteChatFromDB(chat:ChatPacketT): Promise<PostgrestResponse.PostgrestResponse<string>|PostgrestResponse.PostgrestError>{
+async function deleteChatFromDB(chat:ChatPacketT): Promise<PostgrestResponse.PostgrestResponse<string>>{
 	console.log(chat.chatId)
 	return new Promise((resolve, reject) => {
 		supabase

@@ -23,24 +23,32 @@
 	import Modal from '../components/Modal.svelte'
 	import Index from './index.svelte'
 	import Toast from '../components/Toast.svelte';
+	import * as Auth from '../components/ts/auth';
+	
 	
 	let date = new Date()
-	
 	export let theme = ''
+	let chats:ChatPacketT[]
+	let chatPacket:ChatPacketT
+	let isAuthed:boolean = false
 	
 	themeStore.subscribe((newTheme) => {
 		theme = newTheme
 	})
-	
-	let chats:ChatPacketT[]
-	
-	let chatPacket:ChatPacketT
 	
 	onMount(async () => {
 		const appStorage = window.localStorage
 		theme = Helpers.fetchTheme(appStorage, themeStore, 'theme')
 		Helpers.setListenerOpacity(25)
 		
+		isAuthed = await Auth.authCheck()
+		if (isAuthed) {
+			if (!Auth.refreshTokenFetcherActive) {
+				setInterval(() => {
+					Auth.getRefreshToken()
+				},1000 * 60 * 3)
+			}
+		}
 		chats = await fetchChatsFromDB()
 	})
 	
@@ -53,7 +61,7 @@
 </script>
 
 <main class={theme}>
-	{#if chats}
+	{#if chats && chats?.length > 0}
 	{#each chats as chat}
 	<div class={theme}>
 		<h2>{chat.chatName || 'Saved Chat'}</h2>
@@ -81,8 +89,10 @@
 		}
 	}}'></HistoryMenu>
 	{/each}
+	{:else}
+	<p>No chats have been saved. :(</p>
 	{/if}
-	<Menu {chatPacket} {theme}></Menu>
+	<Menu {isAuthed} {chatPacket} {theme}></Menu>
 	
 </main>
 

@@ -3,6 +3,7 @@ import themeStore from './themeStore'
 import { toastStore } from './toastStore'
 // import { get } from 'svelte/store'
 import type { Session } from '@supabase/gotrue-js';
+import type { Writable } from 'svelte/store';
 
 
 if (browser) {
@@ -30,18 +31,18 @@ const clearChat = (chatPacket:ChatPacketT):MessageT[] => {
 };
 
 
-function fetchFromLocal (appStorage:Storage, prop:string) {
+function fetchFromLocal (appStorage:Storage, prop:string):unknown|null {
 	try {
 		const value = JSON.parse(appStorage.getItem(prop))
 		return value
 	} catch (error) {
-		console.warn(error)
-		return error
+		console.warn(error?.message)
+		return null
 	}
 }
 
 
-const fetchTheme = (appStorage:Storage, themeStore, type:string):string => {
+const fetchTheme = (appStorage:Storage, themeStore:Writable<string>, type:string):string => {
 	const themes = 
 	[ 'deep-blue'
 	, 'deep-pink'
@@ -211,7 +212,7 @@ function setListener (currentListener:string):string {
 }
 
 
-function setListenerOpacity (opacity):void {
+function setListenerOpacity (opacity:number):void {
 	const regex = /opacity*/
 	const listeners = Array.from(document.getElementsByClassName('p5Sketch'))
 	listeners.forEach(element => {
@@ -234,7 +235,7 @@ const stashChat = (appStorage:Storage, chatPacket:ChatPacketT): void => {
 };
 
 
-function updateListener (appStorage, currentListener:string):string {
+function updateListener (appStorage:Storage, currentListener:string):string {
 	// console.log(listener)
 	const sun = document.getElementById('p5Sketch')
 	const cube = document.getElementById('p5Sketch2')

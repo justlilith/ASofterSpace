@@ -16,16 +16,13 @@
 	import Toast from '../components/Toast.svelte'
 	import * as Helpers from '../components/ts/helpers'
 	import fetch from 'isomorphic-fetch'
-	
-	
 	import * as Auth from '../components/ts/auth'
 	import type { Session, User } from '@supabase/gotrue-js';
 	import Settings from './settings.svelte';
 	
 	export let theme = ''
 	
-	let isAuthed:boolean
-	
+	let isAuthed:boolean = false
 	let chatPacket:ChatPacketT
 	
 	onMount(async () => {
@@ -41,20 +38,15 @@
 		themeStore.subscribe((newTheme) => {
 			theme = newTheme
 		})
-		Auth.authCheck()
-		.then(res => {
-			// console.log(res)
-			isAuthed = res
-			
-			if (res) {
-				if (!Auth.refreshTokenFetcherActive) {
-					setInterval(() => {
-						Auth.getRefreshToken()
-					},1000 * 60 * 3)
-				}
-			}
-		})
 		
+		isAuthed = await Auth.authCheck()
+		if (isAuthed) {
+			if (!Auth.refreshTokenFetcherActive) {
+				setInterval(() => {
+					Auth.getRefreshToken()
+				},1000 * 60 * 3)
+			}
+		}
 	})
 	// export let name: string;
 	

@@ -5,29 +5,28 @@
 	import * as Helpers from './ts/helpers'
 	
 	export let theme = ''
-	
 	export let isAuthed:boolean = false
-	
 	export let showMenu = false
-
-	export let chatPacket:ChatPacketT
+	export let chatPacket:ChatPacketT = null
 	
 	let appStorage
-
+	
 	onMount(async () => {
 		appStorage = window.localStorage
-
-		Auth.authCheck()
-		.then(res => {
-			isAuthed = res
-			if (isAuthed){
-				if (!Auth.refreshTokenFetcherActive) {
-					setInterval(() => {
-						Auth.getRefreshToken()
-					},1000 * 60 * 3)
-				}
-			}
-		})
+		
+		// if (isAuthed == false){
+		// 	Auth.authCheck()
+		// 	.then(res => {
+		// 		isAuthed = res
+		// 		if (isAuthed){
+		// 			if (!Auth.refreshTokenFetcherActive) {
+		// 				setInterval(() => {
+		// 					Auth.getRefreshToken()
+		// 				},1000 * 60 * 3)
+		// 			}
+		// 		}
+		// 	})
+		// }
 	})
 </script>
 
@@ -93,7 +92,7 @@ class={theme}>
 <li>
 	<a href="/"
 	on:click='{async () => {
-		chatPacket.chatFullText = Helpers.clearChat(chatPacket)
+		if (chatPacket) {chatPacket.chatFullText = Helpers.clearChat(chatPacket)}
 		Helpers.clearStash(appStorage)
 		isAuthed = await Auth.signOut(isAuthed)
 		appStorage.setItem('userData', '')

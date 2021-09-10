@@ -15,13 +15,9 @@
 	let dateString = currentDate.toDateString().replace(/\s/g, "-");
 	
 	export let showStashSave: boolean = false;
-	
 	export let chatPacket:ChatPacketT
-	
 	export let theme = ''
-
-	export let isAuthed:boolean
-
+	export let isAuthed:boolean = false
 	let showModal:boolean = false
 
 	let message =

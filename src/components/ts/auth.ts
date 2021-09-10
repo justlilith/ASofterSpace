@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
-import { writable, get } from 'svelte/store'
+import { writable } from 'svelte/store'
 import * as Helpers from './helpers'
 // import fetch from 'isomorphic-fetch'
 import type { Session, User } from '@supabase/gotrue-js'
@@ -19,17 +19,24 @@ const authDataStore = writable({
 
 async function authCheck ():Promise<boolean> {
 	
+	console.log('invoked authCheck ✨')
 	// const options = {}
 	// await fetch()
 	let user:User, session:Session, error:Error
 	
 	const appStorage = window.localStorage
 	
-	const userData:UserData = Helpers.fetchFromLocal(appStorage,'userData')
-	console.log('invoked authCheck ✨')
+	let userData:UserData = Helpers.fetchFromLocal(appStorage,'userData')
 	
 	if (userData == null || userData.error || userData.isAuthed == false) {
 		isAuthed = false
+		if (userData == null) {
+			userData = {
+				error: null,
+				expiry: null,
+				isAuthed: false
+			}
+		}
 		authDataStore.update(() => {
 			return {user: null, session: null, error}
 		})
@@ -68,6 +75,15 @@ async function authCheck ():Promise<boolean> {
 }
 
 
+function awaitRefreshToken():void {
+	if (!refreshTokenFetcherActive) {
+		setInterval(() => {
+			getRefreshToken()
+		},1000 * 60 * 3)
+	}
+}
+
+
 async function getRefreshToken():Promise<void> {
 	if (refreshTokenFetcherActive) {
 		return
@@ -80,6 +96,7 @@ async function getRefreshToken():Promise<void> {
 		console.log('%cfetching refresh token~', 'color:hsl(120,100%,50%); font-weight:bold;')
 		const fetched:boolean = await authCheck()
 		console.log(fetched)
+		refreshTokenFetcherActive = false
 	}
 }
 
@@ -176,7 +193,7 @@ async function signOut(isAuthed:boolean):Promise<boolean> {
 }
 
 
-async function signup (email:string, password:string, name?:string) {
+async function signup (email:string, password:string, name?:string):Promise<Array<User|Session|Error>> {
 	try {
 		({ user, session, error } = await supabase.auth.signUp({
 			email: email,
@@ -190,8 +207,7 @@ async function signup (email:string, password:string, name?:string) {
 		}
 		
 		if (user) {
-			supabase.auth.setSession(session.refresh_token)
-			let user
+			supabase.auth.setSession(session.refresh_token);
 			({ user, error } = await supabase.auth.update({ 
 				data: { name: name } 
 			}))
@@ -222,6 +238,7 @@ async function testHeaders ():Promise<void> {
 }
 
 export { authDataStore
+	, awaitRefreshToken
 	, isAuthed
 	, getRefreshToken
 	, login
