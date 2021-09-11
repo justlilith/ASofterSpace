@@ -9,12 +9,14 @@
 
 	const dispatch = createEventDispatcher()
 	function sendMessage(message){
-		dispatch('message', {method: message})
+		dispatch('message', {directive: message})
 	}
 </script>
 
 <nav>
-	<button>
+	<button on:pointerdown='{event => {
+		sendMessage('save')
+	}}'>
 		<span class='material-icons-outlined {theme}'>download</span>
 		Save Chat
 	</button>

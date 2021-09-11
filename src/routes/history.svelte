@@ -76,7 +76,7 @@
 		</div>
 	</div>
 	<HistoryMenu {theme} on:message='{async (event) => {
-		switch (event.detail.method) {
+		switch (event.detail.directive) {
 			case 'delete':
 			default:
 			console.log('replace me sempai')
@@ -86,6 +86,10 @@
 				Helpers.notify('Chat deleted!')
 				chats = await fetchChatsFromDB()
 			}
+			break
+			case 'save':
+				console.log('save me sempai~')
+			Helpers.saveChat(chat);
 		}
 	}}'></HistoryMenu>
 	{/each}
