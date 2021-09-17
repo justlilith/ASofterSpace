@@ -24,6 +24,7 @@
 	let date = new Date()
 	let showStashSave:boolean = false
 	let showMenu:boolean = false
+	let name = ''
 	
 	export let chatPacket:ChatPacketT = {
 		chatId: 0,
@@ -57,6 +58,7 @@
 		isAuthed = await Auth.authCheck()
 		if (isAuthed) {
 			Auth.awaitRefreshToken()
+			name = `, ${(await Auth.getUserData()).name}`
 		}
 		
 		try {
@@ -89,7 +91,7 @@
 			return list
 		}
 	}
-</script>
+	</script>
 
 <main class={theme}>
 	<div id='messages'>
@@ -102,7 +104,7 @@
 		</span>
 		{/each}
 		{:else}
-		<p transition:fade|local>Talk to me.</p>
+		<p transition:fade|local>Talk to me{name}. 💙</p>
 		{/if}
 	</section>
 </div>
