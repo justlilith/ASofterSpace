@@ -31,7 +31,7 @@ const clearChat = (chatPacket:ChatPacketT):MessageT[] => {
 };
 
 
-function fetchFromLocal (appStorage:Storage, prop:string):unknown|null {
+function fetchFromLocal (appStorage:Storage, prop:string) {
 	try {
 		const value = JSON.parse(appStorage.getItem(prop))
 		return value
@@ -187,7 +187,7 @@ const saveChat = (chatPacket:ChatPacketT): void => {
 };
 
 
-function saveToLocal (appStorage:Storage, prop:string, value:string|Session|UserData):void {
+function saveToLocal (appStorage:Storage, prop:string, value:string|Session|UserDataT):void {
 	appStorage.setItem(prop,JSON.stringify(value))
 	console.log(prop, appStorage.getItem(prop))
 }
