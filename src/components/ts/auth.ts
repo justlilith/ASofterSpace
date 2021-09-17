@@ -3,6 +3,7 @@ import { writable } from 'svelte/store'
 import * as Helpers from './helpers'
 // import fetch from 'isomorphic-fetch'
 import type { Session, User } from '@supabase/gotrue-js'
+import { dataset_dev } from 'svelte/internal'
 
 const sbUrl = 'https://tdoulxkicweqdvxnuqmm.supabase.co'
 const sbKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyODk0NTUxNCwiZXhwIjoxOTQ0NTIxNTE0fQ.b5JJopf2VUmRy69rF6_jp21phjEHi6NHeVnGsJ7yC_A'
@@ -26,7 +27,7 @@ async function authCheck ():Promise<boolean> {
 	
 	const appStorage = window.localStorage
 	
-	let userData:UserData = Helpers.fetchFromLocal(appStorage,'userData')
+	let userData:UserDataT = Helpers.fetchFromLocal(appStorage,'userData')
 	
 	if (userData == null || userData.error || userData.isAuthed == false) {
 		isAuthed = false
@@ -101,6 +102,31 @@ async function getRefreshToken():Promise<void> {
 }
 
 
+async function getUserData ():Promise<UserPacketT|null> {
+	return new Promise((resolve, reject) => {
+		const session = supabase.auth.session()
+		console.log(session.user.id)
+		supabase
+		.from('userdata')
+		.select('username')
+		.match({uid:session.user.id})
+		.then((res)=> {
+			if (!res.error) {
+				console.log(res)
+				const userData = {
+					id: session.user.id,
+					name: res.data[0].username
+				}
+				resolve(userData)
+			} else {
+				reject(null)
+			}
+		})
+	})
+}
+
+
+
 async function tryRefreshToken ():Promise<{
 	session: Session | null
 	user: User | null
@@ -163,7 +189,7 @@ async function login (email:string, password:string):Promise<(User|Session|Error
 	// console.log(user, session, error)
 	
 	if (session) {
-		const userData:UserData = {
+		const userData:UserDataT = {
 			error: null,
 			expiry: session.expires_at,
 			isAuthed: true
@@ -182,6 +208,28 @@ async function login (email:string, password:string):Promise<(User|Session|Error
 	// console.log(get(authDataStore))
 	
 	return [user, session, error]
+}
+
+
+async function saveUserData (userData) {
+	console.log(userData)
+	return new Promise((resolve, reject) => {
+		supabase
+		.from('userdata')
+		.upsert({
+			username:userData.name,
+			uid:userData.id
+		})
+		.match({uid:userData.id})
+		.then(res => {
+			if (res.error) {
+				console.warn(res.error)
+				reject(null)
+			} else {
+				resolve('OK')
+			}
+		})
+	})
 }
 
 
@@ -241,8 +289,10 @@ export { authDataStore
 	, awaitRefreshToken
 	, isAuthed
 	, getRefreshToken
+	, getUserData
 	, login
 	, refreshTokenFetcherActive
+	, saveUserData
 	, signOut
 	, signup
 	, authCheck

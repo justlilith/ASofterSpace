@@ -15,10 +15,12 @@
 	import ThemeSwitcher from '../components/ThemeSwitcher.svelte'
 	import * as Helpers from '../components/ts/helpers'
 	import * as Auth from '../components/ts/auth';
+	import { session } from '$app/stores';
 	
 	let date = new Date()
 	let theme = ''
 	let isAuthed:boolean = false
+	let name:string = ''
 	
 	onMount(async () => {
 		const appStorage = window.localStorage
@@ -31,21 +33,55 @@
 					Auth.getRefreshToken()
 				},1000 * 60 * 3)
 			}
+			name = await getName()
 		}
 	})
 	
+	async function saveSettings() {
+		let data = await Auth.getUserData()
+		let userData = {
+			id:data.id,
+			name:name
+		}
+		console.log(userData)
+		Auth.saveUserData(userData)
+	}
 	
-	// export let name: string;
+	async function getName():Promise<string>{
+		let data = await Auth.getUserData()
+			console.log(data)
+			return data.name
+		}
+		
+		
+		// export let name: string;
+		
+	</script>
 	
-</script>
-
-<Menu {isAuthed} {theme}></Menu>
-
-
-<main class={theme}>
-	<ThemeSwitcher bind:theme></ThemeSwitcher>
-	<section id="p5Sketch"></section>
-	<section id="p5Sketch2"></section>
+	
+	
+	<main class={theme}>
+		<Menu {isAuthed} {theme}></Menu>
+		{#if isAuthed}
+		<h1>Account Settings</h1>
+		{:else}
+		<h1>Settings</h1>
+		{/if}
+		<ThemeSwitcher bind:theme></ThemeSwitcher>
+		{#if isAuthed}
+		<form action='/settings' id='settingsForm'>
+			<span>Name: </span><input bind:value={name} placeholder={name}>
+			<input type='submit' style='display:none;'
+			on:click|preventDefault='{() => {
+				saveSettings()
+			}}'>
+		</form>
+		<button
+		on:click|preventDefault='{() => {
+			saveSettings()
+		}}'>Save
+	</button>
+	{/if}
 </main>
 
 <style lang='scss'>

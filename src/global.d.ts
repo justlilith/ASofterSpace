@@ -24,8 +24,13 @@ interface ToastT {
 	mood: string
 }
 
-interface UserData {
+interface UserDataT {
 	isAuthed: boolean,
 	expiry: number,
 	error: null|Error
+}
+
+interface UserPacketT {
+	id: string,
+	name: string,
 }

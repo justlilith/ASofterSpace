@@ -54,7 +54,7 @@ class={theme}>
 <ul>
 	<li>
 		<a href="/"
-		transition:fade='{{duration: 100, delay:100}}'
+		transition:fade|local='{{duration: 100, delay:100}}'
 		>
 		<span class='material-icons-outlined {theme}'>chat</span>
 		<span class='{theme} menuButtonText'>Chat</span>
@@ -63,7 +63,7 @@ class={theme}>
 {#if isAuthed}
 <li>
 	<a href="/history"
-	transition:fade='{{duration: 100, delay:150}}'
+	transition:fade|local='{{duration: 100, delay:150}}'
 	>
 	<span class='material-icons-outlined {theme}'>history</span>
 	<span class='{theme} menuButtonText'>History</span>
@@ -72,7 +72,7 @@ class={theme}>
 {/if}
 <li>
 	<a href="/settings"
-	transition:fade='{{duration: 100, delay:200}}'
+	transition:fade|local='{{duration: 100, delay:200}}'
 	>
 	<span class='material-icons-outlined {theme}'>settings</span>
 	<span class='{theme} menuButtonText'>Settings</span>
@@ -81,7 +81,7 @@ class={theme}>
 {#if !isAuthed}
 <li>
 	<a href="/login"
-	transition:fade='{{duration: 100, delay:250}}'
+	transition:fade|local='{{duration: 100, delay:250}}'
 	>
 	<span class='material-icons-outlined {theme}'>login</span>
 	<span class='{theme} menuButtonText'>Login</span>
@@ -99,7 +99,7 @@ class={theme}>
 		appStorage.setItem('chats', '')
 		Helpers.notify('You\'ve been successfully logged out ✔️', 2000, 'good')
 	}}'
-	transition:fade='{{duration: 100, delay:300}}'
+	transition:fade|local='{{duration: 100, delay:300}}'
 	>
 	<span class='material-icons-outlined {theme}'>logout</span>
 	<span class='{theme} menuButtonText'>Logout</span>
