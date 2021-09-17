@@ -6,4 +6,4 @@ WIP.
 
 frameworks/langs:
 + [p5.js](https://github.com/processing/p5.js)
-+ [svelte](https://github.com/sveltejs/svelte)
++ [SvelteKit](https://kit.svelte.dev/)
