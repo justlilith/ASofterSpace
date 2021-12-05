@@ -24,7 +24,7 @@
 	let date = new Date()
 	let showStashSave:boolean = false
 	let showMenu:boolean = false
-	let name
+	let name = ''
 	
 	export let chatPacket:ChatPacketT = {
 		chatId: 0,
