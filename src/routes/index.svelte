@@ -24,7 +24,7 @@
 	let date = new Date()
 	let showStashSave:boolean = false
 	let showMenu:boolean = false
-	let name = ''
+	let name
 	
 	export let chatPacket:ChatPacketT = {
 		chatId: 0,
@@ -58,7 +58,8 @@
 		isAuthed = await Auth.authCheck()
 		if (isAuthed) {
 			Auth.awaitRefreshToken()
-			name = `, ${(await Auth.getUserData()).name}`
+			name = `, ${(await Auth.getUserData()).data.name ?? 'friend'}`
+			// name = supabase
 		}
 		
 		try {

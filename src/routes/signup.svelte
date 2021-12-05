@@ -48,10 +48,14 @@
 		if (error) {
 			Helpers.notify(JSON.stringify(error.message), 2000)
 		}
-		if (session) {
-			Helpers.notify('congrats! check your email to confirm your account c:', 2000, 'good')
+		if (user) {
 			const form:HTMLFormElement = document.querySelector('#signupForm')
 			form.reset()
+			Helpers.notify('congrats! your account is active c:', 2000, 'good')
+			// Helpers.notify('congrats! check your email to confirm your account c:', 2000, 'good')
+			setTimeout(() => {
+				window.location.href='/'
+			},2000)
 		}
 	}
 	

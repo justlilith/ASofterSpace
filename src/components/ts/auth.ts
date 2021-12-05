@@ -103,25 +103,38 @@ async function getRefreshToken():Promise<void> {
 
 
 async function getUserData ():Promise<UserPacketT|null> {
+	// const session = supabase.auth.session()
+	// const {user, data, error} = await supabase.auth.api.getUser(session.user.)
 	return new Promise((resolve, reject) => {
+		// resolve()
 		const session = supabase.auth.session()
-		console.log(session.user.id)
-		supabase
-		.from('userdata')
-		.select('username')
-		.match({uid:session.user.id})
-		.then((res)=> {
-			if (!res.error) {
-				console.log(res)
-				const userData = {
-					id: session.user.id,
-					name: res.data[0].username
+		if (session == null) {
+			reject(null)
+		}
+		// console.log(session.user.id)
+		resolve(
+			{
+				id: session.user.id,
+				data: {
+					name: session.user.user_metadata.name
 				}
-				resolve(userData)
-			} else {
-				reject(null)
-			}
-		})
+			})
+		// supabase
+		// .from('userdata')
+		// .select('username')
+		// .match({uid:session.user.id})
+		// .then((res)=> {
+		// 	if (!res.error) {
+		// 		console.log(res)
+		// 		const userData = {
+		// 			id: session.user.id,
+		// 			name: res.data[0].username
+		// 		}
+		// 		resolve(userData)
+		// 	} else {
+		// 		reject(null)
+		// 	}
+		// })
 	})
 }
 
@@ -211,24 +224,33 @@ async function login (email:string, password:string):Promise<(User|Session|Error
 }
 
 
-async function saveUserData (userData) {
-	console.log(userData)
+async function saveUserData (args:Record<string, User|any>):Promise<Error|void> {
+	console.log(args.user)
+	const { user, data, error } = await supabase.auth.api.updateUser(session.access_token, {
+		data: {
+			name: args.userData.name
+		}
+	})
 	return new Promise((resolve, reject) => {
-		supabase
-		.from('userdata')
-		.upsert({
-			username:userData.name,
-			uid:userData.id
-		})
-		.match({uid:userData.id})
-		.then(res => {
-			if (res.error) {
-				console.warn(res.error)
-				reject(null)
-			} else {
-				resolve('OK')
-			}
-		})
+		if (error) {
+			reject(error)
+		}
+		resolve()
+		// supabase
+		// .from('userdata')
+		// .upsert({
+		// 	username:userData.name,
+		// 	uid:userData.id
+		// })
+		// .match({uid:userData.id})
+		// .then(res => {
+		// 	if (res.error) {
+		// 		console.warn(res.error)
+		// 		reject(null)
+		// 	} else {
+		// 		resolve('OK')
+		// 	}
+		// })
 	})
 }
 
@@ -247,6 +269,10 @@ async function signup (email:string, password:string, name?:string):Promise<Arra
 			email: email,
 			password: password,
 		}))
+
+		if (error) {
+			throw error
+		}
 		
 		if (session) {
 			authDataStore.update(() => {
@@ -259,8 +285,12 @@ async function signup (email:string, password:string, name?:string):Promise<Arra
 			({ user, error } = await supabase.auth.update({ 
 				data: { name: name } 
 			}))
+			if (error) {
+				throw error
+			}
+			await login(email, password)
 		}
-		
+
 		return [user, session, error]
 	} catch (error) {
 		console.warn(error)

@@ -64,7 +64,7 @@
 			Helpers.notify(error.message,2000, 'bad')
 		}
 		if (session) {
-			Helpers.notify('way to go! login successful ✨',1500, 'good')
+			Helpers.notify(`way to go! login successful ✨ you'll now be redirected`, 1500, `good`)
 			setTimeout(() => {
 				window.location.href='/'
 			},2000)

@@ -32,5 +32,9 @@ interface UserDataT {
 
 interface UserPacketT {
 	id: string,
-	name: string,
+	data: UserMetaDataT
+}
+
+interface UserMetaDataT {
+	name: string
 }

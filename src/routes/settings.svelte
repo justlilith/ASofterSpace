@@ -44,16 +44,18 @@
 			name:name
 		}
 		console.log(userData)
-		let response = await Auth.saveUserData(userData)
-		if (response != null) {
-			Helpers.notify('Settings saved! ✨',1000,'good')
+		let error = await Auth.saveUserData({userData:userData})
+		if (error) {
+			console.warn(error)
+			return
 		}
+		Helpers.notify('Settings saved! ✨',1000,'good')
 	}
 	
 	async function getName():Promise<string>{
 		let data:UserPacketT = await Auth.getUserData()
 			console.log(data)
-			return data.name
+			return data.data.name
 		}
 		
 		
@@ -73,7 +75,7 @@
 		<ThemeSwitcher bind:theme></ThemeSwitcher>
 		{#if isAuthed}
 		<form action='/settings' id='settingsForm'>
-			<p>Name: </p><input bind:value={name} placeholder={name}>
+			<p>Change name: </p><input bind:value={name} placeholder={name}>
 			<input type='submit' style='display:none;'
 			on:click|preventDefault='{() => {
 				saveSettings()
