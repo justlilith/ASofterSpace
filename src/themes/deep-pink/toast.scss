@@ -2,8 +2,9 @@
 
 deep-pink {
 	@at-root {
-		div.#{&}.toastMessage {
-			background-color: hsl(300, 50%, 90%);
+		div.#{&}.toast-message-box {
+			background-color: hsl(300, 50%, 0%);
+			color: white;
 		}
 	}
 }

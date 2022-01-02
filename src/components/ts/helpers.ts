@@ -147,7 +147,8 @@ function notify(toastMessage:string, duration?:number, mood = 'neutral'):void {
 		message: toastMessage,
 		duration: duration,
 		id: crypto.getRandomValues(array)[0],
-		mood: mood
+		mood: mood,
+		remaining: duration / 1000
 	}
 	
 	// const toastQueue = get(toastStore)

@@ -2,8 +2,9 @@
 
 deep-blue {
 	@at-root {
-		div.#{&}.toastMessage {
-			background-color: hsl(230, 50%, 90%);
+		div.#{&}.toast-message-box {
+			background-color: hsl(230, 50%, 0%);
+			color: white;
 		}
 	}
 }

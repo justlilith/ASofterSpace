@@ -2,8 +2,9 @@
 
 soft-blue {
 	@at-root {
-		div.#{&}.toastMessage {
+		div.#{&}.toast-message-box {
 			background-color: hsl(200, 50%, 90%);
+			color: black;
 		}
 	}
 }

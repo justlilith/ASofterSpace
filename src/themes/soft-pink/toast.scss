@@ -2,8 +2,9 @@
 
 soft-pink {
 	@at-root {
-		div.#{&}.toastMessage {
+		div.#{&}.toast-message-box {
 			background-color: hsl(330, 50%, 90%);
+			color: black;
 		}
 	}
 }

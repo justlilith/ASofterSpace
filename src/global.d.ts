@@ -22,6 +22,7 @@ interface ToastT {
 	duration: number,
 	id: number,
 	mood: string
+	remaining: number
 }
 
 interface UserDataT {
