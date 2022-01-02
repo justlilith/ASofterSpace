@@ -134,9 +134,11 @@
 	
 	.bad {
 		background-color: hsl(0, 100%, 75%) !important;
+		color: black !important;
 	}
 	
 	.good {
 		background-color: hsl(90, 100%, 75%) !important;
+		color: black !important;
 	}
 </style>
