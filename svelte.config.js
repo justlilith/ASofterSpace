@@ -17,13 +17,8 @@ const config = {
 		// 	, fallback: null
 		// })
 		adapter: adapter({
-			edge: false,
-			split: true
+			edge: true,
 		}),
-		alias: {
-			"$lib": "src/lib",
-			"$lib/*": "src/lib/*"
-		},
 		// hydrate the <div id="svelte"> element in src/app.html
 		appDir: 'internal'
 		// , paths:
