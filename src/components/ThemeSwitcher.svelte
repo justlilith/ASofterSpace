@@ -2,7 +2,7 @@
 	import themeStore from './ts/themeStore'
 	// import button, { Label } from '@smui/button/bare.js'
 	// import { Label } from '@smui/button/bare.js'
-	import { browser } from '$app/env'
+	import { browser } from '$app/environment'
 	import { onMount } from 'svelte'
 	import * as Helpers from './ts/helpers'
 	import Toast from './Toast.svelte'

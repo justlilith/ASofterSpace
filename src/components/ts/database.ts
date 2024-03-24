@@ -7,20 +7,20 @@ import { createClient } from '@supabase/supabase-js'
 // import {v4 as uuidv4 } from 'uuid'
 import type PostgrestResponse from '@supabase/supabase-js'
 
-const sbUrl = 'https://tdoulxkicweqdvxnuqmm.supabase.co'
-const sbKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyODk0NTUxNCwiZXhwIjoxOTQ0NTIxNTE0fQ.b5JJopf2VUmRy69rF6_jp21phjEHi6NHeVnGsJ7yC_A'
+const sbUrlPublic = 'https://tdoulxkicweqdvxnuqmm.supabase.co'
+const sbKeyPublic = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyODk0NTUxNCwiZXhwIjoxOTQ0NTIxNTE0fQ.b5JJopf2VUmRy69rF6_jp21phjEHi6NHeVnGsJ7yC_A'
 
-const supabase = createClient(sbUrl, sbKey)
-const user = supabase.auth.user()
+const supabase = createClient(sbUrlPublic, sbKeyPublic)
+const user = supabase.auth.getUser()
 
 // let user:User|Session|Error, session:User|Session|Error, error:User|Session|Error
 // let user:User, session:Session, error:Error, isAuthed:boolean
 
 
 async function addChatToDB (chatPacket:ChatPacketT):Promise<(Error|PostgrestResponse.PostgrestResponse<string>)> {
-	return new Promise((resolve, reject) => {
+	return new Promise(async (resolve, reject) => {
 		const date = new Date
-		const uid = user ? user.id : null
+		const uid = (await user).data.user.id ?? null
 		
 		chatPacket.chatName = chatPacket.chatName ? chatPacket.chatName : "Saved Chat"
 		const chatNameFinal = `${chatPacket.chatName} (from ${date.toDateString()})`
@@ -52,7 +52,7 @@ async function deleteChatFromDB(chat:ChatPacketT): Promise<PostgrestResponse.Pos
 		supabase
 		.from('chatfulltexts')
 		// .select('*')
-		.delete({returning: 'representation'})
+		.delete()
 		.match({chatid:chat.chatId})
 		.then((res) => {
 			if (res.error) {

@@ -2,58 +2,57 @@
 <!-- yo, L6 here. Nice to have you checking out the source. I apologize for what you're gonna see lol -->
 
 <html lang="en">
+
 <head>
-	<!-- Google Tag Manager -->
-	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-		'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-	})(window,document,'script','dataLayer','GTM-TTZFTB7');</script>
-	<!-- End Google Tag Manager -->
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	
-	%svelte.head%
-	
+
+	%sveltekit.head%
+
 	<link rel='icon' type='image/png' href='favicon.png'>
 	<link rel='stylesheet' href='global.css'>
 	<!-- <link rel='stylesheet' href='./build/bundle.css'> -->
-	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
-	/>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/svelte-material-ui@4.0.0/bare.min.css"
-	/>
-	
-	<link rel="alternate" type="application/json+oembed"
-	href="http://asofter.space/oembed.json"
-	title="A Softer Space's oEmbed Profile" />
-	
-	<meta name="twitter:card" content="summary_large_image"></meta>
-	<meta name="twitter:site" content="@imjustlilith"></meta>
-	<meta name="twitter:creator" content="@imjustlilith"></meta>
-	<meta name="twitter:title" content="A Softer Space"></meta>
-	<meta name="twitter:image" content="https://asofter.space/preview.gif"></meta>
-	<meta name="og:image" content="https://asofter.space/preview.gif"></meta>
-	<meta property="twitter:image:alt" content="A white sircle with a multicolored ring."></meta>
-	<meta property="og:image:alt" content="A white sircle with a multicolored ring."></meta>
-	<meta property="twitter:description" content="A Softer Space is a calming area to vent your thoughts, as if texting a friend."></meta>
-	<meta property="og:description" content="A Softer Space is a calming area to vent your thoughts, as if texting a friend."></meta>
-	
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/svelte-material-ui@4.0.0/bare.min.css" />
+
+	<link rel="alternate" type="application/json+oembed" href="http://asofter.space/oembed.json"
+		title="A Softer Space's oEmbed Profile" />
+
+	<meta name="twitter:card" content="summary_large_image">
+	</meta>
+	<meta name="twitter:site" content="@imjustlilith">
+	</meta>
+	<meta name="twitter:creator" content="@imjustlilith">
+	</meta>
+	<meta name="twitter:title" content="A Softer Space">
+	</meta>
+	<meta name="twitter:image" content="https://asofter.space/preview.gif">
+	</meta>
+	<meta name="og:image" content="https://asofter.space/preview.gif">
+	</meta>
+	<meta property="twitter:image:alt" content="A white sircle with a multicolored ring.">
+	</meta>
+	<meta property="og:image:alt" content="A white sircle with a multicolored ring.">
+	</meta>
+	<meta property="twitter:description"
+		content="A Softer Space is a calming area to vent your thoughts, as if texting a friend.">
+	</meta>
+	<meta property="og:description"
+		content="A Softer Space is a calming area to vent your thoughts, as if texting a friend.">
+	</meta>
+
 	<script defer src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.min.js"></script>
 	<script id='p5' defer src="p5/sketch.js"></script>
 	<script id='p5' defer src="p5/sketch2.js"></script>
-	
+
 </head>
 
-<!-- Svelte inits here. Folding P5 around it ✨ -->
+<!-- SvelteKit inits here. Folding P5 around it ✨ -->
+
 <body>
-	<!-- Google Tag Manager (noscript) -->
-	<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TTZFTB7"
-		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-		<!-- End Google Tag Manager (noscript) -->
-		
-		<section id="p5Sketch" class='p5Sketch'></section>
-		<section id="p5Sketch2" class='p5Sketch'></section>
-		<div id="svelte">%svelte.body%</div>
-	</body>
-	</html>
-	
+	<section id="p5Sketch" class='p5Sketch'></section>
+	<section id="p5Sketch2" class='p5Sketch'></section>
+	<div id="svelte">%sveltekit.body%</div>
+</body>
+
+</html>

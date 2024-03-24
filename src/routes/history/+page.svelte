@@ -8,22 +8,20 @@
 <script lang="ts">
 	// import Fab from '@smui/fab'
 	import { fade, slide } from 'svelte/transition'
-	import { bind } from 'svelte/internal'
 	import { onMount } from 'svelte'
-	import { browser } from '$app/env'
 	
-	import Stash from '../components/Stash.svelte'
-	import Menu from '../components/Menu.svelte'
-	import themeStore from '../components/ts/themeStore'
-	import { fetchChatsFromDB } from '../components/ts/database'
-	import * as Helpers from '../components/ts/helpers'
-	import Message from '../components/Message.svelte'
-	import HistoryMenu from '../components/HistoryMenu.svelte'
-	import * as Database from '../components/ts/database'
-	import Modal from '../components/Modal.svelte'
-	import Index from './index.svelte'
-	import Toast from '../components/Toast.svelte';
-	import * as Auth from '../components/ts/auth';
+	import Stash from '../../components/Stash.svelte'
+	import Menu from '../../components/Menu.svelte'
+	import themeStore from '../../components/ts/themeStore'
+	import { fetchChatsFromDB } from '../../components/ts/database'
+	import * as Helpers from '../../components/ts/helpers'
+	import Message from '../../components/Message.svelte'
+	import HistoryMenu from '../../components/HistoryMenu.svelte'
+	import * as Database from '../../components/ts/database'
+	import Modal from '../../components/Modal.svelte'
+	import Index from '../+page.svelte'
+	import Toast from '../../components/Toast.svelte';
+	import * as Auth from '../../components/ts/auth';
 	
 	
 	let date = new Date()
@@ -119,7 +117,7 @@
 		$error: #b00020,
 		);
 		
-		@import '../themes/allThemes';
+		@import 'src/themes/allThemes.scss';
 		
 		main {
 			position:relative;

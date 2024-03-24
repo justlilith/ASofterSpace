@@ -8,14 +8,12 @@
 <script lang="ts">
 	// import Fab from '@smui/fab'
 	import { fade, slide } from 'svelte/transition'
-	import { bind } from 'svelte/internal'
 	import { onMount } from 'svelte'
-	import Stash from '../components/Stash.svelte'
-	import Menu from '../components/Menu.svelte'
-	import ThemeSwitcher from '../components/ThemeSwitcher.svelte'
-	import * as Helpers from '../components/ts/helpers'
-	import * as Auth from '../components/ts/auth';
-	import { session } from '$app/stores';
+	import Stash from '../../components/Stash.svelte'
+	import Menu from '../../components/Menu.svelte'
+	import ThemeSwitcher from '../../components/ThemeSwitcher.svelte'
+	import * as Helpers from '../../components/ts/helpers'
+	import * as Auth from '../../components/ts/auth';
 	
 	let date = new Date()
 	let theme = ''
@@ -102,7 +100,7 @@
 	$error: #b00020,
 	);
 	
-	@import '../themes/allThemes';
+	@import 'src/themes/allThemes';
 	
 	main {
 		position:relative;

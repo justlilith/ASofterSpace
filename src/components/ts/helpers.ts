@@ -1,4 +1,4 @@
-import { browser } from '$app/env'
+import { browser } from '$app/environment'
 import themeStore from './themeStore'
 import { toastStore } from './toastStore'
 // import { get } from 'svelte/store'
@@ -255,7 +255,7 @@ function updateListener (appStorage:Storage, currentListener:string):string {
 		break
 	}
 	saveToLocal(appStorage, 'listener',currentListener)
-	notify(`${currentListener} is now listening to you~ c:`, 500)
+	notify(`${currentListener} is now listening to you~ c:`, 2500)
 	
 	return currentListener
 }
@@ -292,7 +292,7 @@ function updateTheme (appStorage:Storage, theme:string):void {
 	
 	setTimeout(() => {
 		document.getElementById('interstitial') ? document.body.removeChild(document.getElementById('interstitial')) : null
-		notify(`your new theme is ${theme}! c:`, 500)
+		notify(`your new theme is ${theme}! c:`, 2500)
 	},300)
 	
 }

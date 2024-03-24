@@ -5,7 +5,6 @@
 <script lang="ts">
 	// import Fab from '@smui/fab'
 	import { fade, fly, slide } from 'svelte/transition'
-	import { bind } from 'svelte/internal'
 	import { onMount } from 'svelte'
 	import {v4 as uuidv4 } from 'uuid'
 	

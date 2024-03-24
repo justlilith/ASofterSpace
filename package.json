@@ -1,10 +1,11 @@
 {
-  "name": "~TODO~",
-  "version": "0.0.1",
+  "name": "asofterspace",
+  "version": "0.0.2",
+  "type": "module",
   "scripts": {
-    "dev": "svelte-kit dev --host",
-    "build": "svelte-kit build",
-    "preview": "svelte-kit preview",
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --ignore-path .gitignore  --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
@@ -12,30 +13,31 @@
   },
   "devDependencies": {
     "@material/theme": "^12.0.0",
-    "@sveltejs/adapter-netlify": "^1.0.0-next.27",
-    "@sveltejs/adapter-static": "^1.0.0-next.16",
-    "@sveltejs/kit": "next",
+    "@sveltejs/adapter-netlify": "^4",
+    "@sveltejs/adapter-static": "^3",
+    "@sveltejs/kit": "^2.5.4",
     "@typescript-eslint/eslint-plugin": "^4.19.0",
     "@typescript-eslint/parser": "^4.19.0",
     "encoding": "^0.1.13",
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-svelte3": "^3.2.0",
+    "eslint-plugin-svelte": "^2",
     "esm": "^3.2.25",
     "prettier": "~2.2.1",
     "prettier-plugin-svelte": "^2.2.0",
     "rollup-plugin-copy": "^3.4.0",
-    "svelte": "^3.34.0",
-    "svelte-check": "^2.0.0",
-    "svelte-loading-spinners": "^0.1.7",
-    "svelte-preprocess": "^4.0.0",
+    "sass": "^1.72.0",
+    "svelte": "^4.2",
+    "svelte-check": "^3",
+    "svelte-loading-spinners": "^0.3",
+    "svelte-preprocess": "^5",
     "tslib": "^2.0.0",
-    "typescript": "^4.0.0"
+    "typescript": "^5.0.0",
+    "vite": "^5.2.6"
   },
-  "type": "module",
   "dependencies": {
-    "@supabase/supabase-js": "^1.22.2",
+    "@supabase/supabase-js": "^2",
     "isomorphic-fetch": "^3.0.0",
-    "uuid": "^8.3.2"
+    "uuid": "^9"
   }
 }

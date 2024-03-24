@@ -8,17 +8,16 @@
 <script lang="ts">
 	// import Fab from '@smui/fab'
 	import { fade, slide } from 'svelte/transition'
-	import { bind } from 'svelte/internal'
 	import { onMount } from 'svelte'
-	import Stash from '../components/Stash.svelte'
-	import Menu from '../components/Menu.svelte'
-	import themeStore from '../components/ts/themeStore'
-	import Toast from '../components/Toast.svelte'
-	import * as Helpers from '../components/ts/helpers'
+	import Stash from '../../components/Stash.svelte'
+	import Menu from '../../components/Menu.svelte'
+	import themeStore from '../../components/ts/themeStore'
+	import Toast from '../../components/Toast.svelte'
+	import * as Helpers from '../../components/ts/helpers'
 	import fetch from 'isomorphic-fetch'
-	import * as Auth from '../components/ts/auth'
+	import * as Auth from '../../components/ts/auth'
 	import type { Session, User } from '@supabase/gotrue-js';
-	import Settings from './settings.svelte';
+	import Settings from '../settings/+page.svelte';
 	
 	export let theme = ''
 	
@@ -144,7 +143,7 @@
 	$error: #b00020,
 	);
 	
-	@import '../themes/allThemes';
+	@import 'src/themes/allThemes';
 	
 	main {
 		position:relative;

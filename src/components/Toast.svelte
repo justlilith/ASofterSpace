@@ -3,11 +3,7 @@
 	import { Jumper } from 'svelte-loading-spinners'
 	// import button, { Label } from '@smui/button/bare.js'
 	// import { Label } from '@smui/button/bare.js'
-	import { browser } from '$app/env'
-	import { onMount } from 'svelte'
-	import * as Helpers from './ts/helpers'
 	import { fly, fade, slide } from 'svelte/transition'
-	import { prevent_default } from 'svelte/internal'
 	
 	
 	export let theme:string = ''	

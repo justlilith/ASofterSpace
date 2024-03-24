@@ -8,16 +8,15 @@
 <script lang="ts">
 	// import Fab from '@smui/fab'
 	import { fade, slide } from 'svelte/transition'
-	import { bind } from 'svelte/internal'
 	import { onMount } from 'svelte'
-	import Stash from '../components/Stash.svelte'
-	import Menu from '../components/Menu.svelte'
-	import themeStore from '../components/ts/themeStore'
-	import Toast from '../components/Toast.svelte'
-	import * as Helpers from '../components/ts/helpers'
+	import Stash from '../../components/Stash.svelte'
+	import Menu from '../../components/Menu.svelte'
+	import themeStore from '../../components/ts/themeStore'
+	import Toast from '../../components/Toast.svelte'
+	import * as Helpers from '../../components/ts/helpers'
 	
 	
-	import { signup } from '../components/ts/auth'
+	import { signup } from '../../components/ts/auth'
 	
 	export let theme = ''
 	
@@ -125,7 +124,7 @@
 	$error: #b00020,
 	);
 	
-	@import '../themes/allThemes';
+	@import 'src/themes/allThemes';
 	
 	main {
 		position:relative;

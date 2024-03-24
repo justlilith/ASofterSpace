@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { browser } from '$app/env'
+	import { browser } from '$app/environment'
 	import * as Helpers from './ts/helpers'
 	import { fade, fly } from 'svelte/transition'
 	

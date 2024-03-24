@@ -16,51 +16,57 @@ const config = {
 		// 	, assets:'docs'
 		// 	, fallback: null
 		// })
-		adapter: adapter()
+		adapter: adapter({
+			edge: false,
+			split: true
+		}),
+		alias: {
+			"$lib": "src/lib",
+			"$lib/*": "src/lib/*"
+		},
 		// hydrate the <div id="svelte"> element in src/app.html
-	,	target: '#svelte'
-	, appDir: 'internal'
-	// , paths:
-	// { base: '/asofterspace'
-	// }
-	// , ssr: false
-	, vite:
-	{ config: {
-		// 	optimizeDeps:
-		// 	{ exclude:
-		// 		[ '@smui/button'
-		// 		, '@smui/common'
-		// 		, '@smui/fab'
-		// 		, '@smui/*'
-		// 		, '@smui'
-		// 	]
-		// },
-		// plugins:
-		// [ copy (
-		// 	{ targets: [
-		// 		{ src:'p5'
-		// 		, dest:'../docs'
-		// 	}
-		// 	, { src:'root/**/*'
-		// 		, dest: '../docs'
-		// 	}
-		// ]
-		// , flatten:true
-		// })
-		
-		// ]
-		// config options
-		// ssr:
-		// { noExternal:
-		// 	[ '@smui/button'
-		// 	, '@smui/common'
-		// 	, '@smui/fab'
-		// 	, '@smui-theme'
-		// 	]
+		appDir: 'internal'
+		// , paths:
+		// { base: '/asofterspace'
 		// }
-		}
+		// , ssr: false
+		// , vite:
+		// { config: {
+		// 	// 	optimizeDeps:
+		// 	// 	{ exclude:
+		// 	// 		[ '@smui/button'
+		// 	// 		, '@smui/common'
+		// 	// 		, '@smui/fab'
+		// 	// 		, '@smui/*'
+		// 	// 		, '@smui'
+		// 	// 	]
+		// 	// },
+		// 	// plugins:
+		// 	// [ copy (
+		// 	// 	{ targets: [
+		// 	// 		{ src:'p5'
+		// 	// 		, dest:'../docs'
+		// 	// 	}
+		// 	// 	, { src:'root/**/*'
+		// 	// 		, dest: '../docs'
+		// 	// 	}
+		// 	// ]
+		// 	// , flatten:true
+		// 	// })
+
+		// 	// ]
+		// 	// config options
+		// 	// ssr:
+		// 	// { noExternal:
+		// 	// 	[ '@smui/button'
+		// 	// 	, '@smui/common'
+		// 	// 	, '@smui/fab'
+		// 	// 	, '@smui-theme'
+		// 	// 	]
+		// 	// }
+		// 	}
+		// }
 	}
-}
 };
 
 export default config;
