@@ -3,32 +3,31 @@ import { writable } from 'svelte/store'
 import * as Helpers from './helpers'
 // import fetch from 'isomorphic-fetch'
 import type { Session, User } from '@supabase/gotrue-js'
-import { dataset_dev } from 'svelte/internal'
 
-const sbUrl = 'https://tdoulxkicweqdvxnuqmm.supabase.co'
-const sbKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyODk0NTUxNCwiZXhwIjoxOTQ0NTIxNTE0fQ.b5JJopf2VUmRy69rF6_jp21phjEHi6NHeVnGsJ7yC_A'
+const sbUrlPublic = 'https://tdoulxkicweqdvxnuqmm.supabase.co'
+const sbKeyPublic = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyODk0NTUxNCwiZXhwIjoxOTQ0NTIxNTE0fQ.b5JJopf2VUmRy69rF6_jp21phjEHi6NHeVnGsJ7yC_A'
 
-const supabase = createClient(sbUrl, sbKey)
+const supabase = createClient(sbUrlPublic, sbKeyPublic)
 
 // let user:User|Session|Error, session:User|Session|Error, error:User|Session|Error
-let user:User, session:Session, error:Error, isAuthed:boolean, refreshTokenFetcherActive:boolean
+let user: User, session: Session, error: Error, isAuthed: boolean, refreshTokenFetcherActive: boolean
 
 const authDataStore = writable({
 	user, session, error
 })
 
 
-async function authCheck ():Promise<boolean> {
-	
+async function authCheck(): Promise<boolean> {
+
 	console.log('invoked authCheck ✨')
 	// const options = {}
 	// await fetch()
-	let user:User, session:Session, error:Error
-	
+	let user: User, session: Session, error: Error
+
 	const appStorage = window.localStorage
-	
-	let userData:UserDataT = Helpers.fetchFromLocal(appStorage,'userData')
-	
+
+	let userData: UserDataT = Helpers.fetchFromLocal(appStorage, 'userData')
+
 	if (userData == null || userData.error || userData.isAuthed == false) {
 		isAuthed = false
 		if (userData == null) {
@@ -39,53 +38,24 @@ async function authCheck ():Promise<boolean> {
 			}
 		}
 		authDataStore.update(() => {
-			return {user: null, session: null, error}
+			return { user: null, session: null, error }
 		})
-		Helpers.saveToLocal(appStorage,'userData',userData)
+		Helpers.saveToLocal(appStorage, 'userData', userData)
 		return false
-	}
-	if (userData.isAuthed) {
-		({user, session, error} = await tryRefreshToken())
-		if (error) {
-			console.warn('%coh noooo', 'color:red;', error);
-			isAuthed = false
-			userData.error = error
-			userData.expiry = null
-			userData.isAuthed = false
-			Helpers.saveToLocal(appStorage,'userData',userData)
-			authDataStore.update(() => {
-				return {user: null, session: null, error}
-			})
-			return false
-		}
-		if (session) {
-			isAuthed = true
-			userData.error = null
-			userData.expiry = session.expires_at
-			userData.isAuthed = true
-			// console.log(session.refresh_token)
-			document.cookie = 'asofterspace_refresh_token=' + session.refresh_token + ';'
-			
-			Helpers.saveToLocal(appStorage,'userData',userData)
-			authDataStore.update(() => {
-				return {user, session, error}
-			})
-			return true
-		}
 	}
 }
 
 
-function awaitRefreshToken():void {
+function awaitRefreshToken(): void {
 	if (!refreshTokenFetcherActive) {
 		setInterval(() => {
 			getRefreshToken()
-		},1000 * 60 * 3)
+		}, 1000 * 60 * 3)
 	}
 }
 
 
-async function getRefreshToken():Promise<void> {
+async function getRefreshToken(): Promise<void> {
 	if (refreshTokenFetcherActive) {
 		return
 	}
@@ -95,28 +65,28 @@ async function getRefreshToken():Promise<void> {
 	const timeRemaining = date.getTime() - (session.expires_at * 1000)
 	if (timeRemaining < (1000 * 60 * 4)) {
 		console.log('%cfetching refresh token~', 'color:hsl(120,100%,50%); font-weight:bold;')
-		const fetched:boolean = await authCheck()
+		const fetched: boolean = await authCheck()
 		console.log(fetched)
 		refreshTokenFetcherActive = false
 	}
 }
 
 
-async function getUserData ():Promise<UserPacketT|null> {
+async function getUserData(): Promise<UserPacketT | null> {
 	// const session = supabase.auth.session()
 	// const {user, data, error} = await supabase.auth.api.getUser(session.user.)
-	return new Promise((resolve, reject) => {
+	return new Promise(async (resolve, reject) => {
 		// resolve()
-		const session = supabase.auth.session()
+		const session = await supabase.auth.getSession()
 		if (session == null) {
 			reject(null)
 		}
 		// console.log(session.user.id)
 		resolve(
 			{
-				id: session.user.id,
+				id: session.data.session.user.id,
 				data: {
-					name: session.user.user_metadata.name
+					name: session.data.session.user.user_metadata.name
 				}
 			})
 		// supabase
@@ -138,43 +108,6 @@ async function getUserData ():Promise<UserPacketT|null> {
 	})
 }
 
-
-
-async function tryRefreshToken ():Promise<{
-	session: Session | null
-	user: User | null
-	error: Error | null
-}> {
-	try {
-		const refreshToken = document.cookie
-		.split(';')
-		.find(chunk => chunk.includes('asofterspace_refresh_token='))
-		.split('=')[1];
-		
-		if (refreshToken) {
-			console.log('%cparsed', 'color:hsl(120,100%,50%); font-weight:bold;')
-			console.log(refreshToken);
-			({ user, session, error } = await supabase.auth.signIn({
-				refreshToken: refreshToken
-			}))
-			return new Promise((resolve, reject) => {
-				if (error) {
-					reject( {user:null, session:null, error})
-				}
-				// console.log(session)
-				resolve( { user, session, error } )
-			})
-		} else {
-			throw new Error('Couldn\'t find token :/')
-		}
-	} catch (error) {
-		return new Promise((resolve) => {
-			resolve ({ user:null, session: null, error })
-		})
-	}
-}
-
-
 // function getNewRefreshToken () {
 
 // }
@@ -188,45 +121,42 @@ async function tryRefreshToken ():Promise<{
 
 
 // :Promise<(User | Session | Error)[]>
-async function login (email:string, password:string):Promise<(User|Session|Error)[]> {
+async function login(email: string, password: string): Promise<(User | Session | Error)[]> {
 	const appStorage = window.localStorage;
-	
-	({ user, session, error } = await supabase.auth.signIn({
+
+	let { data, error } = await supabase.auth.signInWithPassword({
 		email: email,
-		password: password,
-	}, {
-		redirectTo: 'https://asofter.space/'
-		// redirectTo: 'localhost:3000'
-	}))
-	
+		password: password
+	});
+
 	// console.log(user, session, error)
-	
-	if (session) {
-		const userData:UserDataT = {
+
+	if (data.session) {
+		const userData: UserDataT = {
 			error: null,
-			expiry: session.expires_at,
+			expiry: data.session.expires_at,
 			isAuthed: true
 		}
-		
+
 		// console.log(session.refresh_token)
 		// document.cookie.
 		document.cookie = 'asofterspace_refresh_token=' + session.refresh_token + ';'
-		
-		Helpers.saveToLocal(appStorage,'userData',userData)
+
+		Helpers.saveToLocal(appStorage, 'userData', userData)
 		authDataStore.update(() => {
 			return { user, session, error }
 		})
 	}
-	
+
 	// console.log(get(authDataStore))
-	
+
 	return [user, session, error]
 }
 
 
-async function saveUserData (args:Record<string, User|any>):Promise<Error|void> {
+async function saveUserData(args: Record<string, User | any>): Promise<Error | void> {
 	console.log(args.user)
-	const { user, data, error } = await supabase.auth.api.updateUser(session.access_token, {
+	const { data, error } = await supabase.auth.updateUser({
 		data: {
 			name: args.userData.name
 		}
@@ -255,7 +185,7 @@ async function saveUserData (args:Record<string, User|any>):Promise<Error|void> 
 }
 
 
-async function signOut(isAuthed:boolean):Promise<boolean> {
+async function signOut(isAuthed: boolean): Promise<boolean> {
 	isAuthed = false
 	await supabase.auth.signOut()
 	window.location.href = '/'
@@ -263,28 +193,28 @@ async function signOut(isAuthed:boolean):Promise<boolean> {
 }
 
 
-async function signup (email:string, password:string, name?:string):Promise<Array<User|Session|Error>> {
+async function signup(email: string, password: string, name?: string): Promise<Array<User | Session | Error>> {
 	try {
-		({ user, session, error } = await supabase.auth.signUp({
+		let { data, error } = await supabase.auth.signUp({
 			email: email,
 			password: password,
-		}))
+		})
 
 		if (error) {
 			throw error
 		}
-		
+
 		if (session) {
 			authDataStore.update(() => {
-				return {user, session, error}
+				return { user, session, error }
 			})
 		}
-		
+
 		if (user) {
-			supabase.auth.setSession(session.refresh_token);
-			({ user, error } = await supabase.auth.update({ 
-				data: { name: name } 
-			}))
+			supabase.auth.setSession({ access_token: data.session.access_token, refresh_token: data.session.refresh_token });
+			let { data: data2, error } = await supabase.auth.updateUser({
+				data: { name: name }
+			})
 			if (error) {
 				throw error
 			}
@@ -298,24 +228,8 @@ async function signup (email:string, password:string, name?:string):Promise<Arra
 	}
 }
 
-
-async function testHeaders ():Promise<void> {
-	// const headers = {
-	// }
-	// fetch(headers,sbUrl)
-	const currentSession = supabase.auth.session()
-	const currentUser = supabase.auth.user()
-	console.log(currentSession, currentUser)
-	
-	const { user, session, error } = await supabase.auth.signIn({
-		refreshToken: currentSession.refresh_token
-	})
-	console.log(`%c${JSON.stringify(user)}
-	%c${JSON.stringify(session)}
-	%c${error}`, 'color:red;', 'color:yellow;', 'color:cyan;')
-}
-
-export { authDataStore
+export {
+	authDataStore
 	, awaitRefreshToken
 	, isAuthed
 	, getRefreshToken
@@ -326,5 +240,4 @@ export { authDataStore
 	, signOut
 	, signup
 	, authCheck
-	, testHeaders
 }
