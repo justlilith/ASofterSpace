@@ -2,11 +2,11 @@
 	// import Fab from '@smui/fab'
 	import { fade, slide } from 'svelte/transition';
 	import { onMount } from 'svelte';
-	import Stash from '../../components/Stash.svelte';
-	import Menu from '../../components/Menu.svelte';
-	import ThemeSwitcher from '../../components/ThemeSwitcher.svelte';
-	import * as Helpers from '../../components/ts/helpers';
-	import * as Auth from '../../components/ts/auth';
+	import Stash from '$lib/components/Stash.svelte';
+	import Menu from '$lib/components/Menu.svelte';
+	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
+	import * as Helpers from '$lib/components/ts/helpers';
+	import * as Auth from '../../lib/components/ts/auth';
 
 	let date = new Date();
 	let theme = '';

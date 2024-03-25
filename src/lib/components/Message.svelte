@@ -14,7 +14,7 @@ class={message.sender}
 {message.content}</p>
 
 <style lang='scss'>
-	@import '../themes/allThemes';
+	@import 'src/themes/allThemes';
 
 	p {
 		// border: thin solid grey;

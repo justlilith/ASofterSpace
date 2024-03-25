@@ -1,6 +1,5 @@
 <script lang='ts'>
 	import { createEventDispatcher } from 'svelte'
-	import { bind } from 'svelte/internal';
 	// import { stashChat, saveChat, clearChat, clearStash } from './Stash.svelte'
 	import * as Helpers from './ts/helpers'
 	import themeStore from './ts/themeStore'
@@ -109,7 +108,7 @@
 	}
 </script>
 
-<section id='inputArea' on:click|preventDefault>
+<section id='inputArea'>
 	<input id='textInput'
 	class={theme}
 	bind:value={messageContent}
@@ -132,7 +131,7 @@
 </section>
 
 <style lang='scss'>
-	@import '../themes/allThemes';
+	@import 'src/themes/allThemes';
 	
 	#inputArea {
 		width: 100%;

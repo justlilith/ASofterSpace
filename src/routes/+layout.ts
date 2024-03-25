@@ -1,7 +1,7 @@
-async function load ({ page }) {
+export const load = ({ route }) => {
 	return {
 		props: {
-			key: page.path,
+			routeId: route.id,
 		},
 	}
 }

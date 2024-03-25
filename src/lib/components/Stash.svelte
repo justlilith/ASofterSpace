@@ -5,7 +5,7 @@
 	
 	import { addChatToDB } from './ts/database'
 
-	import Modal from './Modal.svelte'
+	import Modal from '../../components/Modal.svelte'
 	
 	if (browser) {
 		const appStorage = window.localStorage;	
@@ -140,8 +140,8 @@ on:click="{() => {showModal = !showModal}}">
 
 
 <style lang="scss">
-	@import '../themes/allThemes-button';
-	@import '../themes/allThemes-menu';
+	@import 'src/themes/allThemes-button';
+	@import 'src/themes/allThemes-menu';
 
 	.modal {
 		background-color: black;

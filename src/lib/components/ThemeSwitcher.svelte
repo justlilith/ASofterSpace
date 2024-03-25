@@ -49,5 +49,5 @@
 </div>
 
 <style lang='scss'>
-	@import '../themes/allThemes-button';
+	@import 'src/themes/allThemes-button';
 </style>

@@ -79,7 +79,7 @@
 
 
 <style lang='scss'>
-	@import '../themes/allThemes-toast';
+	@import 'src/themes/allThemes-toast';
 	
 	#toastContainer {
 		display: flex;

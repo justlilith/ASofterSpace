@@ -8,12 +8,11 @@
 <script lang="ts">
 	// import Fab from '@smui/fab'
 	import { fade, slide } from 'svelte/transition'
-	import { bind } from 'svelte/internal'
 	import { onMount } from 'svelte'
-	import Stash from '../components/Stash.svelte'
+	import Stash from '../lib/components/Stash.svelte'
 	import Menu from '../components/Menu.svelte'
-	import themeStore from '../components/ts/themeStore'
-	import * as Helpers from '../components/ts/helpers'
+	import themeStore from '../lib/components/ts/themeStore'
+	import * as Helpers from '../lib/components/ts/helpers'
 	
 	export let theme = ''
 	
