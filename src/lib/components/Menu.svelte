@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { fade, fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
-	import * as Auth from '$lib/components/ts/auth';
 	import * as Helpers from '$lib/helpers';
+	import { authService } from '$lib/services/authService';
 
 	export let theme = '';
 	export let isAuthed: boolean = false;
@@ -103,7 +103,7 @@
 								chatPacket.chatFullText = Helpers.clearChat(chatPacket);
 							}
 							Helpers.clearStash(appStorage);
-							isAuthed = await Auth.signOut(isAuthed);
+							isAuthed = await authService.signOut(isAuthed);
 							appStorage.setItem('userData', '');
 							appStorage.setItem('chats', '');
 							Helpers.notify("You've been successfully logged out ✔️", 2000, 'good');
