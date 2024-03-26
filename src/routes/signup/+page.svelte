@@ -8,7 +8,7 @@
 	import Toast from '$lib/components/Toast.svelte';
 	import * as Helpers from '$lib/components/ts/helpers';
 
-	import { signup } from '$lib/components/ts/auth';
+	import { authService } from '$lib/services/authService';
 
 	export let theme = '';
 
@@ -35,7 +35,7 @@
 	async function newAccount() {
 		let user, session, error;
 
-		[user, session, error] = await signup(email, password, name);
+		[user, session, error] = await authService.signUp(email, password, name);
 		if (error) {
 			Helpers.notify(JSON.stringify(error.message), 2000);
 		}

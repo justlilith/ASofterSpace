@@ -15,7 +15,7 @@
 	import Toast from '$lib/components/Toast.svelte'
 	import * as Helpers from '$lib/components/ts/helpers'
 	import fetch from 'isomorphic-fetch'
-	import * as Auth from '$lib/components/ts/auth'
+	import { authService } from '$lib/services/authService'
 	import type { Session, User } from '@supabase/gotrue-js';
 	import Settings from '../settings/+page.svelte';
 	
@@ -23,30 +23,6 @@
 	
 	let isAuthed:boolean = false
 	let chatPacket:ChatPacketT
-	
-	onMount(async () => {
-		const appStorage = window.localStorage
-		Helpers.setListenerOpacity(25)
-		
-		theme = Helpers.fetchTheme(appStorage, themeStore, 'theme')
-		
-		if (!theme) {
-			theme = 'deep-blue'
-		}
-		
-		themeStore.subscribe((newTheme) => {
-			theme = newTheme
-		})
-		
-		isAuthed = await Auth.authCheck()
-		if (isAuthed) {
-			if (!Auth.refreshTokenFetcherActive) {
-				setInterval(() => {
-					Auth.getRefreshToken()
-				},1000 * 60 * 3)
-			}
-		}
-	})
 	// export let name: string;
 	
 	let email:string
@@ -57,7 +33,7 @@
 		// console.log('signin invoked')
 		let user, session, error
 		
-		[user, session, error] = await Auth.login(email, password)
+		[user, session, error] = await authService.login(email, password)
 		
 		if (error) {
 			Helpers.notify(error.message,2000, 'bad')

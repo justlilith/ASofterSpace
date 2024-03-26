@@ -3,13 +3,15 @@
 	import Menu from '$lib/components/Menu.svelte';
 	import Toast from '$lib/components/Toast.svelte';
 	import * as Helpers from '$lib/components/ts/helpers';
-	import * as Auth from '$lib/components/ts/auth';
+	import * as Auth from '$lib/services/authService';
 	import themeStore from '$lib/components/ts/themeStore';
 
 	let name;
 	let theme;
 	let showMenu;
 	let isAuthed;
+
+	let authService = Auth.authService;
 
 	onMount(async () => {
 		const appStorage = window.localStorage;
@@ -33,10 +35,9 @@
 			theme = newTheme;
 		});
 
-		let isAuthed = await Auth.authCheck();
+		let isAuthed = await authService.authCheck();
 		if (isAuthed) {
-			Auth.awaitRefreshToken();
-			name = `, ${(await Auth.getUserData()).data.name ?? 'friend'}`;
+			name = `, ${(await authService.getUserData()).data.name ?? 'friend'}`;
 			// name = supabase
 		}
 	});

@@ -31,13 +31,7 @@
 </script>
 
 {#if showMenu}
-	<button
-		class="modal"
-		transition:fade={{ duration: 300 }}
-		on:click={() => {
-			showMenu = !showMenu;
-		}}
-	></button>
+	<div class="modal" transition:fade={{ duration: 300 }} />
 {/if}
 
 <button id="menuButton" class={theme} on:click={() => (showMenu = !showMenu)}>
@@ -46,33 +40,57 @@
 </button>
 
 {#if showMenu}
-	<nav transition:fly={{ duration: 300, x: -200 }} class={theme}>
+	<nav id="side-menu" transition:fly={{ duration: 300, x: -200 }} class={theme}>
 		<ul>
 			<li>
-				<a href="/chat" transition:fade|local={{ duration: 100, delay: 100 }}>
+				<a
+					href="/chat"
+					transition:fade|local={{ duration: 100, delay: 100 }}
+					on:click={() => {
+						showMenu = false;
+					}}
+				>
 					<span class="material-icons-outlined {theme}">chat</span>
-					<span class="{theme} menuButtonText">Chat</span>
+					<span class="{theme} menuButtonText">chat</span>
 				</a>
 			</li>
 			{#if isAuthed}
 				<li>
-					<a href="/history" transition:fade|local={{ duration: 100, delay: 150 }}>
+					<a
+						href="/history"
+						transition:fade|local={{ duration: 100, delay: 150 }}
+						on:click={() => {
+							showMenu = false;
+						}}
+					>
 						<span class="material-icons-outlined {theme}">history</span>
-						<span class="{theme} menuButtonText">History</span>
+						<span class="{theme} menuButtonText">all chats</span>
 					</a>
 				</li>
 			{/if}
 			<li>
-				<a href="/settings" transition:fade|local={{ duration: 100, delay: 200 }}>
+				<a
+					href="/settings"
+					transition:fade|local={{ duration: 100, delay: 200 }}
+					on:click={() => {
+						showMenu = false;
+					}}
+				>
 					<span class="material-icons-outlined {theme}">settings</span>
-					<span class="{theme} menuButtonText">Settings</span>
+					<span class="{theme} menuButtonText">settings</span>
 				</a>
 			</li>
 			{#if !isAuthed}
 				<li>
-					<a href="/login" transition:fade|local={{ duration: 100, delay: 250 }}>
+					<a
+						href="/login"
+						transition:fade|local={{ duration: 100, delay: 250 }}
+						on:click={() => {
+							showMenu = false;
+						}}
+					>
 						<span class="material-icons-outlined {theme}">login</span>
-						<span class="{theme} menuButtonText">Login</span>
+						<span class="{theme} menuButtonText">login</span>
 					</a>
 				</li>
 			{/if}
@@ -89,14 +107,27 @@
 							appStorage.setItem('userData', '');
 							appStorage.setItem('chats', '');
 							Helpers.notify("You've been successfully logged out ✔️", 2000, 'good');
+							showMenu = false;
 						}}
 						transition:fade|local={{ duration: 100, delay: 300 }}
 					>
 						<span class="material-icons-outlined {theme}">logout</span>
-						<span class="{theme} menuButtonText">Logout</span>
+						<span class="{theme} menuButtonText">logout</span>
 					</a>
 				</li>
 			{/if}
+			<li>
+				<button
+					id="close-button"
+					class={theme}
+					on:click={() => {
+						showMenu = false;
+					}}
+				>
+					<span class="material-icons-outlined {theme}">close</span>
+					<span class="{theme} menuButtonText">close menu</span>
+				</button>
+			</li>
 		</ul>
 	</nav>
 {/if}
@@ -114,17 +145,27 @@
 		top: 0;
 	}
 
-	nav,
-	button {
+	#close-button {
+		background: none;
+		border: none;
+	}
+
+	#side-menu {
+		background-color: black;
+		z-index: 20;
+	}
+	nav {
+		padding: 0 7.5vw;
 		bottom: 2vh;
 		left: 2vw;
 		position: fixed;
 		z-index: 10;
-		padding: 0 7.5vw;
 	}
 
 	#menuButton {
 		left: 0px;
+		bottom: 2vh;
+		position: fixed;
 		background: none;
 		border: none;
 		z-index: 20;
@@ -158,6 +199,7 @@
 	}
 
 	li {
+		color: rgb(0, 100, 200);
 		text-decoration: none;
 		list-style: none;
 		padding: 2vh 0;

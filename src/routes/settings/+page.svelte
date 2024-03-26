@@ -6,36 +6,21 @@
 	import Menu from '$lib/components/Menu.svelte';
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
 	import * as Helpers from '$lib/components/ts/helpers';
-	import * as Auth from '../../lib/components/ts/auth';
+	import { authService } from '$lib/services/authService';
 
 	let date = new Date();
 	let theme = '';
 	let isAuthed: boolean = false;
 	let name: string = '';
 
-	onMount(async () => {
-		const appStorage = window.localStorage;
-		Helpers.setListenerOpacity(25);
-
-		isAuthed = await Auth.authCheck();
-		if (isAuthed) {
-			if (!Auth.refreshTokenFetcherActive) {
-				setInterval(() => {
-					Auth.getRefreshToken();
-				}, 1000 * 60 * 3);
-			}
-			name = await getName();
-		}
-	});
-
 	async function saveSettings() {
-		let data: UserPacketT = await Auth.getUserData();
+		let data: UserPacketT = await authService.getUserData();
 		let userData = {
 			id: data.id,
 			name: name
 		};
 		console.log(userData);
-		let error = await Auth.saveUserData({ userData: userData });
+		let error = await authService.saveUserData({ userData: userData });
 		if (error) {
 			console.warn(error);
 			return;
@@ -44,7 +29,7 @@
 	}
 
 	async function getName(): Promise<string> {
-		let data: UserPacketT = await Auth.getUserData();
+		let data: UserPacketT = await authService.getUserData();
 		console.log(data);
 		return data.data.name;
 	}
