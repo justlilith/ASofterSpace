@@ -1,5 +1,10 @@
-const storage = window.localStorage
+class LocalStorageService {
+	constructor() { }
+	storage = window.localStorage
+}
+
+const localStorageService = new LocalStorageService()
 
 export {
-	storage
+	localStorageService
 }

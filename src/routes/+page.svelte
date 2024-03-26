@@ -1,23 +1,27 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import AuthMenu from '$lib/components/auth/authMenu.svelte';
 </script>
 
-<h1>welcome to a softer space</h1>
+<div class="center main">
+	<h1>welcome to a softer space</h1>
 
-<AuthMenu />
+	<p>
+		To get started, visit <a href="/chat">the chat</a>. Nothing is stored unless you have an account
+		and choose to sync your progress. The chat is a free area to speak.
+	</p>
+	<button
+		on:click={() => {
+			goto('/chat');
+		}}>Visit the chat</button
+	>
+	<p>Log in or create an account below to sync your progress.</p>
+
+	<AuthMenu />
+</div>
 
 <style lang="scss">
-	@use '@material/theme/color-palette';
-
-	$background: #000;
-
-	@use '@material/theme/index' as theme with (
-	$primary: color-palette.$blue-500,
-	$secondary: color-palette.$teal-600,
-	$surface: #fff,
-	$background: $background,
-	$error: #b00020,
-	);
-
-	@import '../themes/allThemes';
+	.main {
+		text-align: center;
+	}
 </style>

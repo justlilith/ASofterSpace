@@ -5,6 +5,7 @@
 	import * as Helpers from '$lib/components/ts/helpers';
 	import * as Auth from '$lib/services/authService';
 	import themeStore from '$lib/components/ts/themeStore';
+	import Construction from '$lib/components/banners/construction.svelte';
 
 	let name;
 	let theme;
@@ -36,6 +37,7 @@
 		});
 
 		let isAuthed = await authService.authCheck();
+		authService.active.isAuthed = await authService.authCheck();
 		if (isAuthed) {
 			name = `, ${(await authService.getUserData()).data.name ?? 'friend'}`;
 			// name = supabase
@@ -47,8 +49,9 @@
 	<title>a softer space</title>
 </svelte:head>
 
+<Construction />
 <main class={theme}>
-	<Menu {theme} bind:isAuthed bind:showMenu/>
+	<Menu {theme} bind:isAuthed bind:showMenu />
 
 	<slot />
 	<Toast {theme} />

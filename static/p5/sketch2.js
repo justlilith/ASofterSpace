@@ -1,4 +1,4 @@
-let sketch2 = function(p) {
+let sketchCube = function(p) {
 	let DIAMETER = Math.min(p.windowWidth/5, p.windowHeight/5)
 	
 	let origin = [p.windowWidth/4, p.windowHeight/4]
@@ -87,4 +87,4 @@ let sketch2 = function(p) {
 		}
 	}
 }
-new p5(sketch2, 'p5Sketch2');
+new p5(sketchCube, 'p5SketchCube');

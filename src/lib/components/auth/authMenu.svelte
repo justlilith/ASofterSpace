@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { authService } from '$lib/services/authService';
-	import { fade } from 'svelte/transition';
 	import * as Helpers from '$lib/helpers';
-	import { theme } from '$lib/services/themeService';
+	import { themeService } from '$lib/services/themeService';
+	import { goto } from '$app/navigation';
 
 	let loginPage = true;
 	let signupPage = false;
@@ -10,6 +10,8 @@
 	let name;
 	let email;
 	let password;
+
+	let theme = themeService.theme;
 
 	async function signin() {
 		// console.log('signin invoked')
@@ -44,127 +46,126 @@
 			const form: HTMLFormElement = document.querySelector('#signupForm');
 			form.reset();
 			Helpers.notify('congrats! your account is active c:', 2000, 'good');
-			// Helpers.notify('congrats! check your email to confirm your account c:', 2000, 'good')
 			setTimeout(() => {
-				window.location.href = '/';
+				goto('/chat');
 			}, 2000);
 		}
 	}
+
+	function clearForm() {
+		name = null;
+		email = null;
+		password = null;
+	}
 </script>
 
-{#if loginPage}
-	<h1>Login</h1>
-	{#if authService.active.isAuthed}
-		<!-- <h2>Authed</h2> -->
-	{/if}
+<section class="center">
+	{#if loginPage}
+		<div class="center">
+			<h2>Log in</h2>
+			{#if authService.active.isAuthed}
+				<!-- <h2>Authed</h2> -->
+			{/if}
 
-	<form action="/login" id="loginForm">
-		<input
-			bind:value={email}
-			transition:fade={{ duration: 100, delay: 100 }}
-			id="email"
-			placeholder="email@mailboxx.com"
-		/>
+			<form id="loginForm">
+				<input bind:value={email} id="email" placeholder="email" />
 
-		<input
-			bind:value={password}
-			transition:fade={{ duration: 100, delay: 150 }}
-			id="pass"
-			type="password"
-			placeholder="password"
-		/>
+				<input bind:value={password} id="pass" type="password" placeholder="password" />
 
-		<input
-			type="submit"
-			style="display:none"
-			on:click|preventDefault={() => {
-				signin();
-			}}
-		/>
-	</form>
+				<input
+					type="submit"
+					style="display:none"
+					on:click|preventDefault={() => {
+						signin();
+					}}
+				/>
+			</form>
 
-	<div>
-		<button
-			class={theme}
-			transition:fade={{ duration: 100, delay: 200 }}
-			on:click={() => {
-				signin();
-			}}
-			>Login
-		</button>
-		<!-- <button class={theme}
+			<div>
+				<button
+					class={theme}
+					on:click={() => {
+						signin();
+					}}
+					>Login
+				</button>
+				<!-- <button class={theme}
 	transition:fade='{{duration: 100, delay:200}}'
 	on:click='{() => {
 		testHeaders()
 	}}' >Test Headers -->
-		<!-- </button> -->
-	</div>
+				<!-- </button> -->
+			</div>
 
-	<p transition:fade={{ duration: 100, delay: 250 }}>
-		New to A Softer Space?
-		<button
-			on:click={() => {
-				loginPage = false;
-				signupPage = true;
-			}}>Sign up here, okay?</button
-		>
-	</p>
-{/if}
+			<p>
+				New to A Softer Space?
+				<button
+					on:click={() => {
+						clearForm();
+						loginPage = false;
+						signupPage = true;
+					}}>Sign up here, okay?</button
+				>
+			</p>
+		</div>
+	{/if}
 
-{#if signupPage}
-	<h1>Sign Up</h1>
+	{#if signupPage}
+		<div class="center">
+			<h2>Sign up</h2>
 
-	<form action="/signup" id="signupForm">
-		<input
-			bind:value={name}
-			transition:fade={{ duration: 100, delay: 100 }}
-			id="name"
-			placeholder="Your Name"
-		/>
+			<form action="/signup" id="signupForm">
+				<input bind:value={name} id="name" placeholder="name" />
 
-		<input
-			bind:value={email}
-			transition:fade={{ duration: 100, delay: 100 }}
-			id="email"
-			placeholder="email@mailboxx.com"
-		/>
+				<input bind:value={email} id="email" placeholder="email" />
 
-		<input
-			bind:value={password}
-			transition:fade={{ duration: 100, delay: 150 }}
-			id="pass"
-			type="password"
-			placeholder="password"
-		/>
+				<input bind:value={password} id="pass" type="password" placeholder="password" />
 
-		<input
-			type="submit"
-			style="display:none"
-			on:click|preventDefault={() => {
-				newAccount();
-			}}
-		/>
-	</form>
+				<input
+					type="submit"
+					style="display:none"
+					on:click|preventDefault={() => {
+						newAccount();
+					}}
+				/>
+			</form>
 
-	<div>
-		<button
-			class={theme}
-			transition:fade={{ duration: 100, delay: 200 }}
-			on:click={() => {
-				newAccount();
-			}}
-		>
-			Sign up
-		</button>
-	</div>
+			<div>
+				<button
+					class={theme}
+					on:click={() => {
+						newAccount();
+					}}
+				>
+					Sign up
+				</button>
+			</div>
 
-	<p transition:fade={{ duration: 100, delay: 250 }}>
-		Already have an account?
-		<button
-			on:click={() => {
-				loginPage = true;
-				signupPage = false;
-			}}>Log in here, okay?</button
-		>
-	</p>
-{/if}
+			<p>
+				Already have an account?
+				<button
+					on:click={() => {
+						clearForm();
+						loginPage = true;
+						signupPage = false;
+					}}>Log in here, okay?</button
+				>
+			</p>
+		</div>
+	{/if}
+</section>
+
+<style lang="scss">
+	section {
+		width: 100%;
+		margin-left: auto;
+		margin-right: auto;
+		align-content: center;
+		text-emphasis: center;
+	}
+
+	form {
+		display: inline-flex;
+		flex-direction: column;
+	}
+</style>

@@ -10,7 +10,7 @@
 
 	let date = new Date();
 	let theme = '';
-	let isAuthed: boolean = false;
+	let isAuthed: boolean = authService.active.isAuthed;
 	let name: string = '';
 
 	async function saveSettings() {
@@ -39,39 +39,35 @@
 
 <svelte:head>
 	<title>a softer space :: settings</title>
-
-	<!-- <script id='p5' defer src="/p5/sketch.js"></script> -->
-	<!-- <script id='p5' defer src="/p5/sketch2.js"></script> -->
 </svelte:head>
 
-<main class={theme}>
-	<Menu {isAuthed} {theme} />
-	{#if isAuthed}
-		<h1>Account Settings</h1>
-	{:else}
-		<h1>Settings</h1>
-	{/if}
-	<ThemeSwitcher bind:theme />
-	{#if isAuthed}
-		<form action="/settings" id="settingsForm">
-			<p>Change name:</p>
-			<input bind:value={name} placeholder={name} />
-			<input
-				type="submit"
-				style="display:none;"
-				on:click|preventDefault={() => {
-					saveSettings();
-				}}
-			/>
-		</form>
-		<button
+<h1>Settings</h1>
+
+<ThemeSwitcher bind:theme />
+
+{#if isAuthed}
+	<h1>Account Settings</h1>
+{/if}
+
+{#if isAuthed}
+	<form action="/settings" id="settingsForm">
+		<p>Change name:</p>
+		<input bind:value={name} placeholder={name} />
+		<input
+			type="submit"
+			style="display:none;"
 			on:click|preventDefault={() => {
 				saveSettings();
 			}}
-			>Save
-		</button>
-	{/if}
-</main>
+		/>
+	</form>
+	<button
+		on:click|preventDefault={() => {
+			saveSettings();
+		}}
+		>Save
+	</button>
+{/if}
 
 <style lang="scss">
 	@use '@material/theme/color-palette';

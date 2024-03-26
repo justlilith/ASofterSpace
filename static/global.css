@@ -84,6 +84,15 @@ span.mdc-button__label {
 
 
 
+/* layout */
+
+
+.center {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
 
 #interstitial {
 	background-color:#000;

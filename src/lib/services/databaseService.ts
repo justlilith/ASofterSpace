@@ -1,3 +1,4 @@
+import { constants } from '$lib/constants/constants'
 import { createClient } from '@supabase/supabase-js'
 // import { dataset_dev } from 'svelte/internal'
 // import { writable, get } from 'svelte/store'
@@ -7,10 +8,9 @@ import { createClient } from '@supabase/supabase-js'
 // import {v4 as uuidv4 } from 'uuid'
 import type PostgrestResponse from '@supabase/supabase-js'
 
-const sbUrlPublic = 'https://tdoulxkicweqdvxnuqmm.supabase.co'
-const sbKeyPublic = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyODk0NTUxNCwiZXhwIjoxOTQ0NTIxNTE0fQ.b5JJopf2VUmRy69rF6_jp21phjEHi6NHeVnGsJ7yC_A'
 
-const supabase = createClient(sbUrlPublic, sbKeyPublic)
+
+const supabase = createClient(constants.keys.public.supabase.sbUrlPublic, constants.keys.public.supabase.sbKeyPublic)
 const user = supabase.auth.getUser()
 
 // let user:User|Session|Error, session:User|Session|Error, error:User|Session|Error

@@ -4,6 +4,7 @@ import { writable, type Writable } from 'svelte/store'
 import * as Helpers from '../components/ts/helpers'
 // import fetch from 'isomorphic-fetch'
 import type { Session, User } from '@supabase/gotrue-js'
+import { constants } from '$lib/constants/constants'
 
 interface AuthStore {
 	user: User
@@ -12,8 +13,8 @@ interface AuthStore {
 }
 
 class AuthService {
-	sbUrlPublic = 'https://tdoulxkicweqdvxnuqmm.supabase.co'
-	sbKeyPublic = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTYyODk0NTUxNCwiZXhwIjoxOTQ0NTIxNTE0fQ.b5JJopf2VUmRy69rF6_jp21phjEHi6NHeVnGsJ7yC_A'
+	sbKeyPublic = constants.keys.public.supabase.sbKeyPublic
+	sbUrlPublic = constants.keys.public.supabase.sbUrlPublic
 
 	supabaseClient: SupabaseClient;
 

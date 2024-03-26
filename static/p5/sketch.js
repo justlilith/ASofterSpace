@@ -1,4 +1,4 @@
-let sketch = function(p) {
+let sketchSun = function(p) {
   let DIAMETER = Math.min(p.windowWidth/3, p.windowHeight/3)
   
   let origin = [p.windowWidth/4, p.windowHeight/4]
@@ -81,4 +81,4 @@ let sketch = function(p) {
     }
   }
 }
-new p5(sketch, 'p5Sketch');
+new p5(sketchSun, 'p5SketchSun');

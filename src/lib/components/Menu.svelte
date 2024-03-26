@@ -83,14 +83,14 @@
 			{#if !isAuthed}
 				<li>
 					<a
-						href="/login"
+						href="/"
 						transition:fade|local={{ duration: 100, delay: 250 }}
 						on:click={() => {
 							showMenu = false;
 						}}
 					>
 						<span class="material-icons-outlined {theme}">login</span>
-						<span class="{theme} menuButtonText">login</span>
+						<span class="{theme} menuButtonText">log in / sign up</span>
 					</a>
 				</li>
 			{/if}
@@ -112,7 +112,7 @@
 						transition:fade|local={{ duration: 100, delay: 300 }}
 					>
 						<span class="material-icons-outlined {theme}">logout</span>
-						<span class="{theme} menuButtonText">logout</span>
+						<span class="{theme} menuButtonText">log out</span>
 					</a>
 				</li>
 			{/if}

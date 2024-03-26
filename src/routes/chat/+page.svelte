@@ -10,6 +10,8 @@
 	import themeStore from '$lib/components/ts/themeStore';
 	import * as Helpers from '$lib/components/ts/helpers';
 	import { authService } from '$lib/services/authService';
+	import { browser } from '$app/environment';
+	import { settingsService } from '$lib/services/settingsService';
 
 	let theme: string = 'deep-blue';
 	let isAuthed: boolean = false;
@@ -17,6 +19,7 @@
 	let showStashSave: boolean = false;
 	let showMenu: boolean = false;
 	let name = '';
+	let listener = settingsService.settings.listener;
 
 	export let chatPacket: ChatPacketT = {
 		chatId: 0,
@@ -26,48 +29,32 @@
 	};
 
 	onMount(async () => {
-		const appStorage = window.localStorage;
+		if (browser) {
+			const appStorage = window.localStorage;
 
-		theme = Helpers.fetchTheme(appStorage, themeStore, 'theme');
-
-		if (!theme) {
-			theme = 'deep-blue';
-			themeStore.update(() => {
-				return theme;
-			});
-
-			console.log(`theme updated to ${theme} :>`);
-			const html = document.getElementsByTagName('html')[0];
-			html.className = theme;
-
-			Helpers.saveToLocal(appStorage, 'theme', theme);
-		}
-
-		themeStore.subscribe((newTheme) => {
-			theme = newTheme;
-		});
-
-		isAuthed = await authService.authCheck();
-		if (isAuthed) {
-			name = `, ${(await authService.getUserData()).data.name ?? 'friend'}`;
-			// name = supabase
-		}
-
-		try {
-			let stash: ChatPacketT = Helpers.fetchFromLocal(appStorage, 'chats');
-			if (stash) {
-				chatPacket = { ...stash };
+			isAuthed = authService.active.isAuthed;
+			if (isAuthed) {
+				name = `, ${(await authService.getUserData()).data.name ?? 'friend'}`;
+				// name = supabase
 			}
-			console.log(stash);
-		} catch (error) {
-			console.warn("couldn't get the chats sowwy");
-			console.warn(error.message);
+
+			try {
+				let stash: ChatPacketT = Helpers.fetchFromLocal(appStorage, 'chats');
+				if (stash) {
+					chatPacket = { ...stash };
+				}
+				console.log(stash);
+			} catch (error) {
+				console.warn("couldn't get the chats sowwy");
+				console.warn(error.message);
+			}
+
+			chatPacket.chatId = chatPacket.chatId || uuidv4();
+			chatPacket.timestamp = `${date.toUTCString()}`;
+
+			Helpers.setListener('the sun');
+			Helpers.setListenerOpacity(50);
 		}
-
-		chatPacket.chatId = chatPacket.chatId || uuidv4();
-		chatPacket.timestamp = `${date.toUTCString()}`;
-
-		Helpers.setListenerOpacity(100);
 	});
 
 	let chatName = '';
@@ -89,13 +76,13 @@
 	<title>a softer space</title>
 
 	<script defer src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.min.js"></script>
-	<script id="p5" defer src="p5/sketch.js"></script>
-	<script id="p5" defer src="p5/sketch2.js"></script>
+	<!-- <script id="p5sun" defer src="p5/sketch.js"></script>
+	<script id="p5cube" defer src="p5/sketch2.js"></script> -->
 </svelte:head>
 
+<!-- <section id="p5Sketch" class="p5SketchSun" hidden={settingsService.listeners['sun'].hidden}/>
+<section id="p5Sketch2" class="p5SketchCube" hidden={settingsService.listeners['cube'].hidden}/> -->
 <main class={theme}>
-	<section id="p5Sketch" class="p5Sketch" />
-	<section id="p5Sketch2" class="p5Sketch" />
 	<div id="messages">
 		<section id="animatedList">
 			{#if chatPacket.chatFullText.length !== 0}
@@ -105,7 +92,7 @@
 					</span>
 				{/each}
 			{:else}
-				<p transition:fade|local>Talk to me{name}. 💙</p>
+				<p transition:fade|local>Talk to me{name ? `, ${name}` : ``}. 💙</p>
 			{/if}
 		</section>
 	</div>
@@ -120,19 +107,14 @@
 </main>
 
 <style lang="scss">
-	@use '@material/theme/color-palette';
-
-	$background: #000;
-
-	@use '@material/theme/index' as theme with (
-	$primary: color-palette.$blue-500,
-	$secondary: color-palette.$teal-600,
-	$surface: #fff,
-	$background: $background,
-	$error: #b00020,
-	);
-
-	@import 'src/themes/allThemes';
+	#p5Sketch,
+	#p5Sketch2 {
+		z-index: -66;
+		width: 100%;
+		position: absolute;
+		display: grid;
+		justify-items: center;
+	}
 
 	main {
 		position: relative;
