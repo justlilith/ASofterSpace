@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { authService } from '$lib/services/authService';
 	import { fade } from 'svelte/transition';
-	import * as Helpers from '$lib/helpers'
+	import * as Helpers from '$lib/helpers';
 	import { theme } from '$lib/services/themeService';
 
 	let loginPage = true;
@@ -11,26 +11,26 @@
 	let email;
 	let password;
 
-	async function signin () {
+	async function signin() {
 		// console.log('signin invoked')
-		let user, session, error
-		
-		[user, session, error] = await authService.login(email, password)
-		
+		let user, session, error;
+
+		[user, session, error] = await authService.login(email, password);
+
 		if (error) {
-			Helpers.notify(error.message,2000, 'bad')
+			Helpers.notify(error.message, 2000, 'bad');
 		}
 		if (session) {
-			Helpers.notify(`way to go! login successful ✨ you'll now be redirected`, 1500, `good`)
+			Helpers.notify(`way to go! login successful ✨ you'll now be redirected`, 1500, `good`);
 			setTimeout(() => {
-				window.location.href='/'
-			},2000)
+				window.location.href = '/';
+			}, 2000);
 			// Helpers.notify('login successful :>')
 		}
-		console.log(user, session, error)
-		authService.active.isAuthed = true
-		const form:HTMLFormElement = document.querySelector('#loginForm')
-		form.reset()
+		console.log(user, session, error);
+		authService.active.isAuthed = true;
+		const form: HTMLFormElement = document.querySelector('#loginForm');
+		form.reset();
 	}
 
 	async function newAccount() {
@@ -102,7 +102,12 @@
 
 	<p transition:fade={{ duration: 100, delay: 250 }}>
 		New to A Softer Space?
-		<a href="/signup">Sign up here, okay?</a>
+		<button
+			on:click={() => {
+				loginPage = false;
+				signupPage = true;
+			}}>Sign up here, okay?</button
+		>
 	</p>
 {/if}
 
@@ -155,6 +160,11 @@
 
 	<p transition:fade={{ duration: 100, delay: 250 }}>
 		Already have an account?
-		<a href="/login">Log in here, okay?</a>
+		<button
+			on:click={() => {
+				loginPage = true;
+				signupPage = false;
+			}}>Log in here, okay?</button
+		>
 	</p>
 {/if}

@@ -1,4 +1,5 @@
-import { SupabaseClient, createClient } from '@supabase/supabase-js'
+import {  createClient } from '@supabase/supabase-js'
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { writable, type Writable } from 'svelte/store'
 import * as Helpers from '../components/ts/helpers'
 // import fetch from 'isomorphic-fetch'
@@ -28,6 +29,12 @@ class AuthService {
 
 	constructor() {
 		this.supabaseClient = createClient(this.sbUrlPublic, this.sbKeyPublic)
+		this.active = {
+			user: null,
+			error: null,
+			isAuthed: false,
+			session: null
+		}
 		this.authDataStore = writable({
 			user: this.active.user, session: this.active.session, error: this.active.error
 		})

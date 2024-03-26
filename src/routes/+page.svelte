@@ -1,9 +1,10 @@
 <script lang="ts">
+	import AuthMenu from '$lib/components/auth/authMenu.svelte';
 </script>
-
 
 <h1>welcome to a softer space</h1>
 
+<AuthMenu />
 
 <style lang="scss">
 	@use '@material/theme/color-palette';

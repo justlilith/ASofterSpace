@@ -3,7 +3,7 @@
 	import * as Helpers from './ts/helpers'
 	import { fade, fly } from 'svelte/transition'
 	
-	import { addChatToDB } from './ts/database'
+	import { addChatToDB } from '$lib/services/databaseService'
 
 	import Modal from '../../components/Modal.svelte'
 	

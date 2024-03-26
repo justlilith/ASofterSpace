@@ -34,7 +34,7 @@
 	<div class="modal" transition:fade={{ duration: 300 }} />
 {/if}
 
-<button id="menuButton" class={theme} on:click={() => (showMenu = !showMenu)}>
+<button id="menuButton" class={theme} on:click={() => {showMenu = !showMenu}}>
 	<span class="material-icons-outlined {theme}">menu</span>
 	<span class="{theme} menuButtonText">Menu</span>
 </button>

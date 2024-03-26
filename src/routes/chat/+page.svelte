@@ -9,7 +9,7 @@
 	import Stash from '$lib/components/Stash.svelte';
 	import themeStore from '$lib/components/ts/themeStore';
 	import * as Helpers from '$lib/components/ts/helpers';
-	import * as Auth from '$lib/components/ts/auth';
+	import { authService } from '$lib/services/authService';
 
 	let theme: string = 'deep-blue';
 	let isAuthed: boolean = false;
@@ -47,10 +47,9 @@
 			theme = newTheme;
 		});
 
-		isAuthed = await Auth.authCheck();
+		isAuthed = await authService.authCheck();
 		if (isAuthed) {
-			Auth.awaitRefreshToken();
-			name = `, ${(await Auth.getUserData()).data.name ?? 'friend'}`;
+			name = `, ${(await authService.getUserData()).data.name ?? 'friend'}`;
 			// name = supabase
 		}
 
@@ -95,8 +94,8 @@
 </svelte:head>
 
 <main class={theme}>
-	<section id="p5Sketch" class='p5Sketch'></section>
-	<section id="p5Sketch2" class='p5Sketch'></section>
+	<section id="p5Sketch" class="p5Sketch" />
+	<section id="p5Sketch2" class="p5Sketch" />
 	<div id="messages">
 		<section id="animatedList">
 			{#if chatPacket.chatFullText.length !== 0}
