@@ -41,33 +41,35 @@
 	<title>a softer space :: settings</title>
 </svelte:head>
 
-<h1>Settings</h1>
+<main class="center">
+	<h1>Settings</h1>
 
-<ThemeSwitcher bind:theme />
+	<ThemeSwitcher bind:theme />
 
-{#if isAuthed}
-	<h1>Account Settings</h1>
-{/if}
+	{#if isAuthed}
+		<h1>Account Settings</h1>
+	{/if}
 
-{#if isAuthed}
-	<form action="/settings" id="settingsForm">
-		<p>Change name:</p>
-		<input bind:value={name} placeholder={name} />
-		<input
-			type="submit"
-			style="display:none;"
+	{#if isAuthed}
+		<form action="/settings" id="settingsForm">
+			<p>Change name:</p>
+			<input bind:value={name} placeholder={name} />
+			<input
+				type="submit"
+				style="display:none;"
+				on:click|preventDefault={() => {
+					saveSettings();
+				}}
+			/>
+		</form>
+		<button
 			on:click|preventDefault={() => {
 				saveSettings();
 			}}
-		/>
-	</form>
-	<button
-		on:click|preventDefault={() => {
-			saveSettings();
-		}}
-		>Save
-	</button>
-{/if}
+			>Save
+		</button>
+	{/if}
+</main>
 
 <style lang="scss">
 	@use '@material/theme/color-palette';
