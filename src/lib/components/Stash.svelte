@@ -5,7 +5,7 @@
 	
 	import { addChatToDB } from '$lib/services/databaseService'
 
-	import Modal from '../../components/Modal.svelte'
+	import Modal from '$lib/components/Modal.svelte'
 	
 	if (browser) {
 		const appStorage = window.localStorage;	

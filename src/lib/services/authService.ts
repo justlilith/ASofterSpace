@@ -1,7 +1,7 @@
 import {  createClient } from '@supabase/supabase-js'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { writable, type Writable } from 'svelte/store'
-import * as Helpers from '../components/ts/helpers'
+import * as Helpers from '$lib/components/ts/helpers'
 // import fetch from 'isomorphic-fetch'
 import type { Session, User } from '@supabase/gotrue-js'
 import { constants } from '$lib/constants/constants'

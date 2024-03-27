@@ -4,15 +4,14 @@
 	import { onMount } from 'svelte';
 
 	import Stash from '$lib/components/Stash.svelte';
-	import Menu from '../../components/Menu.svelte';
+	import Menu from '$lib/components/Menu.svelte';
 	import themeStore from '$lib/components/ts/themeStore';
 	import { fetchChatsFromDB } from '$lib/services/databaseService';
 	import * as Helpers from '$lib/components/ts/helpers';
 	import Message from '$lib/components/Message.svelte';
-	import HistoryMenu from '../../components/HistoryMenu.svelte';
+	import HistoryMenu from '$lib/components/HistoryMenu.svelte';
 	import * as Database from '$lib/services/databaseService';
-	import Modal from '../../components/Modal.svelte';
-	import Index from '../+page.svelte';
+	import Modal from '$lib/components/Modal.svelte';
 	import Toast from '$lib/components/Toast.svelte';
 	import * as Auth from '$lib/services/authService';
 
