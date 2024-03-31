@@ -4,6 +4,7 @@ import { toastStore } from './components/ts/toastStore'
 // import { get } from 'svelte/store'
 import type { Session } from '@supabase/gotrue-js';
 import type { Writable } from 'svelte/store';
+import { localStorageService } from './services/localStorageService';
 
 
 if (browser) {
@@ -29,17 +30,6 @@ const clearChat = (chatPacket:ChatPacketT):MessageT[] => {
 	notify(`chat cleared! c:`, 3000)
 	return chatPacket.chatFullText
 };
-
-
-function fetchFromLocal (appStorage:Storage, prop:string) {
-	try {
-		const value = JSON.parse(appStorage.getItem(prop))
-		return value
-	} catch (error) {
-		console.warn(error?.message)
-		return null
-	}
-}
 
 
 const fetchTheme = (appStorage:Storage, themeStore:Writable<string>, type:string):string => {
@@ -71,7 +61,7 @@ const fetchTheme = (appStorage:Storage, themeStore:Writable<string>, type:string
 			currentThemeIndex = themes.indexOf(theme)
 			return themes[currentThemeIndex]
 		})
-		saveToLocal(appStorage,'theme',theme)
+		localStorageService.saveToLocal({ appStorage, prop: 'theme', value: theme })
 	}
 	
 	try {
@@ -84,7 +74,7 @@ const fetchTheme = (appStorage:Storage, themeStore:Writable<string>, type:string
 		listener = 'the sun'
 		console.warn(error.message)
 		console.warn('%cdefaulting listener to %cthe sun)))', 'color:white;','color:red')
-		saveToLocal(appStorage,'listener',listener)
+		localStorageService.saveToLocal({ appStorage, prop: 'listener', value: listener })
 	}
 	listener = setListener(listener)
 	
@@ -139,7 +129,7 @@ function notify(toastMessage:string, duration?:number, mood = 'neutral'):void {
 	// document.body.appendChild(marshmallow)
 	
 	if (!duration) {
-		duration = 2000
+		duration = 2000 //ms
 	}
 	
 	const array = new Int8Array(1)
@@ -148,7 +138,7 @@ function notify(toastMessage:string, duration?:number, mood = 'neutral'):void {
 		duration: duration,
 		id: crypto.getRandomValues(array)[0],
 		mood: mood,
-		remaining: duration / 1000
+		remaining: duration / 1000 //whole sec
 	}
 	
 	// const toastQueue = get(toastStore)
@@ -188,10 +178,10 @@ const saveChat = (chatPacket:ChatPacketT): void => {
 };
 
 
-function saveToLocal (appStorage:Storage, prop:string, value:string|Session|UserDataT):void {
-	appStorage.setItem(prop,JSON.stringify(value))
-	console.log(prop, appStorage.getItem(prop))
-}
+// function saveToLocal (appStorage:Storage, prop:string, value:string|Session|UserDataT):void {
+// 	appStorage.setItem(prop,JSON.stringify(value))
+// 	console.log(prop, appStorage.getItem(prop))
+// }
 
 
 function setListener (currentListener:string):string {
@@ -254,7 +244,7 @@ function updateListener (appStorage:Storage, currentListener:string):string {
 		currentListener = 'the sun'
 		break
 	}
-	saveToLocal(appStorage, 'listener',currentListener)
+	localStorageService.saveToLocal({ appStorage, prop: 'listener', value: currentListener })
 	notify(`${currentListener} is now listening to you~ c:`, 2500)
 	
 	return currentListener
@@ -287,7 +277,7 @@ function updateTheme (appStorage:Storage, theme:string):void {
 		const html = document.getElementsByTagName('html')[0] 
 		html.className = theme
 		
-		saveToLocal(appStorage, 'theme',theme)
+		localStorageService.saveToLocal({ appStorage, prop: 'theme', value: theme })
 	},150)
 	
 	setTimeout(() => {
@@ -301,11 +291,9 @@ export {
 	clearChat
 	, clearStash
 	, fetchTheme
-	, fetchFromLocal
 	, newModal
 	, notify
 	, saveChat
-	, saveToLocal
 	, setListener
 	, setListenerOpacity
 	, stashChat

@@ -6,6 +6,7 @@
 
 	let loginPage = true;
 	let signupPage = false;
+	let loggedIn = authService.active.isAuthed;
 
 	let name;
 	let email;
@@ -25,7 +26,7 @@
 		if (session) {
 			Helpers.notify(`way to go! login successful ✨ you'll now be redirected`, 1500, `good`);
 			setTimeout(() => {
-				window.location.href = '/';
+				goto('/chat');
 			}, 2000);
 			// Helpers.notify('login successful :>')
 		}
@@ -40,7 +41,7 @@
 
 		[user, session, error] = await authService.signUp(email, password, name);
 		if (error) {
-			Helpers.notify(JSON.stringify(error.message), 2000);
+			Helpers.notify(JSON.stringify(error.message), 2000, 'bad');
 		}
 		if (user) {
 			const form: HTMLFormElement = document.querySelector('#signupForm');
@@ -52,6 +53,10 @@
 		}
 	}
 
+	function signOut() {
+		authService.signOut()
+	}
+
 	function clearForm() {
 		name = null;
 		email = null;
@@ -60,6 +65,9 @@
 </script>
 
 <section class="center">
+	{#if loggedIn}
+		<p>You are currently logged in.</p>
+	{/if}
 	{#if loginPage}
 		<div class="center">
 			<h2>Log in</h2>

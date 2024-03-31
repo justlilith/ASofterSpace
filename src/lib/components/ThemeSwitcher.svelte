@@ -6,25 +6,17 @@
 	import { onMount } from 'svelte'
 	import * as Helpers from './ts/helpers'
 	import Toast from './Toast.svelte'
+	import { themeService } from '$lib/services/themeService';
 	
-	let themes = 
-	[ 'deep-blue'
-	, 'deep-pink'
-	, 'soft-blue'
-	, 'soft-pink'
-	]
+	let themes = themeService.themes
 	
 	export let theme:string = ''	
-	
-	let appStorage
 	
 	let listener:string
 	
 	onMount(async () => {
-		const appStorage = window.localStorage
-		theme = Helpers.fetchTheme(appStorage, themeStore, 'theme')
-		listener = Helpers.fetchTheme(appStorage, themeStore, 'listener')
-		
+		theme = themeService.theme
+
 		themeStore.subscribe((newTheme) => {
 			theme = newTheme
 		})
@@ -40,14 +32,14 @@
 	<button class={theme} on:click={() => Helpers.updateTheme(window.localStorage, theme)}>
 		<span>Switch Theme</span>
 	</button>
-	<p>current listener: {listener}</p>
+	<!-- <p>current listener: {listener}</p>
 	<button class={theme} on:click={() => listener = Helpers.updateListener(window.localStorage, listener)}>
 		<span>Switch Listener</span>
-	</button>
+	</button> -->
 	{/if}
 	<Toast {theme}></Toast>
 </div>
 
 <style lang='scss'>
-	@import 'src/themes/allThemes-button';
+	// @import 'src/themes/allThemes-button';
 </style>

@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import * as Helpers from '$lib/helpers';
 	import { authService } from '$lib/services/authService';
+	import { localStorageService } from '$lib/services/localStorageService';
 
 	export let theme = '';
 	export let isAuthed: boolean = false;
@@ -12,8 +13,7 @@
 	let appStorage;
 
 	onMount(async () => {
-		appStorage = window.localStorage;
-
+		appStorage = localStorageService.storage;
 		// if (isAuthed == false){
 		// 	Auth.authCheck()
 		// 	.then(res => {
@@ -34,7 +34,13 @@
 	<div class="modal" transition:fade={{ duration: 300 }} />
 {/if}
 
-<button id="menuButton" class={theme} on:click={() => {showMenu = !showMenu}}>
+<button
+	id="menuButton"
+	class={theme}
+	on:click={() => {
+		showMenu = !showMenu;
+	}}
+>
 	<span class="material-icons-outlined {theme}">menu</span>
 	<span class="{theme} menuButtonText">Menu</span>
 </button>
@@ -103,7 +109,7 @@
 								chatPacket.chatFullText = Helpers.clearChat(chatPacket);
 							}
 							Helpers.clearStash(appStorage);
-							isAuthed = await authService.signOut(isAuthed);
+							isAuthed = await authService.signOut();
 							appStorage.setItem('userData', '');
 							appStorage.setItem('chats', '');
 							Helpers.notify("You've been successfully logged out ✔️", 2000, 'good');
@@ -164,7 +170,7 @@
 
 	#menuButton {
 		left: 0px;
-		bottom: 2vh;
+		top: 15vh;
 		position: fixed;
 		background: none;
 		border: none;

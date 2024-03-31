@@ -154,7 +154,7 @@ on:click="{() => {showModal = !showModal}}">
 	}
 	
 	nav, #toggleButton {
-		bottom: 2vh;
+		top: 15vh;
 		right: 0;
 		position: fixed;
 		z-index: 10;

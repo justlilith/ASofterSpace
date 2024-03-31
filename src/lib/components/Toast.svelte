@@ -33,10 +33,8 @@
 		toasterOccupied = true
 		console.log('now serving')
 		currentToast = currentToastQueue.filter(slice => toast.id == slice.id)[0]
-		let index = currentToastQueue.indexOf(toast)
 		setTimeout(()=> {
 			console.log('loading next toast')
-			// toast = currentToast[0].message
 			currentToastQueue = currentToastQueue.filter(slice => toast.id !== slice.id)
 			toastStore.update(()=>{
 				return currentToastQueue

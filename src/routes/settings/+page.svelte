@@ -7,6 +7,7 @@
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
 	import * as Helpers from '$lib/components/ts/helpers';
 	import { authService } from '$lib/services/authService';
+	import type { UserPacketT } from 'src/types/user';
 
 	let date = new Date();
 	let theme = '';

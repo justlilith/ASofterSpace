@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import AuthMenu from '$lib/components/auth/authMenu.svelte';
+	import { authService } from '$lib/services/authService';
 </script>
 
 <div class="center main">
@@ -17,6 +18,9 @@
 	>
 	<p>Log in or create an account below to sync your progress.</p>
 
+	{#if authService.active.user }
+	<p>You are currently logged in.</p>
+	{/if}
 	<AuthMenu />
 </div>
 

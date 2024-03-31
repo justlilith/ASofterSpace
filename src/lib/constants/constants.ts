@@ -6,6 +6,7 @@ class Constants {
 		}
 	}
 	keys = {
+		storageEnableKey: 'asofterspaceStorageEnabled',
 		public: {
 			supabase: {
 				sbUrlPublic: 'https://tdoulxkicweqdvxnuqmm.supabase.co',

@@ -6,6 +6,8 @@
 	import * as Auth from '$lib/services/authService';
 	import themeStore from '$lib/components/ts/themeStore';
 	import Construction from '$lib/components/banners/construction.svelte';
+	import { themeService } from '$lib/services/themeService';
+	import { localStorageService } from '$lib/services/localStorageService';
 
 	let name;
 	let theme;
@@ -14,10 +16,16 @@
 
 	let authService = Auth.authService;
 
+	authService.authDataStore.subscribe((update) => {
+		isAuthed = update.isAuthed;
+	});
+
 	onMount(async () => {
 		const appStorage = window.localStorage;
 
-		theme = Helpers.fetchTheme(appStorage, themeStore, 'theme');
+		themeService.fetchTheme(appStorage, themeStore, 'theme');
+
+		theme = themeService.theme;
 
 		if (!theme) {
 			theme = 'deep-blue';
@@ -36,11 +44,12 @@
 			theme = newTheme;
 		});
 
-		let isAuthed = await authService.authCheck();
-		authService.active.isAuthed = await authService.authCheck();
-		if (isAuthed) {
-			name = `, ${(await authService.getUserData()).data.name ?? 'friend'}`;
-			// name = supabase
+		if (localStorageService.enabled) {
+			authService.checkLocalAuth();
+			if (authService.active.isAuthed) {
+				name = `, ${(await authService.getUserData()).data.name ?? 'friend'}`;
+				// name = supabase
+			}
 		}
 	});
 </script>

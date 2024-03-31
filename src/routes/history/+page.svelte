@@ -30,7 +30,7 @@
 		theme = Helpers.fetchTheme(appStorage, themeStore, 'theme');
 		Helpers.setListenerOpacity(25);
 
-		isAuthed = await Auth.authService.authCheck();
+		isAuthed = await Auth.authService.checkLocalAuth();
 	});
 
 	// export let name: string;
