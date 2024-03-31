@@ -34,7 +34,7 @@
 
 			isAuthed = authService.active.isAuthed;
 			if (isAuthed) {
-				name = `, ${(await authService.getUserData()).data.name ?? 'friend'}`;
+				name = `${(await authService.getUserData()).data.name ?? 'friend'}`;
 				// name = supabase
 			}
 
