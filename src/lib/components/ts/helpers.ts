@@ -1,4 +1,5 @@
 import { browser } from '$app/environment'
+import type { UserDataT } from 'src/types/user';
 import themeStore from './themeStore'
 import { toastStore } from './toastStore'
 // import { get } from 'svelte/store'

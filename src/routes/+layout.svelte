@@ -3,7 +3,7 @@
 	import Menu from '$lib/components/Menu.svelte';
 	import Toast from '$lib/components/Toast.svelte';
 	import * as Helpers from '$lib/components/ts/helpers';
-	import * as Auth from '$lib/services/authService';
+	import { authService } from '$lib/services/authService';
 	import themeStore from '$lib/components/ts/themeStore';
 	import Construction from '$lib/components/banners/construction.svelte';
 	import { themeService } from '$lib/services/themeService';
@@ -13,8 +13,6 @@
 	let theme;
 	let showMenu;
 	let isAuthed;
-
-	let authService = Auth.authService;
 
 	authService.authDataStore.subscribe((update) => {
 		isAuthed = update.isAuthed;
@@ -47,7 +45,9 @@
 		if (localStorageService.enabled) {
 			authService.checkLocalAuth();
 			if (authService.active.isAuthed) {
-				name = `, ${(await authService.getUserData()).data.name ?? 'friend'}`;
+				authService.active.user.name = `, ${
+					(await authService.getUserMetadata()).data.name ?? 'friend'
+				}`;
 				// name = supabase
 			}
 		}
@@ -65,3 +65,21 @@
 	<slot />
 	<Toast {theme} />
 </main>
+
+<style lang="scss">
+	main {
+		margin-left: auto;
+		margin-right: auto;
+	}
+	@media (min-width: 500px) {
+		main {
+			min-width: 80%;
+		}
+	}
+
+	@media (min-width: 1000px) {
+		main {
+			max-width: 60%;
+		}
+	}
+</style>

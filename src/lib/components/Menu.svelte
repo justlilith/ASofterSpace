@@ -6,7 +6,7 @@
 	import { localStorageService } from '$lib/services/localStorageService';
 
 	export let theme = '';
-	export let isAuthed: boolean = false;
+	export let isAuthed: boolean = authService.active.isAuthed;
 	export let showMenu = false;
 	export let chatPacket: ChatPacketT = null;
 
@@ -34,20 +34,47 @@
 	<div class="modal" transition:fade={{ duration: 300 }} />
 {/if}
 
-<button
-	id="menuButton"
-	class={theme}
-	on:click={() => {
-		showMenu = !showMenu;
-	}}
->
-	<span class="material-icons-outlined {theme}">menu</span>
-	<span class="{theme} menuButtonText">Menu</span>
-</button>
+<div id="menu">
+	<button
+		id="menuButton"
+		class={theme}
+		on:click={() => {
+			showMenu = !showMenu;
+		}}
+	>
+		<span class="material-icons-outlined {theme}">menu</span>
+		<span class="{theme} menuButtonText">Menu</span>
+	</button>
+
+	<div id="user">
+		<span class="material-icons-outlined {theme}">person</span>
+		{#if isAuthed}
+			<span>{authService?.active?.user?.user?.email}</span>
+			::
+			<span>{authService?.active?.user?.user?.user_metadata?.name}</span>
+		{:else}
+			<a href="/login">log in</a>
+		{/if}
+	</div>
+</div>
+
+<!-- side menu -->
 
 {#if showMenu}
 	<nav id="side-menu" transition:fly={{ duration: 300, x: -200 }} class={theme}>
 		<ul>
+			<li>
+				<a
+					href="/"
+					transition:fade|local={{ duration: 100, delay: 100 }}
+					on:click={() => {
+						showMenu = false;
+					}}
+				>
+					<span class="material-icons-outlined {theme}">home</span>
+					<span class="{theme} menuButtonText">about</span>
+				</a>
+			</li>
 			<li>
 				<a
 					href="/chat"
@@ -89,7 +116,7 @@
 			{#if !isAuthed}
 				<li>
 					<a
-						href="/"
+						href="/login"
 						transition:fade|local={{ duration: 100, delay: 250 }}
 						on:click={() => {
 							showMenu = false;
@@ -103,7 +130,7 @@
 			{#if isAuthed}
 				<li>
 					<a
-						href="/"
+						href="/logout"
 						on:click={async () => {
 							if (chatPacket) {
 								chatPacket.chatFullText = Helpers.clearChat(chatPacket);
@@ -123,8 +150,20 @@
 				</li>
 			{/if}
 			<li>
+				<a
+					href="/privacy"
+					transition:fade|local={{ duration: 100, delay: 200 }}
+					on:click={() => {
+						showMenu = false;
+					}}
+				>
+					<span class="material-icons-outlined {theme}">shield</span>
+					<span class="{theme} menuButtonText">privacy</span>
+				</a>
+			</li>
+			<li>
 				<button
-					id="close-button"
+					id="close-side-menu-button"
 					class={theme}
 					on:click={() => {
 						showMenu = false;
@@ -141,6 +180,15 @@
 <style lang="scss">
 	@import 'src/themes/allThemes';
 
+	#menu {
+		display: flex;
+		flex-direction: row;
+	}
+
+	#user {
+		text-align: right;
+		flex-grow: 100;
+	}
 	.modal {
 		background-color: black;
 		opacity: 0.5;
@@ -151,9 +199,10 @@
 		top: 0;
 	}
 
-	#close-button {
+	#close-side-menu-button {
 		background: none;
 		border: none;
+		padding: 0px;
 	}
 
 	#side-menu {
@@ -169,9 +218,6 @@
 	}
 
 	#menuButton {
-		left: 0px;
-		top: 15vh;
-		position: fixed;
 		background: none;
 		border: none;
 		z-index: 20;
@@ -215,28 +261,20 @@
 		nav {
 			min-width: 30%;
 		}
-
-		#menuButton {
-			padding: 0 0 0 20vw;
-		}
 	}
 
 	@media (min-width: 1000px) {
 		nav {
 			max-width: 10%;
 		}
-
-		#menuButton {
-			padding: 0 0 0 35vw;
-		}
 	}
 
-	@media (max-height: 500px) {
-		#menuButton {
-			visibility: hidden;
-			animation: 500ms fadeout;
-		}
-	}
+	// @media (max-height: 500px) {
+	// 	#menuButton {
+	// 		visibility: hidden;
+	// 		animation: 500ms fadeout;
+	// 	}
+	// }
 
 	@keyframes fadeout {
 		from {

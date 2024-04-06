@@ -61,7 +61,7 @@ const fetchTheme = (appStorage:Storage, themeStore:Writable<string>, type:string
 			currentThemeIndex = themes.indexOf(theme)
 			return themes[currentThemeIndex]
 		})
-		localStorageService.saveToLocal({ appStorage, prop: 'theme', value: theme })
+		localStorageService.saveToLocal({ prop: 'theme', value: theme })
 	}
 	
 	try {
@@ -74,7 +74,7 @@ const fetchTheme = (appStorage:Storage, themeStore:Writable<string>, type:string
 		listener = 'the sun'
 		console.warn(error.message)
 		console.warn('%cdefaulting listener to %cthe sun)))', 'color:white;','color:red')
-		localStorageService.saveToLocal({ appStorage, prop: 'listener', value: listener })
+		localStorageService.saveToLocal({ prop: 'listener', value: listener })
 	}
 	listener = setListener(listener)
 	
@@ -244,7 +244,7 @@ function updateListener (appStorage:Storage, currentListener:string):string {
 		currentListener = 'the sun'
 		break
 	}
-	localStorageService.saveToLocal({ appStorage, prop: 'listener', value: currentListener })
+	localStorageService.saveToLocal({ prop: 'listener', value: currentListener })
 	notify(`${currentListener} is now listening to you~ c:`, 2500)
 	
 	return currentListener
@@ -277,7 +277,7 @@ function updateTheme (appStorage:Storage, theme:string):void {
 		const html = document.getElementsByTagName('html')[0] 
 		html.className = theme
 		
-		localStorageService.saveToLocal({ appStorage, prop: 'theme', value: theme })
+		localStorageService.saveToLocal({ prop: 'theme', value: theme })
 	},150)
 	
 	setTimeout(() => {

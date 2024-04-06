@@ -82,7 +82,6 @@
 	{:else}
 		<p>No chats have been saved. :(</p>
 	{/if}
-	<Menu {isAuthed} {chatPacket} {theme} />
 </main>
 
 <Toast {theme} />
