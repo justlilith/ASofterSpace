@@ -27,9 +27,9 @@
 
 <div class={theme}>
 	{#if browser}
-		<p>current theme:</p>
+		<h2>Theme</h2>
 		<p>
-			<select
+			current theme: <select
 				bind:value={themeOption}
 				on:change={(value) => {
 					console.log(themeOption);

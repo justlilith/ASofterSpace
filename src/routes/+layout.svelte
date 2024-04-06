@@ -44,12 +44,6 @@
 
 		if (localStorageService.enabled) {
 			authService.checkLocalAuth();
-			if (authService.active.isAuthed) {
-				authService.active.user.name = `, ${
-					(await authService.getUserMetadata()).data.name ?? 'friend'
-				}`;
-				// name = supabase
-			}
 		}
 	});
 </script>

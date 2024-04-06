@@ -9,6 +9,10 @@
 	export let isAuthed: boolean = authService.active.isAuthed;
 	export let showMenu = false;
 	export let chatPacket: ChatPacketT = null;
+	
+	authService.authDataStore.subscribe(update => {
+		isAuthed = update.isAuthed
+	})
 
 	let appStorage;
 

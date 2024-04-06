@@ -117,6 +117,18 @@ class AuthService {
 			document.cookie = 'asofterspace_refresh_token=' + data.session.refresh_token + ';'
 
 			localStorageService.saveToLocal({ prop: 'userData', value: userData })
+			this.active = {
+				error: null,
+				isAuthed: true,
+				session: data.session,
+				user: {
+					error: null,
+					expiry: data.session.expires_at,
+					isAuthed: true,
+					name: data.user.user_metadata?.name,
+					user: data.user
+				}
+			}
 			this.authDataStore.update(() => {
 				return { user: data.user, session: data.session, error, isAuthed: true, name: data.user.user_metadata?.name }
 			})
