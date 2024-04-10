@@ -8,20 +8,18 @@
 	<h1>welcome to a softer space</h1>
 
 	<p>
-		To get started, visit <a href="/chat">the chat</a>. Nothing is stored unless you have an account
-		and choose to sync your progress. The chat is a free area to speak.
+		To get started, visit <a href="/chat">the chat</a>; it's a free area to speak and vent your
+		thoughts, as if texting a friend.
 	</p>
+	<p>Nothing is stored unless you choose to create an account and sync your chat.</p>
+	<p><a href="/login">Log in or create an account here</a>.</p>
 	<button
 		on:click={() => {
 			goto('/chat');
-		}}>Visit the chat</button
+		}}>Visit the chat!</button
 	>
-	<p>Log in or create an account below to sync your progress.</p>
-
-	{#if authService.active.user }
-	<p>You are currently logged in.</p>
-	{/if}
-	<AuthMenu />
+	<h2>what is this?</h2>
+	<p>a softer space is a solitary journaling app, where you can text your emotions and feeling to a void and save them for later review.</p>
 </div>
 
 <style lang="scss">

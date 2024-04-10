@@ -1,0 +1,3 @@
+interface SaveUserMetadataArgs {
+	name: string
+}

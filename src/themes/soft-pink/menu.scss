@@ -17,7 +17,7 @@ soft-pink {
 			background-color: white;
 		}
 		
-		nav.#{&} a {
+		nav.#{&} a, nav.#{&} button {
 			color: hsl(0, 100%, 30%)
 		}
 	}

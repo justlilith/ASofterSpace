@@ -1,40 +1,40 @@
 <script lang="ts">
-	// import Fab from '@smui/fab'
-	import { fade, slide } from 'svelte/transition';
 	import { onMount } from 'svelte';
-	import Stash from '$lib/components/Stash.svelte';
-	import Menu from '$lib/components/Menu.svelte';
 	import ThemeSwitcher from '$lib/components/ThemeSwitcher.svelte';
 	import * as Helpers from '$lib/components/ts/helpers';
 	import { authService } from '$lib/services/authService';
 	import type { UserPacketT } from 'src/types/user';
+	import { localStorageService } from '$lib/services/localStorageService';
+	import { constants } from '$lib/constants/constants';
 
 	let date = new Date();
 	let theme = '';
-	let isAuthed: boolean = authService.active.isAuthed;
-	let name: string = '';
+	let isAuthed: boolean = authService.active?.isAuthed;
+	let name: string = authService.active?.user?.user?.user_metadata?.name;
+	let newName = name;
+
+	onMount(async () => {
+		console.log(name);
+		await getName()
+	});
 
 	async function saveSettings() {
-		let data: UserPacketT = await authService.getUserData();
-		let userData = {
-			id: data.id,
-			name: name
-		};
-		console.log(userData);
-		let error = await authService.saveUserData({ userData: userData });
+		let data: UserPacketT = await authService.getUserMetadata();
+		let error = await authService.saveUserMetadata({ name: newName });
 		if (error) {
 			console.warn(error);
+			Helpers.notify('Settings were not saved! ❌', 1000, 'bad');
 			return;
 		}
+		console.log(authService.active.user.user.user_metadata);
 		Helpers.notify('Settings saved! ✨', 1000, 'good');
 	}
 
-	async function getName(): Promise<string> {
-		let data: UserPacketT = await authService.getUserData();
+	async function getName() {
+		let data: UserPacketT = await authService.getUserMetadata();
 		console.log(data);
-		return data.data.name;
+		name = data.data.name;
 	}
-
 	// export let name: string;
 </script>
 
@@ -47,14 +47,15 @@
 
 	<ThemeSwitcher bind:theme />
 
-	{#if isAuthed}
-		<h1>Account Settings</h1>
+	{#if authService.active.isAuthed}
+		<h2>Account options</h2>
 	{/if}
 
 	{#if isAuthed}
 		<form action="/settings" id="settingsForm">
+			<p>Current name: {name}</p>
 			<p>Change name:</p>
-			<input bind:value={name} placeholder={name} />
+			<input bind:value={newName} placeholder={name} />
 			<input
 				type="submit"
 				style="display:none;"
@@ -67,24 +68,12 @@
 			on:click|preventDefault={() => {
 				saveSettings();
 			}}
-			>Save
+			>Save account options
 		</button>
 	{/if}
 </main>
 
 <style lang="scss">
-	@use '@material/theme/color-palette';
-
-	$background: #000;
-
-	@use '@material/theme/index' as theme with (
-	$primary: color-palette.$blue-500,
-	$secondary: color-palette.$teal-600,
-	$surface: #fff,
-	$background: $background,
-	$error: #b00020,
-	);
-
 	@import 'src/themes/allThemes';
 
 	main {
@@ -92,7 +81,7 @@
 		text-align: center;
 		padding: 1em;
 		/* min-width: 400px; */
-		max-width: 85%;
+		// max-width: 85%;
 		/* width:100px; */
 		height: 100%;
 		margin: 0 auto;

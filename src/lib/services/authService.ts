@@ -13,7 +13,8 @@ interface AuthStore {
 	user: User
 	session: Session
 	error: Error,
-	isAuthed: boolean
+	isAuthed: boolean,
+	name: string
 }
 
 class AuthService {
@@ -36,7 +37,8 @@ class AuthService {
 		error: null,
 		expiry: null,
 		isAuthed: false,
-		user: null
+		user: null,
+		name: null
 	}
 
 	constructor() {
@@ -48,7 +50,7 @@ class AuthService {
 			session: null
 		}
 		this.authDataStore = writable({
-			user: null, session: null, error: null, isAuthed: false
+			user: null, session: null, error: null, isAuthed: false, name: null
 		})
 		this.checkLocalAuth()
 	}
@@ -60,9 +62,7 @@ class AuthService {
 			// await fetch()
 			let user: User, session: Session, error: Error
 
-			const appStorage = localStorageService.storage
-
-			let userData: UserDataT = localStorageService.fetchFromLocal(appStorage, 'userData')
+			let userData: UserDataT = localStorageService.fetchFromLocal('userData')
 
 			if (userData == null || userData.error || userData.isAuthed == false) {
 				this.active.isAuthed = false
@@ -70,22 +70,26 @@ class AuthService {
 					userData = this.nullUser
 				}
 				this.authDataStore.update(() => {
-					return { user: null, session: null, error, isAuthed: false }
+					return { user: null, session: null, error, isAuthed: false, name: null }
 				})
-				localStorageService.saveToLocal({ appStorage, prop: 'userData', value: userData })
+				localStorageService.clear('userData')
 				return false
 			}
 
 			this.active.user = userData
+			this.active.isAuthed = true;
 
-			this.authDataStore.update(()=> {
-				return {
-					error: null,
-					isAuthed: true,
-					session: null,
-					user: userData.user
-				}
-			})
+			async () => await this.getUserMetadata();
+
+			// this.authDataStore.update(() => {
+			// 	return {
+			// 		error: null,
+			// 		isAuthed: true,
+			// 		session: null,
+			// 		user: userData.user,
+			// 		name: userData.user?.user_metadata?.name
+			// 	}
+			// })
 		}
 	}
 
@@ -104,16 +108,29 @@ class AuthService {
 				error: null,
 				expiry: data.session.expires_at,
 				isAuthed: true,
-				user: data.user
+				user: data.user,
+				name: data.user.user_metadata?.name
 			}
 
 			// console.log(session.refresh_token)
 			// document.cookie.
 			document.cookie = 'asofterspace_refresh_token=' + data.session.refresh_token + ';'
 
-			Helpers.saveToLocal(appStorage, 'userData', userData)
+			localStorageService.saveToLocal({ prop: 'userData', value: userData })
+			this.active = {
+				error: null,
+				isAuthed: true,
+				session: data.session,
+				user: {
+					error: null,
+					expiry: data.session.expires_at,
+					isAuthed: true,
+					name: data.user.user_metadata?.name,
+					user: data.user
+				}
+			}
 			this.authDataStore.update(() => {
-				return { user: data.user, session: data.session, error, isAuthed: true }
+				return { user: data.user, session: data.session, error, isAuthed: true, name: data.user.user_metadata?.name }
 			})
 		}
 
@@ -129,14 +146,17 @@ class AuthService {
 			console.error(error)
 			Helpers.notify(error.message, 4000, 'bad')
 		}
-		this.authDataStore.update(()=> {
+		this.authDataStore.update(() => {
 			return {
 				user: null,
 				error: null,
 				isAuthed: false,
-				session: null
+				session: null,
+				name: null
 			}
 		})
+		localStorageService.clear('userData')
+		document.cookie = ''
 		return this.active.isAuthed
 	}
 
@@ -153,7 +173,7 @@ class AuthService {
 
 			if (data.session) {
 				this.authDataStore.update(() => {
-					return { user: data.user, session: data.session, error, isAuthed: false }
+					return { user: data.user, session: data.session, error, isAuthed: false, name: null }
 				})
 			}
 
@@ -175,34 +195,65 @@ class AuthService {
 		}
 	}
 
-	async getUserData(): Promise<UserPacketT | null> {
+	async getUserMetadata(): Promise<UserPacketT | null> {
 		return new Promise(async (resolve, reject) => {
-			const session = await this.supabaseClient.auth.getSession()
-			if (session == null) {
+			const sessionResponse = await this.supabaseClient.auth.getSession()
+			if (sessionResponse.error) {
+				reject()
+			}
+			const userResponse = await this.supabaseClient.auth.getUser(sessionResponse.data.session?.access_token)
+			if (sessionResponse == null) {
 				reject(null)
 			}
-			// console.log(session.user.id)
+			this.active.user.user = userResponse.data.user
+			this.active.session = sessionResponse.data.session
+			this.authDataStore.update(() => {
+				return {
+					error: null,
+					isAuthed: true,
+					name: userResponse.data.user.user_metadata.name,
+					session: sessionResponse.data.session,
+					user: userResponse.data.user
+				}
+			})
 			resolve(
 				{
-					id: session.data.session.user.id,
+					id: sessionResponse.data.session.user.id,
 					data: {
-						name: session.data.session.user.user_metadata.name
+						name: userResponse.data.user.user_metadata?.name
 					}
 				})
 		})
 	}
 
-	async saveUserData(args: Record<string, User | any>): Promise<Error | void> {
-		console.log(args.user)
+	async saveUserMetadata(args: SaveUserMetadataArgs): Promise<Error | void> {
+		console.log(args)
 		const { data, error } = await this.supabaseClient.auth.updateUser({
 			data: {
-				name: args.userData.name
+				name: args.name
 			}
 		})
+		console.log(data)
 		return new Promise((resolve, reject) => {
 			if (error) {
 				reject(error)
 			}
+			this.active.user.user = data.user
+			this.authDataStore.update(() => {
+				return {
+					error: null,
+					isAuthed: true,
+					name: args.name,
+					session: this.active.session,
+					user: data.user
+				}
+			})
+			this.active.user.name = args.name
+			localStorageService.saveToLocal(
+				{
+					prop: 'userData',
+					value: { ...localStorageService.fetchFromLocal('userData'), name: args.name }
+				})
 			resolve()
 		})
 	}

@@ -4,7 +4,8 @@ interface UserDataT {
 	isAuthed: boolean,
 	expiry: number,
 	error: null|Error,
-	user: User
+	user: User,
+	name: string
 }
 
 interface UserPacketT {

@@ -7,15 +7,20 @@ class LocalStorageService {
 	constructor() {
 		if (browser) {
 			this.storage = window.localStorage
-			this.enabled = this.storage.getItem(constants.keys.storageEnableKey) ? true : false;
+			// this.enabled = this.storage.getItem(constants.keys.storageEnableKey) ? true : false;
+			this.enabled = true;
 		}
 	}
 
 	storage: Storage;
 
-	enabled: boolean = true;
+	enabled: boolean;
 
-	fetchFromLocal(appStorage: Storage, prop: string) {
+	clear(prop: string) {
+		this.storage.removeItem(prop)
+	}
+
+	fetchFromLocal(prop: string) {
 		try {
 			return JSON.parse(this.storage.getItem(prop))
 		} catch (error) {
@@ -24,7 +29,7 @@ class LocalStorageService {
 		}
 	}
 
-	saveToLocal({ appStorage, prop, value }: { appStorage: Storage; prop: string; value: string | Session | UserDataT; }): void {
+	saveToLocal({prop, value }: { prop: string; value: string | Session | UserDataT; }): void {
 		if (!this.enabled) {
 			return
 		}
